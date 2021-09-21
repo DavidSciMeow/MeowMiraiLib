@@ -117,42 +117,50 @@ namespace MeowMiraiLib
         public void Send(string json) => ws.Send(json);
         public static Message[] RectifyMessage(string messagestr)
         {
-            List<Message> l = new();
-            foreach (var k in JArray.Parse(messagestr))
+            try
             {
-                switch (k["type"].ToString())
+                List<Message> l = new();
+                foreach (var k in JArray.Parse(messagestr))
                 {
-                    case "Source":l.Add(k.ToObject<Source>());break;
-                    case "Quote":
-                        {
-                            l.Add(new Quote(
-                                k["id"].ToObject<long>(),
-                                k["groupId"].ToObject<long>(),
-                                k["senderId"].ToObject<long>(),
-                                k["targetId"].ToObject<long>(),
-                                RectifyMessage(k["origin"].ToString()))
-                            );
-                        }
-                        break;
-                    case "At": l.Add(k.ToObject<At>());break;
-                    case "AtAll": l.Add(k.ToObject<AtAll>());break;
-                    case "Face": l.Add(k.ToObject<Face>());break;
-                    case "Plain": l.Add(k.ToObject<Plain>());break;
-                    case "Image": l.Add(k.ToObject<Image>());break;
-                    case "FlashImage": l.Add(k.ToObject<FlashImage>());break;
-                    case "Voice": l.Add(k.ToObject<Voice>());break;
-                    case "Xml": l.Add(k.ToObject<Xml>());break;
-                    case "Json": l.Add(k.ToObject<Json>());break;
-                    case "App": l.Add(k.ToObject<App>());break;
-                    case "Poke": l.Add(k.ToObject<Poke>());break;
-                    case "Dice": l.Add(k.ToObject<Dice>());break;
-                    case "MusicShare": l.Add(k.ToObject<MusicShare>());break;
-                    case "ForwardMessage": l.Add(k.ToObject<ForwardMessage>());break;
-                    case "File": l.Add(k.ToObject<File>());break;
-                    default: throw new($"err parse {k["type"]}");
+                    switch (k["type"].ToString())
+                    {
+                        case "Source": l.Add(k.ToObject<Source>()); break;
+                        case "Quote":
+                            {
+                                l.Add(new Quote(
+                                    k["id"].ToObject<long>(),
+                                    k["groupId"].ToObject<long>(),
+                                    k["senderId"].ToObject<long>(),
+                                    k["targetId"].ToObject<long>(),
+                                    RectifyMessage(k["origin"].ToString()))
+                                );
+                            }
+                            break;
+                        case "At": l.Add(k.ToObject<At>()); break;
+                        case "AtAll": l.Add(k.ToObject<AtAll>()); break;
+                        case "Face": l.Add(k.ToObject<Face>()); break;
+                        case "Plain": l.Add(k.ToObject<Plain>()); break;
+                        case "Image": l.Add(k.ToObject<Image>()); break;
+                        case "FlashImage": l.Add(k.ToObject<FlashImage>()); break;
+                        case "Voice": l.Add(k.ToObject<Voice>()); break;
+                        case "Xml": l.Add(k.ToObject<Xml>()); break;
+                        case "Json": l.Add(k.ToObject<Json>()); break;
+                        case "App": l.Add(k.ToObject<App>()); break;
+                        case "Poke": l.Add(k.ToObject<Poke>()); break;
+                        case "Dice": l.Add(k.ToObject<Dice>()); break;
+                        case "MusicShare": l.Add(k.ToObject<MusicShare>()); break;
+                        case "Forward": l.Add(k.ToObject<ForwardMessage>()); break;
+                        case "File": l.Add(k.ToObject<File>()); break;
+                        default: Console.WriteLine($"err parse {k["type"]}"); break;
+                    }
                 }
+                return l.ToArray();
             }
-            return l.ToArray();
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Array.Empty<Message>();
+            }
         }
         public void Connect() => ws.Open();
         public async Task<bool> ConnectAsync() => await ws.OpenAsync();
