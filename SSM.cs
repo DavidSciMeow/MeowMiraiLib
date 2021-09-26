@@ -23,6 +23,22 @@ namespace MeowMiraiLib.Msg
         }
     }
 
+    public class NudgeSomebody : SSM
+    {
+        public NudgeSomebody(long target, long subject, string kind)
+        {
+            command = "sendNudge";
+            content = new resp() { target = target, subject = subject, kind = kind };
+        }
+        public class resp
+        {
+            public string SessionKey = Client.session;
+            public long target;
+            public long subject;
+            public string kind;
+        }
+    }
+
     public class EventBotInvitedGroup : SSM
     {
         public EventBotInvitedGroup(long eventId, long fromId, long groupId, int operate, string message)

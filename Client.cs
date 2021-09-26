@@ -52,6 +52,17 @@ namespace MeowMiraiLib
                         case "OtherClientMessage":
                             _OtherMessageRecieve.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
+                        case "NudgeEvent":
+                            var j = jo["data"];
+                            _NudgeEventRecieve.Invoke(
+                                new Event.NudgeEvent(
+                                    j["fromId"].ToObject<long>(),
+                                    j["target"].ToObject<long>(),
+                                    j["subject"]["kind"].ToString(),
+                                    j["subject"]["id"].ToObject<long>(),
+                                    j["action"].ToString(),
+                                    j["suffix"].ToString()));
+                            return;
                         default:
                             _ServiceMessageRecieve.Invoke(jo.ToString());
                             return;
@@ -113,6 +124,7 @@ namespace MeowMiraiLib
             _OtherMessageRecieve += (s, e) => { };
             _ServericeConnected += (a) => { };
             _E_BotInvitedJoinGroupRecieve += (a, b) => { };
+            _NudgeEventRecieve += (a) => { };
         }
         public void Send(string json) => ws.Send(json);
         public static Message[] RectifyMessage(string messagestr)
@@ -151,15 +163,16 @@ namespace MeowMiraiLib
                         case "MusicShare": l.Add(k.ToObject<MusicShare>()); break;
                         case "Forward": l.Add(k.ToObject<ForwardMessage>()); break;
                         case "File": l.Add(k.ToObject<File>()); break;
-                        default: Console.WriteLine($"err parse {k["type"]}"); break;
+                        default: Console.WriteLine($"err parse {k["type"]}"); return null;
                     }
                 }
                 return l.ToArray();
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return Array.Empty<Message>();
+                Console.WriteLine($"{ex.Message} :: {messagestr}");
+                Console.WriteLine();
+                return null;
             }
         }
         public void Connect() => ws.Open();
@@ -174,6 +187,8 @@ namespace MeowMiraiLib
         public event FriendMessage _FriendMessageRecieve;
         public delegate void GroupMessage(GroupMessageSender s, Message[] e);
         public event GroupMessage _GroupMessageRecieve;
+        public delegate void NudgeEvent(Event.NudgeEvent e);
+        public event NudgeEvent _NudgeEventRecieve;
         public delegate void TempMessage(TempMessageSender s, Message[] e);
         public event TempMessage _TempMessageRecieve;
         public delegate void StrangerMessage(StrangerMessageSender s, Message[] e);

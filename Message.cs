@@ -152,20 +152,11 @@ namespace MeowMiraiLib.Msg.Type
     }
     public class Poke : Message
     {
-        public enum PokeType
-        {
-            Poke,
-            ShowLove,
-            Like,
-            Heartbroken,
-            SixSixSix,
-            FangDaZhao
-        }
         public string name;
 
-        public Poke(PokeType name)
+        public Poke(string name)
         {
-            this.name = name.ToString();
+            this.name = name;
             this.type = nameof(Poke);
         }
     }

@@ -9,6 +9,7 @@ namespace MeowMiraiLib.Event
     public enum EventType
     {
         BotInvitedJoinGroupRequestEvent,
+        NudgeEvent,
     }
     public class BotInvitedJoinGroupRequestEventArg : EventArgs
     {
@@ -30,6 +31,28 @@ namespace MeowMiraiLib.Event
             this.groupId = groupId;
             this.groupName = groupName;
             this.inviteNick = inviteNick;
+        }
+    }
+    public class NudgeEvent : EventArgs
+    {
+        public EventType type;
+        public long fromId;
+        public long target;
+        public string fromKind;
+        public long fromKindId;
+        public string action;
+        public string suffix;
+
+        public NudgeEvent(long fromId, long target, string fromKind, 
+            long fromKindId, string action, string suffix)
+        {
+            this.type = EventType.NudgeEvent;
+            this.fromId = fromId;
+            this.target = target;
+            this.fromKind = fromKind;
+            this.fromKindId = fromKindId;
+            this.action = action;
+            this.suffix = suffix;
         }
     }
 }
