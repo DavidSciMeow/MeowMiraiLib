@@ -53,16 +53,28 @@ namespace MeowMiraiLib
                             _OtherMessageRecieve.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "NudgeEvent":
-                            var j = jo["data"];
-                            _NudgeEventRecieve.Invoke(
-                                new Event.NudgeEvent(
-                                    j["fromId"].ToObject<long>(),
-                                    j["target"].ToObject<long>(),
-                                    j["subject"]["kind"].ToString(),
-                                    j["subject"]["id"].ToObject<long>(),
-                                    j["action"].ToString(),
-                                    j["suffix"].ToString()));
-                            return;
+                            {
+                                var j = jo["data"];
+                                _NudgeEventRecieve.Invoke(
+                                    new Event.NudgeEvent(
+                                        j["fromId"].ToObject<long>(),
+                                        j["target"].ToObject<long>(),
+                                        j["subject"]["kind"].ToString(),
+                                        j["subject"]["id"].ToObject<long>(),
+                                        j["action"].ToString(),
+                                        j["suffix"].ToString()));
+                                return;
+                            }
+                        case "BotJoinGroupEvent":
+                            {
+                                var j = jo["data"];
+                                _BotJoinGroupEvent.Invoke(new(
+                                    j["group"]["id"].ToObject<long>(),
+                                    j["group"]["name"].ToString(),
+                                    j["group"]["permission"].ToString()
+                                    ));
+                                return;
+                            }
                         default:
                             _ServiceMessageRecieve.Invoke(jo.ToString());
                             return;
@@ -124,6 +136,7 @@ namespace MeowMiraiLib
             _OtherMessageRecieve += (s, e) => { };
             _ServericeConnected += (a) => { };
             _E_BotInvitedJoinGroupRecieve += (a, b) => { };
+            _BotJoinGroupEvent += (a) => { };
             _NudgeEventRecieve += (a) => { };
         }
         public void Send(string json) => ws.Send(json);
@@ -180,7 +193,8 @@ namespace MeowMiraiLib
 
         public delegate void BotInvitedJoinGroupRequestEvent(BotInvitedJoinGroupRequestEventArg m, EventBotInvitedGroup e);
         public event BotInvitedJoinGroupRequestEvent _E_BotInvitedJoinGroupRecieve;
-
+        public delegate void BotJoinGroupEvent(BotJoinGroupEventArg e);
+        public event BotJoinGroupEvent _BotJoinGroupEvent;
         private delegate void ServiceMessage(string e);
         private event ServiceMessage _ServiceMessageRecieve;
         public delegate void FriendMessage(FriendMessageSender s, Message[] e);
@@ -197,5 +211,6 @@ namespace MeowMiraiLib
         public event OtherClientMessage _OtherMessageRecieve;
         public delegate void ServiceConnected(string e);
         public event ServiceConnected _ServericeConnected;
+
     }
 }

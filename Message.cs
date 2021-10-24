@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MeowMiraiLib.Msg.Type
 {
-    public abstract class Message
+    public class Message
     {
         public string type;
     }
