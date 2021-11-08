@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeowMiraiLib.Msg;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,30 +9,27 @@ namespace MeowMiraiLib.Event
 {
     public enum EventType
     {
-        BotInvitedJoinGroupRequestEvent,
         BotJoinGroupEvent,
+        NewFriendRequestEvent,
         NudgeEvent,
     }
-    public class BotInvitedJoinGroupRequestEventArg : EventArgs
+    public class NewFriendRequestEvent : EventArgs
     {
         public EventType type;
         public long eventId;
-        public string message;
         public long fromId;
         public long groupId;
-        public string groupName;
-        public string inviteNick;
+        public string nick;
+        public string message;
 
-        public BotInvitedJoinGroupRequestEventArg(long eventId, string message, long fromId, 
-            long groupId, string groupName, string inviteNick)
+        public NewFriendRequestEvent(long eventId, long fromId, long groupId, string nick, string message)
         {
-            this.type = EventType.BotInvitedJoinGroupRequestEvent;
+            this.type = EventType.BotJoinGroupEvent;
             this.eventId = eventId;
-            this.message = message;
             this.fromId = fromId;
             this.groupId = groupId;
-            this.groupName = groupName;
-            this.inviteNick = inviteNick;
+            this.nick = nick;
+            this.message = message;
         }
     }
     public class NudgeEvent : EventArgs
@@ -56,14 +54,14 @@ namespace MeowMiraiLib.Event
             this.suffix = suffix;
         }
     }
-    public class BotJoinGroupEventArg : EventArgs
+    public class BotJoinGroupEvent : EventArgs
     {
         public EventType type;
         public long groupId;
         public string groupName;
         public string permission;
 
-        public BotJoinGroupEventArg(long groupId, string groupName, string permission)
+        public BotJoinGroupEvent(long groupId, string groupName, string permission)
         {
             this.type = EventType.BotJoinGroupEvent;
             this.groupId = groupId;
