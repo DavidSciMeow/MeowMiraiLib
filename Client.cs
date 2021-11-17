@@ -3,11 +3,8 @@ using System.Threading.Tasks;
 using WebSocket4Net;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Reflection;
-using MeowMiraiLib.Msg;
 using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
-using MeowMiraiLib.Event;
 
 namespace MeowMiraiLib
 {
