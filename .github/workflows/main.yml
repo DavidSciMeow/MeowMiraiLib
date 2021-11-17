@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  Build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -32,13 +32,12 @@ jobs:
     # 3.build
     - name: Build with dotnet
       run: dotnet build --configuration Release
-    # 4.Install Nuget
-    - name: Install Nuget
-      run: |
-        $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-        $targetNugetExe = "nuget.exe"
-        Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
-    # 5. Push  package
-    - name: Push generated package to GitHub registry
-      run: |
-        .\nuget push .\GitToNugetPackageTest\bin\Release\*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NUGET_API_KEY }} -NoSymbols
+    #任务2:测试
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    #任务3:发布nuget
+    - name: Publish
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+       PROJECT_FILE_PATH: MeowMiraiLib.csproj   #确定发布项目名
+       NUGET_KEY: ${{secrets.NUGET_API_KEY}}  #使用专用key
