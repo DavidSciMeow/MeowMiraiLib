@@ -6,4 +6,6 @@ Client c = new();
 c.SetClient("ws://xxx.com.cn:1234/all?qq=123456789").Connect();//链接  
 c.debug = false;  
 c.eventdebug = false;  
+c.OnFriendMessageRecieve += async (s, e) =>{...}
+c.On.... += ....
 ```
