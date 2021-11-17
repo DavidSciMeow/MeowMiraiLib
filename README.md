@@ -1,5 +1,5 @@
 # Meow.MiraiLib  
-##一个**还在测试**的 Mirai-C# (.net 5) 后端 **欢迎支持**  
+## 一个**还在测试**的 Mirai-C# (.net 5) 后端
 ## 简易使用方法(内部注释基本完整)  
 ```
 Client c = new();  
