@@ -20,25 +20,24 @@ namespace MeowMiraiLib
         /// <summary>
         /// 客户端Websocket
         /// </summary>
-        private WebSocket ws;
+        public static WebSocket ws;
         /// <summary>
         /// 会话进程号
         /// </summary>
-        protected string session;
+        public static string session;
         /// <summary>
         /// 调试标识
         /// </summary>
-        public bool debug = false;
+        public static bool debug = false;
         /// <summary>
         /// 事件调试标识
         /// </summary>
-        public bool eventdebug = false;
+        public static bool eventdebug = false;
         /// <summary>
-        /// 设置客户端
+        /// 初始化一个标准客户端
         /// </summary>
-        /// <param name="url">链接的后端url(完整)</param>
-        /// <returns></returns>
-        public Client SetClient(string url)
+        /// <param name="url">地址</param>
+        public Client(string url)
         {
             ws = new WebSocket(url);
             ws.Opened += (s, e) =>
@@ -87,7 +86,7 @@ namespace MeowMiraiLib
                         case "BotJoinGroupEvent":
                             {
                                 var j = jo["data"];
-                                OnBotJoinGroupEvent?.Invoke(new(
+                                OnEventBotJoinGroupEvent?.Invoke(new(
                                     j["group"]["id"].ToObject<long>(),
                                     j["group"]["name"].ToString(),
                                     j["group"]["permission"].ToString()
@@ -139,13 +138,12 @@ namespace MeowMiraiLib
 
                 }
             };
-            return this;
         }
         /// <summary>
         /// 发送字段
         /// </summary>
         /// <param name="json">Json报文</param>
-        public void Send(string json) => ws.Send(json);
+        public static void Send(string json) => ws.Send(json);
         /// <summary>
         /// 解析报文
         /// </summary>
@@ -210,13 +208,33 @@ namespace MeowMiraiLib
         public async Task<bool> ConnectAsync() => await ws.OpenAsync();
 
 
+        /// <summary>
+        /// 接收到自身加入群聊请求
+        /// </summary>
+        /// <param name="e">自身入群句柄</param>
         public delegate void BotJoinGroupEvent(Event.BotJoinGroupEvent e);
-        public event BotJoinGroupEvent OnBotJoinGroupEvent;
+        /// <summary>
+        /// 接收到自身加入群聊请求
+        /// </summary>
+        public event BotJoinGroupEvent OnEventBotJoinGroupEvent;
+        /// <summary>
+        /// 接收到新好友请求
+        /// </summary>
+        /// <param name="e">好友请求句柄</param>
         public delegate void NewFriendRequestEvent(Event.NewFriendRequestEvent e);
-        public event NewFriendRequestEvent OnBotNewFriendEventRecieve;
+        /// <summary>
+        /// 接收到新好友请求
+        /// </summary>
+        public event NewFriendRequestEvent OnEventBotNewFriendEventRecieve;
 
-
+        /// <summary>
+        /// 接受到服务器信息
+        /// </summary>
+        /// <param name="e">服务器信息</param>
         private delegate void ServiceMessage(string e);
+        /// <summary>
+        /// 接收到服务器信息
+        /// </summary>
         private event ServiceMessage OnServiceMessageRecieve;
         public delegate void NudgeEvent(Event.NudgeEvent e);
         public event NudgeEvent OnNudgeMessageRecieve;

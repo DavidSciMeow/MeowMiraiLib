@@ -44,7 +44,7 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// Socket Send Message (命令报文)
     /// </summary>
-    public class SSM : Client
+    public class SSM
     {
         /// <summary>
         /// 同步id
@@ -89,7 +89,7 @@ namespace MeowMiraiLib.Msg
                     $"{(subCommand != null ? $"\"subCommand\":\"{subCommand}\"," : "")}" +
                     $"\"content\":{content}}}";
             }
-            Send(s);
+            Client.Send(s);
             return syncId;
         }
     }
@@ -175,7 +175,7 @@ namespace MeowMiraiLib.Msg
         public MessageFromId(long id)
         {
             command = "messageFromId";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":{id}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"id\":{id}}}";
         }
     }
     /// <summary>
@@ -189,7 +189,7 @@ namespace MeowMiraiLib.Msg
         public FriendList()
         {
             command = "friendList";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
         }
     }
     /// <summary>
@@ -203,7 +203,7 @@ namespace MeowMiraiLib.Msg
         public GroupList()
         {
             command = "groupList";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
         }
     }
     /// <summary>
@@ -217,7 +217,7 @@ namespace MeowMiraiLib.Msg
         public MemberList(long target)
         {
             command = "memberList";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -231,7 +231,7 @@ namespace MeowMiraiLib.Msg
         public BotProfile()
         {
             command = "botProfile";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
         }
     }
     /// <summary>
@@ -245,7 +245,7 @@ namespace MeowMiraiLib.Msg
         public FriendProfile(long qq)
         {
             command = "friendProfile";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qq}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{qq}}}";
         }
     }
     /// <summary>
@@ -259,7 +259,7 @@ namespace MeowMiraiLib.Msg
         public MemberProfile(long qqgroup,long qq)
         {
             command = "memberProfile";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
         }
     }
 
@@ -316,7 +316,7 @@ namespace MeowMiraiLib.Msg
         public SendNudge(long target, long subject, string kind)
         {
             command = "sendNudge";
-            content = $"{{\"sessionKey\":\"{session}\"," +
+            content = $"{{\"sessionKey\":\"{Client.session}\"," +
                 $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
         }
     }
@@ -331,7 +331,7 @@ namespace MeowMiraiLib.Msg
         public QuitGroup(long target)
         {
             command = "quit";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -345,7 +345,7 @@ namespace MeowMiraiLib.Msg
         public DeleteFriend(long target)
         {
             command = "deleteFriend";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -364,7 +364,7 @@ namespace MeowMiraiLib.Msg
         public Resp_newFriendRequestEvent(long eventid,long fromid,long groupid,int operatenum,string message)
         {
             command = "resp_newFriendRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid},"+
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }
@@ -385,7 +385,7 @@ namespace MeowMiraiLib.Msg
         public Resp_memberJoinRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
         {
             command = "resp_memberJoinRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid},"+
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }
@@ -406,7 +406,7 @@ namespace MeowMiraiLib.Msg
         public Resp_botInvitedJoinGroupRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
         {
             command = "resp_botInvitedJoinGroupRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }
