@@ -44,16 +44,52 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// Socket Send Message (命令报文)
     /// </summary>
-    public class SSM
+    public class SSM : Client
     {
-        public int syncId = new Random().Next(int.MaxValue);
+        /// <summary>
+        /// 同步id
+        /// </summary>
+        public int? syncId;
+        /// <summary>
+        /// 命令字段
+        /// </summary>
         public string command;
+        /// <summary>
+        /// 子命令字段
+        /// </summary>
         public string? subCommand = null;
-        public dynamic content = null;
-        public int Send()
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public dynamic content;
+        /// <summary>
+        /// 发送报文到Mirai后端
+        /// </summary>
+        /// <param name="syncid">设置同步id,不设置为随机id</param>
+        /// <returns>返回Syncid</returns>
+        public int? Send(int? syncid = null)
         {
-            var s = JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            Client.ws.Send(s);
+            string s;
+            if (syncid != null)
+            {
+                syncId = syncid;
+            }
+            else
+            {
+                syncId = new Random().Next(int.MaxValue);
+            }
+            if (content is SMessage)
+            {
+                s = JsonConvert.SerializeObject(this, Formatting.None, 
+                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            else
+            {
+                s = $"{{\"syncId\":{syncId},\"command\":\"{command}\"," +
+                    $"{(subCommand != null ? $"\"subCommand\":\"{subCommand}\"," : "")}" +
+                    $"\"content\":{content}}}";
+            }
+            Send(s);
             return syncId;
         }
     }
@@ -62,12 +98,33 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class SMessage
     {
+        /// <summary>
+        /// 目标
+        /// </summary>
         public long? target = null;
+        /// <summary>
+        /// 备用字段,目标
+        /// </summary>
         public long? qq = null;
+        /// <summary>
+        /// 群目标
+        /// </summary>
         public long? group = null;
+        /// <summary>
+        /// 引用字段,回复字段
+        /// </summary>
         public long? quote = null;
+        /// <summary>
+        /// 信息链
+        /// </summary>
         public Message[] messageChain;
-
+        /// <summary>
+        /// 构造一个SendableMessage
+        /// </summary>
+        /// <param name="qq">发送目标</param>
+        /// <param name="group">群</param>
+        /// <param name="messageChain">信息链</param>
+        /// <param name="quote">引用字段</param>
         public SMessage(long qq, long group, Message[] messageChain, long? quote = null)
         {
             this.qq = qq;
@@ -75,7 +132,14 @@ namespace MeowMiraiLib.Msg
             this.quote = quote;
             this.messageChain = messageChain;
         }
-
+        /// <summary>
+        /// 构造一个SendableMessage
+        /// </summary>
+        /// <param name="target">目标</param>
+        /// <param name="messageChain">信息链</param>
+        /// <param name="quote">引用字段</param>
+        /// <param name="qq">发送目标(备用)</param>
+        /// <param name="group">群</param>
         public SMessage(long target, Message[] messageChain, 
             long? quote = null, long? qq = null, long? group = null)
         {
@@ -91,6 +155,9 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class About : SSM
     {
+        /// <summary>
+        /// 获取插件信息
+        /// </summary>
         public About()
         {
             command = "about";
@@ -101,10 +168,14 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class MessageFromId : SSM
     {
+        /// <summary>
+        /// 通过MessageId获取消息
+        /// </summary>
+        /// <param name="id">信息id</param>
         public MessageFromId(long id)
         {
             command = "messageFromId";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"id\":{id}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"id\":{id}}}";
         }
     }
     /// <summary>
@@ -112,10 +183,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class FriendList : SSM
     {
+        /// <summary>
+        /// 获取好友列表
+        /// </summary>
         public FriendList()
         {
             command = "friendList";
-            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
+            content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -123,10 +197,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class GroupList : SSM
     {
+        /// <summary>
+        /// 获取群列表
+        /// </summary>
         public GroupList()
         {
             command = "groupList";
-            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
+            content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -134,10 +211,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class MemberList : SSM
     {
+        /// <summary>
+        /// 获取群员列表
+        /// </summary>
         public MemberList(long target)
         {
             command = "memberList";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -145,10 +225,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class BotProfile : SSM
     {
+        /// <summary>
+        /// 获取bot资料
+        /// </summary>
         public BotProfile()
         {
             command = "botProfile";
-            content = $"{{\"sessionKey\":\"{Client.session}\"}}";
+            content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -156,10 +239,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class FriendProfile : SSM
     {
+        /// <summary>
+        /// 获取某个好友的资料
+        /// </summary>
         public FriendProfile(long qq)
         {
             command = "friendProfile";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{qq}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qq}}}";
         }
     }
     /// <summary>
@@ -167,10 +253,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class MemberProfile : SSM
     {
+        /// <summary>
+        /// 获取某个群友的资料
+        /// </summary>
         public MemberProfile(long qqgroup,long qq)
         {
             command = "memberProfile";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
         }
     }
 
@@ -179,6 +268,9 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class FriendMessage : SSM
     {
+        /// <summary>
+        /// 发送好友信息
+        /// </summary>
         public FriendMessage(long target, Message[] messageChain, long? quote = null)
         {
             command = "sendFriendMessage";
@@ -190,6 +282,9 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class GroupMessage : SSM
     {
+        /// <summary>
+        /// 发送群信息
+        /// </summary>
         public GroupMessage(long target, Message[] messageChain, long? quote = null)
         {
             command = "sendGroupMessage";
@@ -201,23 +296,28 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class TempMessage : SSM
     {
+        /// <summary>
+        /// 发送临时信息
+        /// </summary>
         public TempMessage(long qq,long group, Message[] messageChain, long? quote = null)
         {
             command = "sendTempMessage";
             content = new SMessage(qq, group, messageChain, quote);
         }
     }
-
     /// <summary>
     /// 戳一戳
     /// </summary>
     public class SendNudge : SSM
     {
+        /// <summary>
+        /// 戳一戳
+        /// </summary>
         public SendNudge(long target, long subject, string kind)
         {
             command = "sendNudge";
-            content = $"{{\"sessionKey\":\"{Client.session}\"," +
-                $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"";
+            content = $"{{\"sessionKey\":\"{session}\"," +
+                $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
         }
     }
     /// <summary>
@@ -225,10 +325,13 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class QuitGroup : SSM
     {
+        /// <summary>
+        /// 退群
+        /// </summary>
         public QuitGroup(long target)
         {
             command = "quit";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -236,13 +339,15 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public class DeleteFriend : SSM
     {
+        /// <summary>
+        /// 删除好友
+        /// </summary>
         public DeleteFriend(long target)
         {
             command = "deleteFriend";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
+            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
-
     /// <summary>
     /// 处理加好友请求
     /// </summary>
@@ -259,7 +364,7 @@ namespace MeowMiraiLib.Msg
         public Resp_newFriendRequestEvent(long eventid,long fromid,long groupid,int operatenum,string message)
         {
             command = "resp_newFriendRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
+            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid},"+
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }
@@ -280,7 +385,7 @@ namespace MeowMiraiLib.Msg
         public Resp_memberJoinRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
         {
             command = "resp_memberJoinRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
+            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid},"+
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }
@@ -301,7 +406,7 @@ namespace MeowMiraiLib.Msg
         public Resp_botInvitedJoinGroupRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
         {
             command = "resp_botInvitedJoinGroupRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
+            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
                       $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
                       $"\"message\":\"{message}\"}}";
         }

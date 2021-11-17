@@ -11,15 +11,37 @@ using MeowMiraiLib.Event;
 
 namespace MeowMiraiLib
 {
+    /// <summary>
+    /// 建造一个客户端
+    /// </summary>
     public class Client
     {
-        /// ws://localhost:8880/all?verifyKey=elecrinko&qq=2040755401
+        /// <summary>
+        /// 地址
+        /// </summary>
         public string url;
-        public static WebSocket ws;
-        public static string session;
+        /// <summary>
+        /// 客户端Websocket
+        /// </summary>
+        private WebSocket ws;
+        /// <summary>
+        /// 会话进程号
+        /// </summary>
+        protected string session;
+        /// <summary>
+        /// 调试标识
+        /// </summary>
         public bool debug = false;
+        /// <summary>
+        /// 事件调试标识
+        /// </summary>
         public bool eventdebug = false;
-        public Client(string url)
+        /// <summary>
+        /// 设置客户端
+        /// </summary>
+        /// <param name="url">链接的后端url(完整)</param>
+        /// <returns></returns>
+        public Client SetClient(string url)
         {
             ws = new WebSocket(url);
             ws.Opened += (s, e) =>
@@ -38,45 +60,45 @@ namespace MeowMiraiLib
                     switch (jo["data"]["type"].ToString())
                     {
                         case "GroupMessage":
-                            _GroupMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                            OnGroupMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "FriendMessage":
-                            _FriendMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                            OnFriendMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "TempMessage":
-                            _TempMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                            OnTempMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "StrangerMessage":
-                            _StrangerMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                            OnStrangerMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "OtherClientMessage":
-                            _OtherMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                            OnOtherMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                             return;
                         case "NudgeEvent":
                             {
                                 var j = jo["data"];
-                                _NudgeMessageRecieve?.Invoke(
-                                    new Event.NudgeEvent(
-                                        j["fromId"].ToObject<long>(),
-                                        j["target"].ToObject<long>(),
-                                        j["subject"]["kind"].ToString(),
-                                        j["subject"]["id"].ToObject<long>(),
-                                        j["action"].ToString(),
-                                        j["suffix"].ToString()));
+                                OnNudgeMessageRecieve?.Invoke(new(
+                                    j["fromId"].ToObject<long>(),
+                                    j["target"].ToObject<long>(),
+                                    j["subject"]["kind"].ToString(),
+                                    j["subject"]["id"].ToObject<long>(),
+                                    j["action"].ToString(),
+                                    j["suffix"].ToString()
+                                ));
                                 return;
                             }
                         case "BotJoinGroupEvent":
                             {
                                 var j = jo["data"];
-                                _BotJoinGroupEvent?.Invoke(new(
+                                OnBotJoinGroupEvent?.Invoke(new(
                                     j["group"]["id"].ToObject<long>(),
                                     j["group"]["name"].ToString(),
                                     j["group"]["permission"].ToString()
-                                    ));
+                                ));
                                 return;
                             }
                         default:
-                            _ServiceMessageRecieve?.Invoke(jo.ToString());
+                            OnServiceMessageRecieve?.Invoke(jo.ToString());
                             return;
                     }
                 }
@@ -85,17 +107,15 @@ namespace MeowMiraiLib
                     if (string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
                     {
                         session = jo["data"]["session"].ToString();
-                        _ServericeConnected?.Invoke(jo.ToString());
+                        OnServericeConnected?.Invoke(jo.ToString());
                     }
                     else
                     {
-                        var syncid = int.Parse(jo["syncId"].ToString());
-                        _ServiceMessageRecieve?.Invoke(jo.ToString());
+                        OnServiceMessageRecieve?.Invoke(jo.ToString());
                     }
                 }
             };
-            //rectify event
-            _ServiceMessageRecieve += (a) =>
+            OnServiceMessageRecieve += (a) =>
             {
                 try
                 {
@@ -119,12 +139,21 @@ namespace MeowMiraiLib
                 }
                 catch
                 {
-                    
+
                 }
-                
             };
+            return this;
         }
+        /// <summary>
+        /// 发送字段
+        /// </summary>
+        /// <param name="json">Json报文</param>
         public void Send(string json) => ws.Send(json);
+        /// <summary>
+        /// 解析报文
+        /// </summary>
+        /// <param name="messagestr">报文</param>
+        /// <returns></returns>
         public static Message[] RectifyMessage(string messagestr)
         {
             try
@@ -173,31 +202,38 @@ namespace MeowMiraiLib
                 return null;
             }
         }
+        /// <summary>
+        /// 链接后端
+        /// </summary>
         public void Connect() => ws.Open();
+        /// <summary>
+        /// 异步链接
+        /// </summary>
+        /// <returns></returns>
         public async Task<bool> ConnectAsync() => await ws.OpenAsync();
 
 
         public delegate void BotJoinGroupEvent(Event.BotJoinGroupEvent e);
-        public event BotJoinGroupEvent _BotJoinGroupEvent;
+        public event BotJoinGroupEvent OnBotJoinGroupEvent;
         public delegate void NewFriendRequestEvent(Event.NewFriendRequestEvent e);
-        public event NewFriendRequestEvent _E_BotNewFriendEventRecieve;
+        public event NewFriendRequestEvent OnBotNewFriendEventRecieve;
 
 
         private delegate void ServiceMessage(string e);
-        private event ServiceMessage _ServiceMessageRecieve;
+        private event ServiceMessage OnServiceMessageRecieve;
         public delegate void NudgeEvent(Event.NudgeEvent e);
-        public event NudgeEvent _NudgeMessageRecieve;
+        public event NudgeEvent OnNudgeMessageRecieve;
         public delegate void FriendMessage(FriendMessageSender s, Message[] e);
-        public event FriendMessage _FriendMessageRecieve;
+        public event FriendMessage OnFriendMessageRecieve;
         public delegate void GroupMessage(GroupMessageSender s, Message[] e);
-        public event GroupMessage _GroupMessageRecieve;
+        public event GroupMessage OnGroupMessageRecieve;
         public delegate void TempMessage(TempMessageSender s, Message[] e);
-        public event TempMessage _TempMessageRecieve;
+        public event TempMessage OnTempMessageRecieve;
         public delegate void StrangerMessage(StrangerMessageSender s, Message[] e);
-        public event StrangerMessage _StrangerMessageRecieve;
+        public event StrangerMessage OnStrangerMessageRecieve;
         public delegate void OtherClientMessage(OtherClientMessageSender s, Message[] e);
-        public event OtherClientMessage _OtherMessageRecieve;
+        public event OtherClientMessage OnOtherMessageRecieve;
         public delegate void ServiceConnected(string e);
-        public event ServiceConnected _ServericeConnected;
+        public event ServiceConnected OnServericeConnected;
     }
 }
