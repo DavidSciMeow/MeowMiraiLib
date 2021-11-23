@@ -5,25 +5,15 @@ using Newtonsoft.Json;
 namespace MeowMiraiLib.Msg
 {
     /*---command--- 
-     * = about
-     * = messageFromId
-     * = friendList
-     * = groupList
-     * = memberList
-     * = botProfile
-     * = friendProfile
-     * = memberProfile
-     * = sendFriendMessage
-     * = sendGroupMessage
-     * = sendTempMessage
-     * = sendNudge
      * recall
+     * ------------
      * file_list
      * file_info
      * file_mkdir
      * file_delete
      * file_move
      * file_rename
+     * ------------
      * = deleteFriend
      * mute
      * unmute
@@ -37,10 +27,9 @@ namespace MeowMiraiLib.Msg
      * memberInfo ~ get
      * memberInfo ~ update
      * memberAdmin
-     * = resp_newFriendRequestEvent
-     * = resp_memberJoinRequestEvent
-     * = resp_botInvitedJoinGroupRequestEvent
      */
+
+    #region Bases SSM -- 基础定义
     /// <summary>
     /// Socket Send Message (命令报文)
     /// </summary>
@@ -150,6 +139,135 @@ namespace MeowMiraiLib.Msg
             this.group = group;
         }
     }
+    #endregion
+
+    #region Message&nudge -- 信息和戳一戳
+    /// <summary>
+    /// 发送好友信息
+    /// </summary>
+    public class FriendMessage : SSM
+    {
+        /// <summary>
+        /// 发送好友信息
+        /// </summary>
+        public FriendMessage(long target, Message[] messageChain, long? quote = null)
+        {
+            command = "sendFriendMessage";
+            content = new SMessage(target, messageChain, quote);
+        }
+    }
+    /// <summary>
+    /// 发送群信息
+    /// </summary>
+    public class GroupMessage : SSM
+    {
+        /// <summary>
+        /// 发送群信息
+        /// </summary>
+        public GroupMessage(long target, Message[] messageChain, long? quote = null)
+        {
+            command = "sendGroupMessage";
+            content = new SMessage(target, messageChain, quote);
+        }
+    }
+    /// <summary>
+    /// 发送临时信息
+    /// </summary>
+    public class TempMessage : SSM
+    {
+        /// <summary>
+        /// 发送临时信息
+        /// </summary>
+        public TempMessage(long qq, long group, Message[] messageChain, long? quote = null)
+        {
+            command = "sendTempMessage";
+            content = new SMessage(qq, group, messageChain, quote);
+        }
+    }
+    /// <summary>
+    /// 发送戳一戳
+    /// </summary>
+    public class SendNudge : SSM
+    {
+        /// <summary>
+        /// 发送戳一戳
+        /// </summary>
+        public SendNudge(long target, long subject, string kind)
+        {
+            command = "sendNudge";
+            content = $"{{\"sessionKey\":\"{Client.session}\"," +
+                $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
+        }
+    }
+    #endregion
+
+    #region response to request -- 请求处理
+    /// <summary>
+    /// 处理加好友请求
+    /// </summary>
+    public class Resp_newFriendRequestEvent : SSM
+    {
+        /// <summary>
+        /// 处理加好友请求
+        /// </summary>
+        /// <param name="eventid"></param>
+        /// <param name="fromid"></param>
+        /// <param name="groupid"></param>
+        /// <param name="operatenum">0同意,1拒绝,2添加至黑名单</param>
+        /// <param name="message"></param>
+        public Resp_newFriendRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        {
+            command = "resp_newFriendRequestEvent";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
+                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+                      $"\"message\":\"{message}\"}}";
+        }
+    }
+    /// <summary>
+    /// 用户加群
+    /// </summary>
+    public class Resp_memberJoinRequestEvent : SSM
+    {
+        /// <summary>
+        /// 用户加群
+        /// </summary>
+        /// <param name="eventid"></param>
+        /// <param name="fromid"></param>
+        /// <param name="groupid"></param>
+        /// <param name="operatenum">0同意,1拒绝,2忽略,3拒绝并黑名单,4忽略并黑名单</param>
+        /// <param name="message"></param>
+        public Resp_memberJoinRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        {
+            command = "resp_memberJoinRequestEvent";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
+                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+                      $"\"message\":\"{message}\"}}";
+        }
+    }
+    /// <summary>
+    /// Bot被邀请入群
+    /// </summary>
+    public class Resp_botInvitedJoinGroupRequestEvent : SSM
+    {
+        /// <summary>
+        /// Bot被邀请入群
+        /// </summary>
+        /// <param name="eventid"></param>
+        /// <param name="fromid"></param>
+        /// <param name="groupid"></param>
+        /// <param name="operatenum">0同意,1拒绝</param>
+        /// <param name="message"></param>
+        public Resp_botInvitedJoinGroupRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        {
+            command = "resp_botInvitedJoinGroupRequestEvent";
+            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
+                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+                      $"\"message\":\"{message}\"}}";
+        }
+    }
+    #endregion
+
+
     /// <summary>
     /// 获取插件信息
     /// </summary>
@@ -262,64 +380,6 @@ namespace MeowMiraiLib.Msg
             content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
         }
     }
-
-    /// <summary>
-    /// 发送好友信息
-    /// </summary>
-    public class FriendMessage : SSM
-    {
-        /// <summary>
-        /// 发送好友信息
-        /// </summary>
-        public FriendMessage(long target, Message[] messageChain, long? quote = null)
-        {
-            command = "sendFriendMessage";
-            content = new SMessage(target, messageChain, quote);
-        }
-    }
-    /// <summary>
-    /// 发送群信息
-    /// </summary>
-    public class GroupMessage : SSM
-    {
-        /// <summary>
-        /// 发送群信息
-        /// </summary>
-        public GroupMessage(long target, Message[] messageChain, long? quote = null)
-        {
-            command = "sendGroupMessage";
-            content = new SMessage(target, messageChain, quote);
-        }
-    }
-    /// <summary>
-    /// 发送临时信息
-    /// </summary>
-    public class TempMessage : SSM
-    {
-        /// <summary>
-        /// 发送临时信息
-        /// </summary>
-        public TempMessage(long qq,long group, Message[] messageChain, long? quote = null)
-        {
-            command = "sendTempMessage";
-            content = new SMessage(qq, group, messageChain, quote);
-        }
-    }
-    /// <summary>
-    /// 戳一戳
-    /// </summary>
-    public class SendNudge : SSM
-    {
-        /// <summary>
-        /// 戳一戳
-        /// </summary>
-        public SendNudge(long target, long subject, string kind)
-        {
-            command = "sendNudge";
-            content = $"{{\"sessionKey\":\"{Client.session}\"," +
-                $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
-        }
-    }
     /// <summary>
     /// 退群
     /// </summary>
@@ -346,69 +406,6 @@ namespace MeowMiraiLib.Msg
         {
             command = "deleteFriend";
             content = $"{{\"sessionKey\":\"{Client.session}\",\"target\":{target}}}";
-        }
-    }
-    /// <summary>
-    /// 处理加好友请求
-    /// </summary>
-    public class Resp_newFriendRequestEvent : SSM
-    {
-        /// <summary>
-        /// 处理加好友请求
-        /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝,2添加至黑名单</param>
-        /// <param name="message"></param>
-        public Resp_newFriendRequestEvent(long eventid,long fromid,long groupid,int operatenum,string message)
-        {
-            command = "resp_newFriendRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
-        }
-    }
-    /// <summary>
-    /// 用户加群
-    /// </summary>
-    public class Resp_memberJoinRequestEvent : SSM
-    {
-        /// <summary>
-        /// 用户加群
-        /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝,2忽略,3拒绝并黑名单,4忽略并黑名单</param>
-        /// <param name="message"></param>
-        public Resp_memberJoinRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
-        {
-            command = "resp_memberJoinRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid},"+
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
-        }
-    }
-    /// <summary>
-    /// Bot被邀请入群
-    /// </summary>
-    public class Resp_botInvitedJoinGroupRequestEvent : SSM
-    {
-        /// <summary>
-        /// Bot被邀请入群
-        /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝</param>
-        /// <param name="message"></param>
-        public Resp_botInvitedJoinGroupRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
-        {
-            command = "resp_botInvitedJoinGroupRequestEvent";
-            content = $"{{\"sessionKey\":\"{Client.session}\",\"eventId\":{eventid}," +
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
         }
     }
 }
