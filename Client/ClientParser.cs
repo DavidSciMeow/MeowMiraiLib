@@ -5,6 +5,19 @@ using System;
 using System.Collections.Generic;
 using WebSocket4Net;
 
+/*
+ * 本文为客户端事件转换类文件
+ * 本文件上下文严格和 https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/EventType.md 一一对应
+ * 总体解释方案为 Ws_MessageReceived 信息生成方案为 RectifyMessage
+ * 本源码文件不对API进行公开, 其访问性为私有(Private), 除了官方更新解释方案外严禁更改本文内容
+ * ------------------
+ * this file is a client convert file,
+ * this file is strict consistency to website https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/EventType.md
+ * Main Parser is Ws_MessageReceived function/method, and Message Parser is RectifyMessage function/method
+ * this file will not Expose to outer API, Its accessibility is Private, 
+ * Do Not Alter Any Function/Method Except Official Updates.
+ */
+
 namespace MeowMiraiLib
 {
     public partial class Client
@@ -12,7 +25,7 @@ namespace MeowMiraiLib
         private void Ws_Opened(object? sender, EventArgs e)
         {
             Console.WriteLine("Connected");
-            OnServeiceConnected?.Invoke("Connected");
+            _OnServeiceConnected?.Invoke("Connected");
         }
         private Message[] RectifyMessage(string messagestr)
         {
@@ -155,6 +168,676 @@ namespace MeowMiraiLib
                                     );
                                 return;
                             }
+                        case "BotGroupPermissionChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventBotGroupPermissionChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                            new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "BotMuteEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventBotMuteEvent?.Invoke(
+                                    new(
+                                        j["durationSeconds"].ToObject<long>(),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "BotUnmuteEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventBotUnmuteEvent?.Invoke(
+                                    new(
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "BotJoinGroupEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventBotJoinGroupEvent?.Invoke(
+                                    new(
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        j["group"]["invitor"].ToObject<object>()
+                                    )
+                                );
+                                return;
+                            }
+                        case "BotLeaveEventActive":
+                            {
+                                var j = jo["data"];
+                                OnEventBotLeaveEventActive?.Invoke(
+                                    new(
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "BotLeaveEventKick":
+                            {
+                                var j = jo["data"];
+                                OnEventBotLeaveEventKick?.Invoke(
+                                    new(
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        j["operator"].ToObject<object>()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupRecallEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupRecallEvent?.Invoke(
+                                    new(
+                                        j["authorId"].ToObject<long>(),
+                                        j["messageId"].ToObject<long>(),
+                                        j["time"].ToObject<long>(), 
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "FriendRecallEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventFriendRecallEvent?.Invoke(
+                                    new(
+                                        j["authorId"].ToObject<long>(),
+                                        j["messageId"].ToObject<long>(),
+                                        j["time"].ToObject<long>(),
+                                        j["operator"].ToObject<long>()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "NudgeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventNudgeEvent?.Invoke(new(
+                                    j["fromId"].ToObject<long>(),
+                                    j["target"].ToObject<long>(),
+                                    j["subject"]["kind"].ToString(),
+                                    j["subject"]["id"].ToObject<long>(),
+                                    j["action"].ToString(),
+                                    j["suffix"].ToString()
+                                ));
+                                return;
+                            }
+                        case "GroupNameChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupNameChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupEntranceAnnouncementChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupEntranceAnnouncementChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupMuteAllEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupMuteAllEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToObject<bool>(),
+                                        j["current"].ToObject<bool>(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupAllowAnonymousChatEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupAllowAnonymousChatEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToObject<bool>(),
+                                        j["current"].ToObject<bool>(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupAllowConfessTalkEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupAllowConfessTalkEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToObject<bool>(),
+                                        j["current"].ToObject<bool>(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        j["isByBot"].ToObject<bool>()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "GroupAllowMemberInviteEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventGroupAllowMemberInviteEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToObject<bool>(),
+                                        j["current"].ToObject<bool>(),
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberJoinEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberJoinEvent?.Invoke(
+                                    new(
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            ),
+                                        j["invitor"].ToObject<object>()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberLeaveEventKick":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberLeaveEventKick?.Invoke(
+                                    new(
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["member"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberLeaveEventQuit":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberLeaveEventQuit?.Invoke(
+                                    new(
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberCardChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventCardChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberSpecialTitleChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventSpecialTitleChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberPermissionChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventPermissionChangeEvent?.Invoke(
+                                    new(
+                                        j["origin"].ToString(),
+                                        j["current"].ToString(),
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberMuteEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberMuteEvent?.Invoke(
+                                    new(
+                                        j["durationSeconds"].ToObject<long>(),
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["memberName"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberUnmuteEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberUnmuteEvent?.Invoke(
+                                    new(
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            ),
+                                        new(
+                                            j["operator"]["id"].ToObject<long>(),
+                                            j["operator"]["memberName"].ToString(),
+                                            j["operator"]["specialTitle"].ToString(),
+                                            j["operator"]["permission"].ToString(),
+                                            j["operator"]["joinTimestamp"].ToObject<long>(),
+                                            j["operator"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["operator"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["operator"]["group"]["id"].ToObject<long>(),
+                                                j["operator"]["group"]["name"].ToString(),
+                                                j["operator"]["group"]["permission"].ToString()
+                                                )
+                                            )
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberHonorChangeEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberHonorChangeEvent?.Invoke(
+                                    new(
+                                        new(
+                                            j["member"]["id"].ToObject<long>(),
+                                            j["member"]["memberName"].ToString(),
+                                            j["member"]["specialTitle"].ToString(),
+                                            j["member"]["permission"].ToString(),
+                                            j["member"]["joinTimestamp"].ToObject<long>(),
+                                            j["member"]["lastSpeakTimestamp"].ToObject<long>(),
+                                            j["member"]["muteTimeRemaining"].ToObject<long>(),
+                                            new(
+                                                j["member"]["group"]["id"].ToObject<long>(),
+                                                j["member"]["group"]["name"].ToString(),
+                                                j["member"]["group"]["permission"].ToString()
+                                                )
+                                            ),
+                                        j["action"].ToString(),
+                                        j["honor"].ToString()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "NewFriendRequestEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventNewFriendRequestEvent?.Invoke(
+                                        new(
+                                            j["eventId"].ToObject<long>(),
+                                            j["fromId"].ToObject<long>(),
+                                            j["groupId"].ToObject<long>(),
+                                            j["nick"].ToString(),
+                                            j["message"].ToString()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "MemberJoinRequestEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventMemberJoinRequestEvent?.Invoke(
+                                        new(
+                                            j["eventId"].ToObject<long>(),
+                                            j["fromId"].ToObject<long>(),
+                                            j["groupId"].ToObject<long>(),
+                                            j["groupName"].ToString(),
+                                            j["nick"].ToString(),
+                                            j["message"].ToString()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "BotInvitedJoinGroupRequestEvent":
+                            {
+                                var j = jo["data"];
+                                OnEventBotInvitedJoinGroupRequestEvent?.Invoke(
+                                        new(
+                                            j["eventId"].ToObject<long>(),
+                                            j["fromId"].ToObject<long>(),
+                                            j["groupId"].ToObject<long>(),
+                                            j["groupName"].ToString(),
+                                            j["nick"].ToString(),
+                                            j["message"].ToString()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "OtherClientOnlineEvent":
+                            {
+                                var j = jo["data"];
+                                _OnClientOnlineEvent?.Invoke(
+                                    new(
+                                        j["client"]["id"].ToObject<long>(),
+                                        j["client"]["platform"].ToString(),
+                                        j["kind"].ToObject<long>()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "OtherClientOfflineEvent":
+                            {
+                                var j = jo["data"];
+                                _OnOtherClientOfflineEvent?.Invoke(
+                                    new(
+                                        j["client"]["id"].ToObject<long>(),
+                                        j["client"]["platform"].ToString()
+                                        )
+                                    );
+                                return;
+                            }
+                        case "CommandExecutedEvent":
+                            {
+                                var j = jo["data"];
+                                JArray ja = JArray.Parse(j["args"].ToString());
+                                List<(string, string)> args = new();
+                                foreach(var i in ja)
+                                {
+                                    args.Add((i["type"].ToString(),i["text"].ToString()));
+                                }
+                                _OnCommandExecutedEvent?.Invoke(
+                                    new(
+                                        j["name"].ToString(),
+                                        j["friend"].ToObject<object>(),
+                                        j["member"].ToObject<object>(),
+                                        args
+                                        )
+                                    );
+                                return;
+                            }
+                        default:
+                            {
+                                _OnUnknownEvent?.Invoke(jo.ToString());
+                                return;
+                            }
                     }
                 }
                 catch (Exception ex)
@@ -171,39 +854,10 @@ namespace MeowMiraiLib
                 if (string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
                 {
                     session = jo["data"]["session"].ToString();
-                    OnServeiceConnected?.Invoke(jo.ToString());
+                    _OnServeiceConnected?.Invoke(jo.ToString());
                     return;
                 }
             }
-                /*
-                    case "BotJoinGroupEvent":
-                        {
-                            var j = jo["data"];
-                            OnEventBotJoinGroupEvent?.Invoke(
-                                new(
-                                    new(
-                                    j["group"]["id"].ToObject<long>(),
-                                    j["group"]["name"].ToString(),
-                                    j["group"]["permission"].ToString()
-                                    ),
-                                j["group"]["invitor"].ToObject<object>()
-                            ));
-                            return;
-                        }
-                    case "NudgeEvent":
-                        {
-                            var j = jo["data"];
-                            OnNudgeMessageRecieve?.Invoke(new(
-                                j["fromId"].ToObject<long>(),
-                                j["target"].ToObject<long>(),
-                                j["subject"]["kind"].ToString(),
-                                j["subject"]["id"].ToObject<long>(),
-                                j["action"].ToString(),
-                                j["suffix"].ToString()
-                            ));
-                            return;
-                        }
-                */
         }
     }
 }

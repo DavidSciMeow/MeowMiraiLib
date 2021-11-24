@@ -12,6 +12,7 @@
  * except 'Mirai Code', all other message will be parsing into an Array of message as 'Message[]'
  * for more of message and classes standard or Mirai Code, Visit website: https://github.com/mamoe/mirai/blob/dev/docs/Messages.md
  */
+
 namespace MeowMiraiLib.Msg.Type
 {
     /// <summary>

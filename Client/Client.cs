@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using WebSocket4Net;
+
 /* 
  * 开发标准客户端文件
  * 本文件生成了基础的客户端定义,用于构建一个快速重写的Mirai Websocket客户端,
@@ -17,6 +18,7 @@ using WebSocket4Net;
  * the second part is file 'ClientEvent' this file defines User-able(programmer) function/method/event
  * the third part is file 'ClientParser' this file defines the interpreter for Mirai-backend strings, and converted into Csharp Class and Event. 
  */
+
 namespace MeowMiraiLib
 {
     /// <summary>

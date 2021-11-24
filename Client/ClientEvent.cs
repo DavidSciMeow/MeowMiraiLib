@@ -19,25 +19,54 @@ namespace MeowMiraiLib
 {
     public partial class Client
     {
+        /*--Type of Service--*/
         /// <summary>
-        /// 接收到Websocket端链接成功信息
+        /// Websocket端链接成功信息
         /// </summary>
         /// <param name="e">信息内容</param>
         public delegate void ServiceConnected(string e);
         /// <summary>
         /// 接收到Websocket端链接成功信息
         /// </summary>
-        public event ServiceConnected OnServeiceConnected;
+        public event ServiceConnected _OnServeiceConnected;
+        /// <summary>
+        /// 后端传送其他客户端上线通知
+        /// </summary>
+        /// <param name="e">客户端上线通知句柄</param>
+        public delegate void OtherClientOnlineEvent(Event.OtherClientOnlineEvent e);
+        /// <summary>
+        /// 接收到后端传送其他客户端上线通知
+        /// </summary>
+        public event OtherClientOnlineEvent _OnClientOnlineEvent;
+        /// <summary>
+        /// 后端传送其他客户端下线通知
+        /// </summary>
+        /// <param name="e">客户端下线通知句柄</param>
+        public delegate void OtherClientOfflineEvent(Event.OtherClientOfflineEvent e);
+        /// <summary>
+        /// 接收到后端传送其他客户端下线通知
+        /// </summary>
+        public event OtherClientOfflineEvent _OnOtherClientOfflineEvent;
+        /// <summary>
+        /// 后端传送命令被执行通知
+        /// </summary>
+        /// <param name="e">命令被执行通知句柄</param>
+        public delegate void CommandExecutedEvent(Event.CommandExecutedEvent e);
+        /// <summary>
+        /// 接收到后端传送后端传送命令被执行通知
+        /// </summary>
+        public event CommandExecutedEvent _OnCommandExecutedEvent;
+        /// <summary>
+        /// 后端传送命令未知解析
+        /// </summary>
+        /// <param name="e">命令被执行通知句柄</param>
+        public delegate void UnknownEvent(string e);
+        /// <summary>
+        /// 接收到后端传送后端传送命令被执行通知
+        /// </summary>
+        public event UnknownEvent _OnUnknownEvent;
 
-        /// <summary>
-        /// 收到戳一戳信息
-        /// </summary>
-        /// <param name="e">戳一戳句柄</param>
-        public delegate void NudgeEvent(Event.NudgeEvent e);
-        /// <summary>
-        /// 收到戳一戳信息
-        /// </summary>
-        public event NudgeEvent OnNudgeMessageRecieve;
+        /*--Type of Message--*/
         /// <summary>
         /// 接收到好友私聊信息
         /// </summary>
@@ -89,26 +118,7 @@ namespace MeowMiraiLib
         /// </summary>
         public event OtherClientMessage OnOtherMessageRecieve;
 
-        /// <summary>
-        /// 接收到自身加入群聊请求
-        /// </summary>
-        /// <param name="e">自身入群句柄</param>
-        public delegate void BotJoinGroupEvent(Event.BotJoinGroupEvent e);
-        /// <summary>
-        /// 接收到自身加入群聊请求
-        /// </summary>
-        public event BotJoinGroupEvent OnEventBotJoinGroupEvent;
-        /// <summary>
-        /// 接收到新好友请求
-        /// </summary>
-        /// <param name="e">好友请求句柄</param>
-        public delegate void NewFriendRequestEvent(Event.NewFriendRequestEvent e);
-        /// <summary>
-        /// 接收到新好友请求
-        /// </summary>
-        public event NewFriendRequestEvent OnEventBotNewFriendEventRecieve;
-
-        /*-*/
+        /*--Type of Event--*/
         /// <summary>
         /// Mirai后台证实QQ上线
         /// </summary>
@@ -172,6 +182,248 @@ namespace MeowMiraiLib
         /// 好友昵称改变了
         /// </summary>
         public event FriendNickChangedEvent OnEventFriendNickChangedEvent;
-
+        /// <summary>
+        /// Bot在群里的权限被改变
+        /// </summary>
+        /// <param name="e">权限改变句柄</param>
+        public delegate void BotGroupPermissionChangeEvent(Event.BotGroupPermissionChangeEvent e);
+        /// <summary>
+        /// Bot在群里的权限被改变了
+        /// </summary>
+        public event BotGroupPermissionChangeEvent OnEventBotGroupPermissionChangeEvent;
+        /// <summary>
+        /// Bot被禁言
+        /// </summary>
+        /// <param name="e">禁言句柄</param>
+        public delegate void BotMuteEvent (Event.BotMuteEvent e);
+        /// <summary>
+        /// Bot被禁言了
+        /// </summary>
+        public event BotMuteEvent OnEventBotMuteEvent;
+        /// <summary>
+        /// Bot被解除禁言
+        /// </summary>
+        /// <param name="e">解除禁言句柄</param>
+        public delegate void BotUnmuteEvent (Event.BotUnmuteEvent e);
+        /// <summary>
+        /// Bot被解除禁言了
+        /// </summary>
+        public event BotUnmuteEvent OnEventBotUnmuteEvent;
+        /// <summary>
+        /// Bot加入新群
+        /// </summary>
+        /// <param name="e">自身入群句柄</param>
+        public delegate void BotJoinGroupEvent(Event.BotJoinGroupEvent e);
+        /// <summary>
+        /// Bot加入了一个新群
+        /// </summary>
+        public event BotJoinGroupEvent OnEventBotJoinGroupEvent;
+        /// <summary>
+        /// Bot主动退群
+        /// </summary>
+        /// <param name="e">退群句柄</param>
+        public delegate void BotLeaveEventActive(Event.BotLeaveEventActive e);
+        /// <summary>
+        /// Bot主动退出一个群
+        /// </summary>
+        public event BotLeaveEventActive OnEventBotLeaveEventActive;
+        /// <summary>
+        /// Bot被群踢出
+        /// </summary>
+        /// <param name="e">被群踢出句柄</param>
+        public delegate void BotLeaveEventKick(Event.BotLeaveEventKick e);
+        /// <summary>
+        /// Bot被群踢出
+        /// </summary>
+        public event BotLeaveEventKick OnEventBotLeaveEventKick;
+        /// <summary>
+        /// 群员撤回信息
+        /// </summary>
+        /// <param name="e">群员撤回信息句柄</param>
+        public delegate void GroupRecallEvent(Event.GroupRecallEvent e);
+        /// <summary>
+        /// 群员撤回了信息
+        /// </summary>
+        public event GroupRecallEvent OnEventGroupRecallEvent;
+        /// <summary>
+        /// 好友撤回信息
+        /// </summary>
+        /// <param name="e">撤回信息句柄</param>
+        public delegate void FriendRecallEvent (Event.FriendRecallEvent e);
+        /// <summary>
+        /// 好友撤回了信息
+        /// </summary>
+        public event FriendRecallEvent OnEventFriendRecallEvent;
+        /// <summary>
+        /// 戳一戳事件
+        /// </summary>
+        /// <param name="e">戳一戳句柄</param>
+        public delegate void NudgeEvent(Event.NudgeEvent e);
+        /// <summary>
+        /// 收到戳一戳信息
+        /// </summary>
+        public event NudgeEvent OnEventNudgeEvent;
+        /// <summary>
+        /// 群名改变信息
+        /// </summary>
+        /// <param name="e">群名改变句柄</param>
+        public delegate void GroupNameChangeEvent(Event.GroupNameChangeEvent e);
+        /// <summary>
+        /// 某个群名改变了
+        /// </summary>
+        public event GroupNameChangeEvent OnEventGroupNameChangeEvent;
+        /// <summary>
+        /// 某个群的入群公告改变
+        /// </summary>
+        /// <param name="e">群公告改变句柄</param>
+        public delegate void GroupEntranceAnnouncementChangeEvent(Event.GroupEntranceAnnouncementChangeEvent e);
+        /// <summary>
+        /// 某个群的入群公告改变了
+        /// </summary>
+        public event GroupEntranceAnnouncementChangeEvent OnEventGroupEntranceAnnouncementChangeEvent;
+        /// <summary>
+        /// 群全员禁言
+        /// </summary>
+        /// <param name="e">全员禁言状态句柄</param>
+        public delegate void GroupMuteAllEvent(Event.GroupMuteAllEvent e);
+        /// <summary>
+        /// 某个群更改了全员禁言状态
+        /// </summary>
+        public event GroupMuteAllEvent OnEventGroupMuteAllEvent;
+        /// <summary>
+        /// 群匿名聊天
+        /// </summary>
+        /// <param name="e">全群匿名状态句柄</param>
+        public delegate void GroupAllowAnonymousChatEvent(Event.GroupAllowAnonymousChatEvent e);
+        /// <summary>
+        /// 某个群更改了匿名聊天状态
+        /// </summary>
+        public event GroupAllowAnonymousChatEvent OnEventGroupAllowAnonymousChatEvent;
+        /// <summary>
+        /// 群坦白说
+        /// </summary>
+        /// <param name="e">群坦白说状态句柄</param>
+        public delegate void GroupAllowConfessTalkEvent(Event.GroupAllowConfessTalkEvent e);
+        /// <summary>
+        /// 某个群更改了坦白说的状态
+        /// </summary>
+        public event GroupAllowConfessTalkEvent OnEventGroupAllowConfessTalkEvent;
+        /// <summary>
+        /// 群员邀请好友加群
+        /// </summary>
+        /// <param name="e">群员邀请加群句柄</param>
+        public delegate void GroupAllowMemberInviteEvent(Event.GroupAllowMemberInviteEvent e);
+        /// <summary>
+        /// 某个群员邀请好友加群
+        /// </summary>
+        public event GroupAllowMemberInviteEvent OnEventGroupAllowMemberInviteEvent;
+        /// <summary>
+        /// 新人入群
+        /// </summary>
+        /// <param name="e">新人入群句柄</param>
+        public delegate void MemberJoinEvent(Event.MemberJoinEvent e);
+        /// <summary>
+        /// 某群有新人入群了
+        /// </summary>
+        public event MemberJoinEvent OnEventMemberJoinEvent;
+        /// <summary>
+        /// 某人被踢(不是Bot)
+        /// </summary>
+        /// <param name="e">被踢句柄</param>
+        public delegate void MemberLeaveEventKick(Event.MemberLeaveEventKick e);
+        /// <summary>
+        /// 某群把某人踢出了(不是Bot)
+        /// </summary>
+        public event MemberLeaveEventKick OnEventMemberLeaveEventKick;
+        /// <summary>
+        /// 成员主动退群
+        /// </summary>
+        /// <param name="e">群员主动离群句柄</param>
+        public delegate void MemberLeaveEventQuit(Event.MemberLeaveEventQuit e);
+        /// <summary>
+        /// 某群有成员主动退群了
+        /// </summary>
+        public event MemberLeaveEventQuit OnEventMemberLeaveEventQuit;
+        /// <summary>
+        /// 群名片改动
+        /// </summary>
+        /// <param name="e">群名片改动句柄</param>
+        public delegate void MemberCardChangeEvent(Event.MemberCardChangeEvent e);
+        /// <summary>
+        /// 某群有人的群名片改动了
+        /// </summary>
+        public event MemberCardChangeEvent OnEventCardChangeEvent;
+        /// <summary>
+        /// 群头衔改动
+        /// </summary>
+        /// <param name="e">头衔改动句柄</param>
+        public delegate void MemberSpecialTitleChangeEvent(Event.MemberSpecialTitleChangeEvent e);
+        /// <summary>
+        /// 某群有某个群主改动了某人头衔
+        /// </summary>
+        public event MemberSpecialTitleChangeEvent OnEventSpecialTitleChangeEvent;
+        /// <summary>
+        /// 某个成员权限改变
+        /// </summary>
+        /// <param name="e"></param>
+        public delegate void MemberPermissionChangeEvent(Event.MemberPermissionChangeEvent e);
+        /// <summary>
+        /// 某群有某个成员权限被改变了(不是Bot)
+        /// </summary>
+        public event MemberPermissionChangeEvent OnEventPermissionChangeEvent;
+        /// <summary>
+        /// 群成员被禁言
+        /// </summary>
+        /// <param name="e">成员禁言句柄</param>
+        public delegate void MemberMuteEvent(Event.MemberMuteEvent e);
+        /// <summary>
+        /// 某群的某个群成员被禁言
+        /// </summary>
+        public event MemberMuteEvent OnEventMemberMuteEvent;
+        /// <summary>
+        /// 群成员被取消禁言
+        /// </summary>
+        /// <param name="e">成员取消禁言句柄</param>
+        public delegate void MemberUnmuteEvent(Event.MemberUnmuteEvent e);
+        /// <summary>
+        /// 某群的某个群成员被取消禁言
+        /// </summary>
+        public event MemberUnmuteEvent OnEventMemberUnmuteEvent;
+        /// <summary>
+        /// 成员称号改变
+        /// </summary>
+        /// <param name="e">称号改变句柄</param>
+        public delegate void MemberHonorChangeEvent(Event.MemberHonorChangeEvent e);
+        /// <summary>
+        /// 某群的某个成员的群称号改变
+        /// </summary>
+        public event MemberHonorChangeEvent OnEventMemberHonorChangeEvent;
+        /// <summary>
+        /// 新好友请求
+        /// </summary>
+        /// <param name="e">好友请求句柄</param>
+        public delegate void NewFriendRequestEvent(Event.NewFriendRequestEvent e);
+        /// <summary>
+        /// 接收到新好友请求
+        /// </summary>
+        public event NewFriendRequestEvent OnEventNewFriendRequestEvent;
+        /// <summary>
+        /// 用户入群申请
+        /// </summary>
+        /// <param name="e">用户入群申请句柄</param>
+        public delegate void MemberJoinRequestEvent(Event.MemberJoinRequestEvent e);
+        /// <summary>
+        /// 接收到用户入群申请
+        /// </summary>
+        public event MemberJoinRequestEvent OnEventMemberJoinRequestEvent;
+        /// <summary>
+        /// Bot被邀请入群
+        /// </summary>
+        /// <param name="e">被邀请入群句柄</param>
+        public delegate void BotInvitedJoinGroupRequestEvent(Event.BotInvitedJoinGroupRequestEvent e);
+        /// <summary>
+        /// 接收到Bot被邀请入群申请
+        /// </summary>
+        public event BotInvitedJoinGroupRequestEvent OnEventBotInvitedJoinGroupRequestEvent;
     }
 }
