@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using WebSocket4Net;
 
 /* 
@@ -61,6 +64,31 @@ namespace MeowMiraiLib
         /// </summary>
         /// <param name="json">Json报文</param>
         public static void Send(string json) => ws.Send(json);
+        /// <summary>
+        /// 发送并且等待回值
+        /// </summary>
+        /// <param name="json">发送的字段</param>
+        /// <param name="syncId">同步字段</param>
+        /// <param name="TimeOut">超时取消,默认20s(秒)</param>
+        /// <returns></returns>
+        public static JObject? SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 20)
+        {
+            ws.Send(json);
+            while (true)
+            {
+                if(SSMRequestList.Count > 0)
+                {
+                    if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
+                    {
+                        return SSMRequestList.Dequeue();
+                    }
+                    else
+                    {
+                        SSMRequestList.Enqueue(SSMRequestList.Dequeue());
+                    }
+                }
+            }
+        }
         /// <summary>
         /// 链接后端
         /// </summary>

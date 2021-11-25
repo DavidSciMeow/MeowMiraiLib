@@ -22,6 +22,7 @@ namespace MeowMiraiLib
 {
     public partial class Client
     {
+        private static Queue<JObject> SSMRequestList = new(); //返回队列长度
         private void Ws_Opened(object? sender, EventArgs e)
         {
             Console.WriteLine("Connected");
@@ -81,6 +82,13 @@ namespace MeowMiraiLib
             if (debug)
             {
                 Console.WriteLine(jo);
+            }
+            if (!string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
+            {
+                if (jo["syncId"].ToObject<long>() != -1)
+                {
+                    SSMRequestList.Enqueue(jo);
+                }
             }
             if (jo?["data"]?["type"] != null)
             {
@@ -839,6 +847,8 @@ namespace MeowMiraiLib
                                 return;
                             }
                     }
+
+
                 }
                 catch (Exception ex)
                 {

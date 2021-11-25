@@ -1,33 +1,40 @@
 ﻿using MeowMiraiLib.Msg.Type;
 using System;
 using Newtonsoft.Json;
-
+using Newtonsoft.Json.Linq;
+/*
+ * 本文件是发送信息的标准定义文件,
+ * 文件内容与 https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md 一一对应
+ * 发送定义为 SSM (Socket Sendable Message) 类,
+ * --------------------------
+ * this file is by define message send function/method
+ * this file is one to one match to website https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md
+ * Sender function/method defines class is SSM (Socket Sendable Message) class.
+ * --- command | 还未作的功能 --- 
+ * recall
+ * ------------
+ * file_list
+ * file_info
+ * file_mkdir
+ * file_delete
+ * file_move
+ * file_rename
+ * ------------
+ * mute
+ * unmute
+ * kick
+ * muteAll
+ * unmuteAll
+ * setEssence
+ * groupConfig ~ get
+ * groupConfig ~ update
+ * memberInfo ~ get
+ * memberInfo ~ update
+ * memberAdmin
+ */
 namespace MeowMiraiLib.Msg
 {
-    /*---command--- 
-     * recall
-     * ------------
-     * file_list
-     * file_info
-     * file_mkdir
-     * file_delete
-     * file_move
-     * file_rename
-     * ------------
-     * = deleteFriend
-     * mute
-     * unmute
-     * kick
-     * = quit
-     * muteAll
-     * unmuteAll
-     * setEssence
-     * groupConfig ~ get
-     * groupConfig ~ update
-     * memberInfo ~ get
-     * memberInfo ~ update
-     * memberAdmin
-     */
+    
 
     #region Bases SSM -- 基础定义
     /// <summary>
@@ -55,8 +62,9 @@ namespace MeowMiraiLib.Msg
         /// 发送报文到Mirai后端
         /// </summary>
         /// <param name="syncid">设置同步id,不设置为随机id</param>
-        /// <returns>返回Syncid</returns>
-        public int? Send(int? syncid = null)
+        /// <param name="TimeOut">超时时间,20s(秒)</param>
+        /// <returns>(SyncId[同步方案],ReturnObject[返回的JObject])</returns>
+        public (int?,JObject?) Send(int? syncid = null,int TimeOut = 20)
         {
             string s;
             if (syncid != null)
@@ -69,7 +77,7 @@ namespace MeowMiraiLib.Msg
             }
             if (content is SMessage)
             {
-                s = JsonConvert.SerializeObject(this, Formatting.None, 
+                s = JsonConvert.SerializeObject(this, Formatting.None,
                     new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             else
@@ -78,8 +86,7 @@ namespace MeowMiraiLib.Msg
                     $"{(subCommand != null ? $"\"subCommand\":\"{subCommand}\"," : "")}" +
                     $"\"content\":{content}}}";
             }
-            Client.Send(s);
-            return syncId;
+            return (syncid, Client.SendAndWaitResponse(s, syncId, TimeOut));
         }
     }
     /// <summary>
@@ -150,6 +157,9 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 发送好友信息
         /// </summary>
+        /// <param name="target">可选，发送消息目标好友的QQ号</param>
+        /// <param name="messageChain">消息链，是一个消息对象构成的数组</param>
+        /// <param name="quote">引用一条消息的messageId进行回复</param>
         public FriendMessage(long target, Message[] messageChain, long? quote = null)
         {
             command = "sendFriendMessage";
@@ -164,6 +174,9 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 发送群信息
         /// </summary>
+        /// <param name="target">可选，发送消息目标群的群号</param>
+        /// <param name="messageChain">	消息链，是一个消息对象构成的数组</param>
+        /// <param name="quote">引用一条消息的messageId进行回复</param>
         public GroupMessage(long target, Message[] messageChain, long? quote = null)
         {
             command = "sendGroupMessage";
@@ -176,8 +189,12 @@ namespace MeowMiraiLib.Msg
     public class TempMessage : SSM
     {
         /// <summary>
-        /// 发送临时信息
+        /// 发送临时消息
         /// </summary>
+        /// <param name="qq">临时会话对象QQ号</param>
+        /// <param name="group">临时会话群号</param>
+        /// <param name="messageChain">消息链，是一个消息对象构成的数组</param>
+        /// <param name="quote">引用一条消息的messageId进行回复</param>
         public TempMessage(long qq, long group, Message[] messageChain, long? quote = null)
         {
             command = "sendTempMessage";
@@ -192,6 +209,9 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 发送戳一戳
         /// </summary>
+        /// <param name="target">戳一戳的目标, QQ号, 可以为 bot QQ号</param>
+        /// <param name="subject">戳一戳接受主体(上下文), 戳一戳信息会发送至该主体, 为群号/好友QQ号</param>
+        /// <param name="kind">上下文类型, 可选值 Friend, Group, Stranger</param>
         public SendNudge(long target, long subject, string kind)
         {
             command = "sendNudge";
@@ -329,9 +349,11 @@ namespace MeowMiraiLib.Msg
     /// </summary>
     public sealed class MemberList : SSM
     {
+        
         /// <summary>
         /// 获取群员列表
         /// </summary>
+        /// <param name="target">目标群</param>
         public MemberList(long target)
         {
             command = "memberList";
@@ -360,6 +382,7 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 获取某个好友的资料
         /// </summary>
+        /// <param name="qq">好友QQ</param>
         public FriendProfile(long qq)
         {
             command = "friendProfile";
@@ -372,8 +395,10 @@ namespace MeowMiraiLib.Msg
     public sealed class MemberProfile : SSM
     {
         /// <summary>
-        /// 获取某个群友的资料
+        /// 获取群友资料
         /// </summary>
+        /// <param name="qqgroup">群号</param>
+        /// <param name="qq">群员QQ</param>
         public MemberProfile(long qqgroup,long qq)
         {
             command = "memberProfile";
@@ -388,6 +413,7 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 退群
         /// </summary>
+        /// <param name="target">目标群</param>
         public QuitGroup(long target)
         {
             command = "quit";
@@ -402,6 +428,7 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 删除好友
         /// </summary>
+        /// <param name="target">目标好友</param>
         public DeleteFriend(long target)
         {
             command = "deleteFriend";

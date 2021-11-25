@@ -1,7 +1,9 @@
 ﻿/* 本文上下文定义了消息事件的引起者,
  * 根据消息方案查询引起者, 本类类内继承顺序不允许调换.
  * ------------------------------
- * 
+ * this file defines the 'message sender'
+ * by use of identify the sender,
+ * and do not alter the order of the class
  */
 
 namespace MeowMiraiLib.Msg.Sender
