@@ -5,7 +5,6 @@
  * by use of identify the sender,
  * and do not alter the order of the class
  */
-
 namespace MeowMiraiLib.Msg.Sender
 {
     /// <summary>
