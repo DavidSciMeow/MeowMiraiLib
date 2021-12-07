@@ -72,7 +72,7 @@ namespace MeowMiraiLib
         /// <returns></returns>
         public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 10)
         {
-            var ts = Task.Factory.StartNew(() =>
+            var ts = new Task<JObject?> (() =>
             {
                 ws.Send(json);
                 while (true)
@@ -90,12 +90,16 @@ namespace MeowMiraiLib
                     }
                 }
             });
-            var timedout = Task.Delay(TimeOut * 1000);
-            if (await Task.WhenAny(ts, timedout) == timedout)
+            ts.Start();
+
+            if (await Task.WhenAny(ts, Task.Delay(TimeOut * 1000)) == ts)
+            {
+                return (false, await ts);
+            }
+            else
             {
                 return (true, null);
             }
-            return (false, await ts);
         }
         /// <summary>
         /// 链接

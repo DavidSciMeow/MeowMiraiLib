@@ -76,7 +76,7 @@ namespace MeowMiraiLib.Msg
         public (bool isTimedOut, JObject? Return) Send(Client c, int? syncid = null, int TimeOut = 10)
         {
             this.session = c.session;
-            return c.SendAndWaitResponse(PackMsg(syncid), syncid, TimeOut).GetAwaiter().GetResult();
+            return c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 异步发送信息
@@ -88,7 +88,7 @@ namespace MeowMiraiLib.Msg
         public async Task<(bool isTimedOut, JObject? Return)> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
         {
             this.session = c.session;
-            return await c.SendAndWaitResponse(PackMsg(syncid), syncid, TimeOut);
+            return await c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut);
         }
     }
 
