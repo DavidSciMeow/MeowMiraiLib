@@ -77,7 +77,7 @@ namespace MeowMiraiLib
                 ws.Send(json);
                 while (true)
                 {
-                    if (SSMRequestList.Count > 0)
+                    if (SSMRequestList.Count != 0)
                     {
                         if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
                         {
@@ -86,6 +86,11 @@ namespace MeowMiraiLib
                         else
                         {
                             SSMRequestList.Enqueue(SSMRequestList.Dequeue());
+                        }
+
+                        if(SSMRequestList.Count == 0)
+                        {
+                            return null;
                         }
                     }
                 }
