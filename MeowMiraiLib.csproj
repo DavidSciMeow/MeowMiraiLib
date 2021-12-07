@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>annotations</Nullable>
-    <Version>3.1.0</Version>
+    <Version>3.1.1</Version>
     <Authors>DavidSciMeow</Authors>
     <Company>Electronicute</Company>
     <Product>MeowMiraiLib</Product>
