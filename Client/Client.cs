@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
 
@@ -32,15 +33,15 @@ namespace MeowMiraiLib
         /// <summary>
         /// 地址
         /// </summary>
-        public string url;
+        public string url { get; }
         /// <summary>
         /// 客户端Websocket
         /// </summary>
-        public static WebSocket ws;
+        public WebSocket ws { get; }
         /// <summary>
         /// 会话进程号
         /// </summary>
-        public static string session;
+        public string session;
         /// <summary>
         /// 调试标识
         /// </summary>
@@ -49,21 +50,17 @@ namespace MeowMiraiLib
         /// 事件调试标识
         /// </summary>
         public bool eventdebug = false;
+
         /// <summary>
-        /// 初始化一个标准客户端
+        /// 生成一个新的端
         /// </summary>
-        /// <param name="url">地址</param>
+        /// <param name="url"></param>
         public Client(string url)
         {
+            this.url = url;
             ws = new WebSocket(url);
-            ws.Opened += Ws_Opened;
-            ws.MessageReceived += Ws_MessageReceived;
         }
-        /// <summary>
-        /// 发送字段
-        /// </summary>
-        /// <param name="json">Json报文</param>
-        public static void Send(string json) => ws.Send(json);
+
         /// <summary>
         /// 发送并且等待回值
         /// </summary>
@@ -71,12 +68,12 @@ namespace MeowMiraiLib
         /// <param name="syncId">同步字段</param>
         /// <param name="TimeOut">超时取消,默认20s(秒)</param>
         /// <returns></returns>
-        public static JObject? SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 20)
+        public JObject? SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 20)
         {
             ws.Send(json);
             while (true)
             {
-                if(SSMRequestList.Count > 0)
+                if (SSMRequestList.Count > 0)
                 {
                     if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
                     {
@@ -89,14 +86,21 @@ namespace MeowMiraiLib
                 }
             }
         }
+
         /// <summary>
-        /// 链接后端
-        /// </summary>
-        public void Connect() => ws.Open();
-        /// <summary>
-        /// 异步链接
+        /// 链接
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> ConnectAsync() => await ws.OpenAsync();
+        public void Connect()
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new("No Url Specific");
+            }
+            else
+            {
+                ws.Open();
+            }
+        }
     }
 }

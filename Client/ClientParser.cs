@@ -22,7 +22,7 @@ namespace MeowMiraiLib
 {
     public partial class Client
     {
-        private static Queue<JObject> SSMRequestList = new(); //返回队列长度
+        private Queue<JObject> SSMRequestList = new(); //返回队列长度
         private void Ws_Opened(object? sender, EventArgs e)
         {
             Console.WriteLine("Connected");
