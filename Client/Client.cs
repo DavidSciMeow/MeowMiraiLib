@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
 
@@ -50,14 +48,17 @@ namespace MeowMiraiLib
         /// 事件调试标识
         /// </summary>
         public bool eventdebug = false;
-
         /// <summary>
-        /// 生成一个新的端
+        /// 生成一个端
         /// </summary>
-        /// <param name="url"></param>
-        public Client(string url)
+        /// <param name="url">地址</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        public Client(string url,bool debug = false,bool eventdebug = false)
         {
             this.url = url;
+            this.debug = debug;
+            this.eventdebug = eventdebug;
             ws = new WebSocket(url);
             ws.Opened += Ws_Opened;
             ws.MessageReceived += Ws_MessageReceived;
@@ -96,7 +97,6 @@ namespace MeowMiraiLib
             }
             return (false, await ts);
         }
-
         /// <summary>
         /// 链接
         /// </summary>

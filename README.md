@@ -1,11 +1,75 @@
 # Meow.MiraiLib  
-## 一个**还在测试**的 Mirai-C# (.net 5) 后端
-## 简易使用方法(内部注释基本完整)  
+## 一个简易使用的轻量化 Mirai-C# (.net 5) 后端
+## 简易使用方法(内部注释完整)  
+
+1. ##异步写法
 ```
-Client c = new("ws://xxx.com.cn:1234/all?qq=123456789");
-c.Connect();//链接
-c.debug = false;
-c.eventdebug = false;
-c.OnFriendMessageRecieve += (s,e) => {.....};
-c. ...... //
+using MeowMiraiLib;
+using MeowMiraiLib.Msg;
+using System;
+using System.Threading.Tasks;
+
+namespace Test
+{
+    internal class Program
+    {
+        static readonly Client c = new("....",true,true);
+        static async Task Main(string[] args)
+        {
+            await c.ConnectAsync();
+            c.OnFriendMessageRecieve += (s, e) => 
+            { 
+                //.....
+            };
+            //....
+            while (true)
+            {
+                switch (Console.ReadLine())
+                {
+                    case "t":
+                        {
+                            var k = await new GroupList().SendAsync(c); //查看群列表
+                            Console.WriteLine(k); // 打印返回信息
+                            break;
+                        }
+                }
+            }
+        }
+    }
+}
+```
+2. ##同步写法
+```
+using MeowMiraiLib;
+using MeowMiraiLib.Msg;
+using System;
+
+namespace Test
+{
+    internal class Program
+    {
+        static readonly Client c = new("........",true,true);
+        static void Main(string[] args)
+        {
+            c.Connect();
+            c.OnFriendMessageRecieve += (s, e) => 
+            { 
+                //.....
+            };
+            //....
+            while (true)
+            {
+                switch (Console.ReadLine())
+                {
+                    case "t":
+                        {
+                            var k = new GroupList().Send(c); //查看群列表
+                            Console.WriteLine(k); // 打印返回信息
+                            break;
+                        }
+                }
+            }
+        }
+    }
+}
 ```
