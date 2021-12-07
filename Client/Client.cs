@@ -59,8 +59,9 @@ namespace MeowMiraiLib
         {
             this.url = url;
             ws = new WebSocket(url);
+            ws.Opened += Ws_Opened;
+            ws.MessageReceived += Ws_MessageReceived;
         }
-
         /// <summary>
         /// 发送并且等待回值
         /// </summary>
@@ -68,23 +69,32 @@ namespace MeowMiraiLib
         /// <param name="syncId">同步字段</param>
         /// <param name="TimeOut">超时取消,默认20s(秒)</param>
         /// <returns></returns>
-        public JObject? SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 20)
+        public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 10)
         {
-            ws.Send(json);
-            while (true)
+            var ts = Task.Factory.StartNew(() =>
             {
-                if (SSMRequestList.Count > 0)
+                ws.Send(json);
+                while (true)
                 {
-                    if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
+                    if (SSMRequestList.Count > 0)
                     {
-                        return SSMRequestList.Dequeue();
-                    }
-                    else
-                    {
-                        SSMRequestList.Enqueue(SSMRequestList.Dequeue());
+                        if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
+                        {
+                            return SSMRequestList.Dequeue();
+                        }
+                        else
+                        {
+                            SSMRequestList.Enqueue(SSMRequestList.Dequeue());
+                        }
                     }
                 }
+            });
+            var timedout = Task.Delay(TimeOut * 1000);
+            if (await Task.WhenAny(ts, timedout) == timedout)
+            {
+                return (true, null);
             }
+            return (false, await ts);
         }
 
         /// <summary>
@@ -100,6 +110,21 @@ namespace MeowMiraiLib
             else
             {
                 ws.Open();
+            }
+        }
+        /// <summary>
+        /// 异步链接
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> ConnectAsync()
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new("No Url Specific");
+            }
+            else
+            {
+                return await ws.OpenAsync();
             }
         }
     }

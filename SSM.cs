@@ -69,13 +69,26 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 发送信息
         /// </summary>
-        /// <param name="c"></param>
-        /// <param name="syncid">端同步id(默认自动生成)</param>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认20s(秒)</param>
         /// <returns></returns>
-        public JObject? Send(Client c, int? syncid = null)
+        public (bool isTimedOut, JObject? Return) Send(Client c, int? syncid = null, int TimeOut = 10)
         {
             this.session = c.session;
-            return c.SendAndWaitResponse(PackMsg(syncid), syncid);
+            return c.SendAndWaitResponse(PackMsg(syncid), syncid, TimeOut).GetAwaiter().GetResult();
+        }
+        /// <summary>
+        /// 异步发送信息
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认20s(秒)</param>
+        /// <returns></returns>
+        public async Task<(bool isTimedOut, JObject? Return)> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            this.session = c.session;
+            return await c.SendAndWaitResponse(PackMsg(syncid), syncid, TimeOut);
         }
     }
 
