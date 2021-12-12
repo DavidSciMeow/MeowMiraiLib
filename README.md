@@ -1,12 +1,11 @@
-# Meow.MiraiLib  
-## 一个简易使用的轻量化 Mirai-C# (.net 5) 后端
-## 简易使用方法(内部注释完整)  
+# Meow.MiraiLib
 
-# 最新3.0.0版, 加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.
-# 感谢大佬 @Executor-Cheng 的初版建议和意见.
-# 感谢各位大佬对小项目的关注
+一个简易使用的轻量化 Mirai-C# (.net 5) 后端
 
-1. ##异步写法
+
+## 使用示例
+
+1. 异步
 ```
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
@@ -42,7 +41,7 @@ namespace Test
     }
 }
 ```
-2. ##同步写法
+2. 同步
 ```
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
@@ -77,3 +76,14 @@ namespace Test
     }
 }
 ```
+
+其他功能详见源码注释。
+
+## 最新版本&特性
+
+3.0.0  加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.
+
+## 鸣谢
+
+感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.
+感谢各位大佬对小项目的关注.
