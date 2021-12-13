@@ -76,7 +76,7 @@ namespace MeowMiraiLib
         /// <summary>
         /// 接收到好友私聊信息
         /// </summary>
-        public event FriendMessage OnFriendMessageRecieve;
+        public event FriendMessage OnFriendMessageReceive;
         /// <summary>
         /// 接收到群聊信息
         /// </summary>
@@ -86,7 +86,7 @@ namespace MeowMiraiLib
         /// <summary>
         /// 接收到群聊信息
         /// </summary>
-        public event GroupMessage OnGroupMessageRecieve;
+        public event GroupMessage OnGroupMessageReceive;
         /// <summary>
         /// 接收到临时信息
         /// </summary>
@@ -96,7 +96,7 @@ namespace MeowMiraiLib
         /// <summary>
         /// 接收到临时信息
         /// </summary>
-        public event TempMessage OnTempMessageRecieve;
+        public event TempMessage OnTempMessageReceive;
         /// <summary>
         /// 接收到陌生人信息
         /// </summary>
@@ -106,7 +106,7 @@ namespace MeowMiraiLib
         /// <summary>
         /// 接收到陌生人信息
         /// </summary>
-        public event StrangerMessage OnStrangerMessageRecieve;
+        public event StrangerMessage OnStrangerMessageReceive;
         /// <summary>
         /// 接收到其他类型信息
         /// </summary>
@@ -116,7 +116,7 @@ namespace MeowMiraiLib
         /// <summary>
         /// 接收到其他类型信息
         /// </summary>
-        public event OtherClientMessage OnOtherMessageRecieve;
+        public event OtherClientMessage OnOtherMessageReceive;
 
         /*--Type of Event--*/
         /// <summary>
