@@ -1,0 +1,5 @@
+<map id="MeowMiraiLib.Event.GroupAllowConfessTalkEvent" name="MeowMiraiLib.Event.GroupAllowConfessTalkEvent">
+<area shape="rect" id="node1" title="坦白说" alt="" coords="5,155,184,196"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="53,80,137,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="53,5,136,32"/>
+</map>

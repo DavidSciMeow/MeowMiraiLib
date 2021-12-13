@@ -1,0 +1,5 @@
+<map id="MeowMiraiLib.Event.GroupAllowAnonymousChatEvent" name="MeowMiraiLib.Event.GroupAllowAnonymousChatEvent">
+<area shape="rect" id="node1" title="匿名聊天" alt="" coords="5,155,188,196"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="55,80,139,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="55,5,138,32"/>
+</map>

@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.2"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MeowMiraiLib: Meow.MiraiLib</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">MeowMiraiLib<span id="projectnumber">&#160;3.1.1</span>
+   </div>
+   <div id="projectbrief">Mirai HTTP-API Library (C# version)</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.2 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'搜索','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">Meow.MiraiLib </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p >一个简易使用的轻量化 Mirai-C# (.net 5) 后端</p>
+<h1><a class="anchor" id="autotoc_md13"></a>
+使用示例</h1>
+<ol type="1">
+<li>异步 <div class="fragment"><div class="line">using MeowMiraiLib;</div>
+<div class="line">using MeowMiraiLib.Msg;</div>
+<div class="line">using System;</div>
+<div class="line">using System.Threading.Tasks;</div>
+<div class="line"> </div>
+<div class="line">namespace Test</div>
+<div class="line">{</div>
+<div class="line">    internal class Program</div>
+<div class="line">    {</div>
+<div class="line">        static readonly Client c = new(&quot;....&quot;,true,true);</div>
+<div class="line">        static async Task Main(string[] args)</div>
+<div class="line">        {</div>
+<div class="line">            await c.ConnectAsync();</div>
+<div class="line">            c.OnFriendMessageRecieve += (s, e) =&gt; </div>
+<div class="line">            { </div>
+<div class="line">                //.....</div>
+<div class="line">            };</div>
+<div class="line">            //....</div>
+<div class="line">            while (true)</div>
+<div class="line">            {</div>
+<div class="line">                switch (Console.ReadLine())</div>
+<div class="line">                {</div>
+<div class="line">                    case &quot;t&quot;:</div>
+<div class="line">                        {</div>
+<div class="line">                            var k = await new GroupList().SendAsync(c); //查看群列表</div>
+<div class="line">                            Console.WriteLine(k); // 打印返回信息</div>
+<div class="line">                            break;</div>
+<div class="line">                        }</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --></li>
+<li>同步 <div class="fragment"><div class="line">using MeowMiraiLib;</div>
+<div class="line">using MeowMiraiLib.Msg;</div>
+<div class="line">using System;</div>
+<div class="line"> </div>
+<div class="line">namespace Test</div>
+<div class="line">{</div>
+<div class="line">    internal class Program</div>
+<div class="line">    {</div>
+<div class="line">        static readonly Client c = new(&quot;........&quot;,true,true);</div>
+<div class="line">        static void Main(string[] args)</div>
+<div class="line">        {</div>
+<div class="line">            c.Connect();</div>
+<div class="line">            c.OnFriendMessageRecieve += (s, e) =&gt; </div>
+<div class="line">            { </div>
+<div class="line">                //.....</div>
+<div class="line">            };</div>
+<div class="line">            //....</div>
+<div class="line">            while (true)</div>
+<div class="line">            {</div>
+<div class="line">                switch (Console.ReadLine())</div>
+<div class="line">                {</div>
+<div class="line">                    case &quot;t&quot;:</div>
+<div class="line">                        {</div>
+<div class="line">                            var k = new GroupList().Send(c); //查看群列表</div>
+<div class="line">                            Console.WriteLine(k); // 打印返回信息</div>
+<div class="line">                            break;</div>
+<div class="line">                        }</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --></li>
+</ol>
+<p >其他功能详见源码注释。</p>
+<h1><a class="anchor" id="autotoc_md14"></a>
+最新版本&amp;特性</h1>
+<p >3.0.0 加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.</p>
+<h1><a class="anchor" id="autotoc_md15"></a>
+鸣谢</h1>
+<p >感谢大佬 <a href="https://github.com/Executor-Cheng">@Executor-Cheng</a> 的初版建议和意见. 感谢各位大佬对小项目的关注. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+  </ul>
+</div>
+</body>
+</html>

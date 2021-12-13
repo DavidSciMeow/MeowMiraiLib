@@ -1,0 +1,5 @@
+<map id="MeowMiraiLib.Event.BotOfflineEventDropped" name="MeowMiraiLib.Event.BotOfflineEventDropped">
+<area shape="rect" id="node1" title="Bot被服务器断开(网络问题)" alt="" coords="5,155,207,196"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="64,80,148,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="65,5,147,32"/>
+</map>

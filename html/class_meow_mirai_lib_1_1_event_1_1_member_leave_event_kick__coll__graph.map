@@ -1,0 +1,7 @@
+<map id="MeowMiraiLib.Event.MemberLeaveEventKick" name="MeowMiraiLib.Event.MemberLeaveEventKick">
+<area shape="rect" id="node1" title="成员被踢出(不是Bot)" alt="" coords="27,228,217,269"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="5,117,89,143"/>
+<area shape="rect" id="node3" title=" " alt="" coords="6,13,89,39"/>
+<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_member_holder.html" title="长成员类" alt="" coords="114,109,285,151"/>
+<area shape="rect" id="node5" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_group.html" title="群类" alt="" coords="114,5,285,47"/>
+</map>
