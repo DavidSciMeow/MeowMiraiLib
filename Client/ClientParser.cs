@@ -98,27 +98,27 @@ namespace MeowMiraiLib
                     {
                         case "GroupMessage":
                             {
-                                OnGroupMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                OnGroupMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
                         case "FriendMessage":
                             {
-                                OnFriendMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                OnFriendMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
                         case "TempMessage":
                             {
-                                OnTempMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                OnTempMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
                         case "StrangerMessage":
                             {
-                                OnStrangerMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                OnStrangerMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
                         case "OtherClientMessage":
                             {
-                                OnOtherMessageRecieve?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                OnOtherMessageReceive?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
                         case "BotOnlineEvent":
