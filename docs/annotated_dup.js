@@ -76,7 +76,8 @@ var annotated_dup =
           [ "Xml", "class_meow_mirai_lib_1_1_msg_1_1_type_1_1_xml.html", "class_meow_mirai_lib_1_1_msg_1_1_type_1_1_xml" ]
         ] ],
         [ "SSM", "class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html", "class_meow_mirai_lib_1_1_msg_1_1_s_s_m" ]
-      ] ]
+      ] ],
+      [ "Client", "class_meow_mirai_lib_1_1_client.html", "class_meow_mirai_lib_1_1_client" ]
     ] ],
     [ "About", "class_about.html", "class_about" ],
     [ "BotProfile", "class_bot_profile.html", "class_bot_profile" ],

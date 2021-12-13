@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['xml_0',['Xml',['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_xml.html',1,'MeowMiraiLib.Msg.Type.Xml'],['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_xml.html#a3c756d6a8c72ea8cdef2185c3ca77230',1,'MeowMiraiLib.Msg.Type.Xml.Xml(string xml)']]],
-  ['xml_1',['xml',['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_xml.html#a42e22acde2e33d16119acf582a5a4c12',1,'MeowMiraiLib::Msg::Type::Xml']]]
+  ['unknownevent_0',['UnknownEvent',['../class_meow_mirai_lib_1_1_client.html#a1bb71721fef6c43661db56f1887bd17e',1,'MeowMiraiLib::Client']]],
+  ['unmute_1',['Unmute',['../class_unmute.html',1,'Unmute'],['../class_unmute.html#aabc87511c366b644fa1c9c113c3f84c6',1,'Unmute.Unmute()']]],
+  ['unmuteall_2',['UnmuteAll',['../class_unmute_all.html',1,'UnmuteAll'],['../class_unmute_all.html#a2e4448a8688fcc22a0878e1201a6db9d',1,'UnmuteAll.UnmuteAll()']]],
+  ['url_3',['url',['../class_meow_mirai_lib_1_1_client.html#a1bd55a4536f42bb07d07c65e1310897f',1,'MeowMiraiLib.Client.url()'],['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_image.html#a9824c4535cafbf683424cb7937ba2f60',1,'MeowMiraiLib.Msg.Type.Image.url()'],['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_voice.html#a088e5eefabe779381870e33e46c6475c',1,'MeowMiraiLib.Msg.Type.Voice.url()']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MeowMiraiLib: SSM.cs 源文件</title>
+<title>MeowMiraiLib: D:/Repos/MeowMiraiLib/SSM.cs 源文件</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,9 +25,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">MeowMiraiLib<span id="projectnumber">&#160;3.1.1</span>
+   <div id="projectname">MeowMiraiLib<span id="projectnumber">&#160;3.1.2</span>
    </div>
-   <div id="projectbrief">Mirai HTTP-API Library (C# version)</div>
   </td>
  </tr>
  </tbody>
@@ -136,15 +135,15 @@ $(document).ready(function(){initNavTree('_s_s_m_8cs_source.html',''); initResiz
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            }</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            <span class="keywordflow">return</span> s;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        }</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">   76</a></span>        <span class="keyword">public</span> (<span class="keywordtype">bool</span> <a class="code hl_variable" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">isTimedOut</a>, JObject? Return) <a class="code hl_function" href="namespace_meow_mirai_lib_1_1_msg.html#a463bf7a50518e42eb4b0fbf40d5518ee">Send</a>(Client c, <span class="keywordtype">int</span>? syncid = <span class="keyword">null</span>, <span class="keywordtype">int</span> TimeOut = 10)</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">   76</a></span>        <span class="keyword">public</span> (<span class="keywordtype">bool</span> <a class="code hl_variable" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">isTimedOut</a>, JObject? Return) <a class="code hl_function" href="namespace_meow_mirai_lib_1_1_msg.html#a463bf7a50518e42eb4b0fbf40d5518ee">Send</a>(<a class="code hl_class" href="class_meow_mirai_lib_1_1_client.html">Client</a> c, <span class="keywordtype">int</span>? syncid = <span class="keyword">null</span>, <span class="keywordtype">int</span> TimeOut = 10)</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        {</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            this.session = c.session;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">return</span> c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut).GetAwaiter().GetResult();</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            this.session = c.<a class="code hl_variable" href="class_meow_mirai_lib_1_1_client.html#a07c9194f77f3206ab809dc3ba700e0de">session</a>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <span class="keywordflow">return</span> c.<a class="code hl_function" href="class_meow_mirai_lib_1_1_client.html#a360d908f74ca6afd9b14f7a3350af7ce">SendAndWaitResponse</a>(PackMsg(syncid), syncId, TimeOut).GetAwaiter().GetResult();</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        }</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872">   88</a></span>        <span class="keyword">public</span> async Task&lt;(<span class="keywordtype">bool</span> <a class="code hl_variable" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">isTimedOut</a>, JObject? Return)&gt; <a class="code hl_function" href="namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872">SendAsync</a>(Client c, <span class="keywordtype">int</span>? syncid = <span class="keyword">null</span>, <span class="keywordtype">int</span> TimeOut = 10)</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872">   88</a></span>        <span class="keyword">public</span> async Task&lt;(<span class="keywordtype">bool</span> <a class="code hl_variable" href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">isTimedOut</a>, JObject? Return)&gt; <a class="code hl_function" href="namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872">SendAsync</a>(<a class="code hl_class" href="class_meow_mirai_lib_1_1_client.html">Client</a> c, <span class="keywordtype">int</span>? syncid = <span class="keyword">null</span>, <span class="keywordtype">int</span> TimeOut = 10)</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        {</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            this.session = c.session;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            <span class="keywordflow">return</span> await c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            this.session = c.<a class="code hl_variable" href="class_meow_mirai_lib_1_1_client.html#a07c9194f77f3206ab809dc3ba700e0de">session</a>;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            <span class="keywordflow">return</span> await c.<a class="code hl_function" href="class_meow_mirai_lib_1_1_client.html#a360d908f74ca6afd9b14f7a3350af7ce">SendAndWaitResponse</a>(PackMsg(syncid), syncId, TimeOut);</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        }</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    }</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
@@ -536,6 +535,9 @@ $(document).ready(function(){initNavTree('_s_s_m_8cs_source.html',''); initResiz
 <div class="ttc" id="aclass_member_list_html_a0c39769493da2c5379c98b30e866537c"><div class="ttname"><a href="class_member_list.html#a0c39769493da2c5379c98b30e866537c">MemberList.MemberList</a></div><div class="ttdeci">MemberList(long target)</div><div class="ttdoc">获取群员列表</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00218">SSM.cs:218</a></div></div>
 <div class="ttc" id="aclass_member_profile_html"><div class="ttname"><a href="class_member_profile.html">MemberProfile</a></div><div class="ttdoc">获取某个群友的资料</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00256">SSM.cs:257</a></div></div>
 <div class="ttc" id="aclass_member_profile_html_aeccd9f10ca932a7a65d25429fe7ef5bc"><div class="ttname"><a href="class_member_profile.html#aeccd9f10ca932a7a65d25429fe7ef5bc">MemberProfile.MemberProfile</a></div><div class="ttdeci">MemberProfile(long qqgroup, long qq)</div><div class="ttdoc">获取群友资料</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00263">SSM.cs:263</a></div></div>
+<div class="ttc" id="aclass_meow_mirai_lib_1_1_client_html"><div class="ttname"><a href="class_meow_mirai_lib_1_1_client.html">MeowMiraiLib.Client</a></div><div class="ttdoc">建造一个客户端</div><div class="ttdef"><b>Definition:</b> <a href="_client_8cs_source.html#l00029">Client.cs:30</a></div></div>
+<div class="ttc" id="aclass_meow_mirai_lib_1_1_client_html_a07c9194f77f3206ab809dc3ba700e0de"><div class="ttname"><a href="class_meow_mirai_lib_1_1_client.html#a07c9194f77f3206ab809dc3ba700e0de">MeowMiraiLib.Client.session</a></div><div class="ttdeci">string session</div><div class="ttdoc">会话进程号</div><div class="ttdef"><b>Definition:</b> <a href="_client_8cs_source.html#l00042">Client.cs:42</a></div></div>
+<div class="ttc" id="aclass_meow_mirai_lib_1_1_client_html_a360d908f74ca6afd9b14f7a3350af7ce"><div class="ttname"><a href="class_meow_mirai_lib_1_1_client.html#a360d908f74ca6afd9b14f7a3350af7ce">MeowMiraiLib.Client.SendAndWaitResponse</a></div><div class="ttdeci">async Task&lt;(bool isTimedOut, JObject? Return)&gt; SendAndWaitResponse(string json, int? syncId=null, int TimeOut=10)</div><div class="ttdoc">发送并且等待回值</div><div class="ttdef"><b>Definition:</b> <a href="_client_8cs_source.html#l00073">Client.cs:73</a></div></div>
 <div class="ttc" id="aclass_meow_mirai_lib_1_1_msg_1_1_s_s_m_html"><div class="ttname"><a href="class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html">MeowMiraiLib.Msg.SSM</a></div><div class="ttdoc">Socket Send Message (命令报文)</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00022">SSM.cs:23</a></div></div>
 <div class="ttc" id="aclass_meow_mirai_lib_1_1_msg_1_1_s_s_m_html_a06ffbd94849eb16c5339840d1727d31f"><div class="ttname"><a href="class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html#a06ffbd94849eb16c5339840d1727d31f">MeowMiraiLib.Msg.SSM.command</a></div><div class="ttdeci">string command</div><div class="ttdoc">命令字段</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00031">SSM.cs:31</a></div></div>
 <div class="ttc" id="aclass_meow_mirai_lib_1_1_msg_1_1_s_s_m_html_a7f3b5e373be0767e7dd143114d364687"><div class="ttname"><a href="class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html#a7f3b5e373be0767e7dd143114d364687">MeowMiraiLib.Msg.SSM.subCommand</a></div><div class="ttdeci">string? subCommand</div><div class="ttdoc">子命令字段</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00035">SSM.cs:35</a></div></div>
@@ -584,14 +586,14 @@ $(document).ready(function(){initNavTree('_s_s_m_8cs_source.html',''); initResiz
 <div class="ttc" id="anamespace_meow_mirai_lib_1_1_msg_html_a463bf7a50518e42eb4b0fbf40d5518ee"><div class="ttname"><a href="namespace_meow_mirai_lib_1_1_msg.html#a463bf7a50518e42eb4b0fbf40d5518ee">MeowMiraiLib.Msg.Send</a></div><div class="ttdeci">bool? JObject Return Send(Client c, int? syncid=null, int TimeOut=10)</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00076">SSM.cs:76</a></div></div>
 <div class="ttc" id="anamespace_meow_mirai_lib_1_1_msg_html_a54a37f631faf1f77f78cb4df1d1f1d79"><div class="ttname"><a href="namespace_meow_mirai_lib_1_1_msg.html#a54a37f631faf1f77f78cb4df1d1f1d79">MeowMiraiLib.Msg.isTimedOut</a></div><div class="ttdeci">bool isTimedOut</div><div class="ttdoc">发送信息</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00076">SSM.cs:76</a></div></div>
 <div class="ttc" id="anamespace_meow_mirai_lib_1_1_msg_html_aaddbef299b423a50f9de37366a479872"><div class="ttname"><a href="namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872">MeowMiraiLib.Msg.SendAsync</a></div><div class="ttdeci">async Task&lt;(bool isTimedOut, JObject? Return)&gt; SendAsync(Client c, int? syncid=null, int TimeOut=10)</div><div class="ttdoc">异步发送信息</div><div class="ttdef"><b>Definition:</b> <a href="_s_s_m_8cs_source.html#l00088">SSM.cs:88</a></div></div>
-<div class="ttc" id="anamespace_meow_mirai_lib_html"><div class="ttname"><a href="namespace_meow_mirai_lib.html">MeowMiraiLib</a></div><div class="ttdef"><b>Definition:</b> <a href="_event_8cs_source.html#l00021">Event.cs:22</a></div></div>
+<div class="ttc" id="anamespace_meow_mirai_lib_html"><div class="ttname"><a href="namespace_meow_mirai_lib.html">MeowMiraiLib</a></div><div class="ttdef"><b>Definition:</b> <a href="_client_8cs_source.html#l00024">Client.cs:25</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="_s_s_m_8cs.html">SSM.cs</a></li>
-    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+    <li class="navelem"><a class="el" href="dir_03bee8a51c3d2b928edc66bf0193977e.html">Repos</a></li><li class="navelem"><a class="el" href="dir_c7199800980114a8a0ba75eb689570fb.html">MeowMiraiLib</a></li><li class="navelem"><a class="el" href="_s_s_m_8cs.html">SSM.cs</a></li>
+    <li class="footer">生成于 2021年 十二月 13日 星期一 16:21:32 , 为 MeowMiraiLib使用  <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
 </body>

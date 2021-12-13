@@ -1,5 +1,7 @@
 var dir_c7199800980114a8a0ba75eb689570fb =
 [
+    [ "Client", "dir_7110f921f9b00f383334f6d5f0b5101c.html", "dir_7110f921f9b00f383334f6d5f0b5101c" ],
+    [ "obj", "dir_4bfcac20a2478a7737784e896c1d928c.html", "dir_4bfcac20a2478a7737784e896c1d928c" ],
     [ "Event.cs", "_event_8cs.html", "_event_8cs" ],
     [ "Message.cs", "_message_8cs.html", [
       [ "MeowMiraiLib.Msg.Type.Message", "class_meow_mirai_lib_1_1_msg_1_1_type_1_1_message.html", "class_meow_mirai_lib_1_1_msg_1_1_type_1_1_message" ],

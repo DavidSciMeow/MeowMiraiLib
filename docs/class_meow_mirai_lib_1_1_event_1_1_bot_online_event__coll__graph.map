@@ -1,5 +1,5 @@
 <map id="MeowMiraiLib.Event.BotOnlineEvent" name="MeowMiraiLib.Event.BotOnlineEvent">
-<area shape="rect" id="node1" title="Bot登陆成功" alt="" coords="5,155,205,196"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="63,80,147,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="64,5,147,32"/>
+<area shape="rect" id="node1" title="Bot登陆成功" alt="" coords="5,256,205,348"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="63,131,147,208"/>
+<area shape="rect" id="node3" title=" " alt="" coords="64,5,147,83"/>
 </map>

@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "MeowMiraiLib.Client", "class_meow_mirai_lib_1_1_client.html", null ],
     [ "EventArgs", null, [
       [ "MeowMiraiLib.Event.MiraiEvent", "class_meow_mirai_lib_1_1_event_1_1_mirai_event.html", [
         [ "MeowMiraiLib.Event.BotGroupPermissionChangeEvent", "class_meow_mirai_lib_1_1_event_1_1_bot_group_permission_change_event.html", null ],

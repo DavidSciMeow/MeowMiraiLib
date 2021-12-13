@@ -1,5 +1,5 @@
 <map id="MeowMiraiLib.Msg.Sender.FriendMessageSender" name="MeowMiraiLib.Msg.Sender.FriendMessageSender">
-<area shape="rect" id="node1" title="好友信息好友句柄" alt="" coords="5,80,184,121"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_stranger_message_sender.html" title="陌生人信息句柄" alt="" coords="5,169,184,211"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="63,5,126,32"/>
+<area shape="rect" id="node1" title="好友信息好友句柄" alt="" coords="5,131,184,237"/>
+<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_stranger_message_sender.html" title="陌生人信息句柄" alt="" coords="5,285,184,377"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="63,5,126,83"/>
 </map>

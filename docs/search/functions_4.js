@@ -10,10 +10,10 @@ var searchData=
   ['file_5frename_7',['File_rename',['../class_file__rename.html#ae1108a4d9e5f93a7f35f378dcc4c8b2e',1,'File_rename']]],
   ['flashimage_8',['FlashImage',['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_flash_image.html#ace03c6f491f2b008c9e0fb4349ba3c41',1,'MeowMiraiLib::Msg::Type::FlashImage']]],
   ['forwardmessage_9',['ForwardMessage',['../class_meow_mirai_lib_1_1_msg_1_1_type_1_1_forward_message.html#a362c3921d7fc0a87a0f047989133737c',1,'MeowMiraiLib::Msg::Type::ForwardMessage']]],
-  ['friendinputstatuschangedevent_10',['FriendInputStatusChangedEvent',['../class_meow_mirai_lib_1_1_event_1_1_friend_input_status_changed_event.html#a23778480702ee12a05fb6d3a54b3dcf1',1,'MeowMiraiLib::Event::FriendInputStatusChangedEvent']]],
+  ['friendinputstatuschangedevent_10',['FriendInputStatusChangedEvent',['../class_meow_mirai_lib_1_1_client.html#a21bb0a7a75a1200b7524920c47ea6fd5',1,'MeowMiraiLib.Client.FriendInputStatusChangedEvent()'],['../class_meow_mirai_lib_1_1_event_1_1_friend_input_status_changed_event.html#a23778480702ee12a05fb6d3a54b3dcf1',1,'MeowMiraiLib.Event.FriendInputStatusChangedEvent.FriendInputStatusChangedEvent()']]],
   ['friendlist_11',['FriendList',['../class_friend_list.html#a4f457ce9b45a5bd3330f9c9217592e47',1,'FriendList']]],
-  ['friendmessage_12',['FriendMessage',['../class_friend_message.html#ad3af818dd2dba447231a393320bc0462',1,'FriendMessage']]],
-  ['friendnickchangedevent_13',['FriendNickChangedEvent',['../class_meow_mirai_lib_1_1_event_1_1_friend_nick_changed_event.html#a2ac03fdbdf4b07e2e1cf8fce46768da1',1,'MeowMiraiLib::Event::FriendNickChangedEvent']]],
+  ['friendmessage_12',['FriendMessage',['../class_meow_mirai_lib_1_1_client.html#a762cf0c5ccafe558d2c254f8c938dbd5',1,'MeowMiraiLib.Client.FriendMessage()'],['../class_friend_message.html#ad3af818dd2dba447231a393320bc0462',1,'FriendMessage.FriendMessage()']]],
+  ['friendnickchangedevent_13',['FriendNickChangedEvent',['../class_meow_mirai_lib_1_1_client.html#a874571cd23ed4df85265b89d854816eb',1,'MeowMiraiLib.Client.FriendNickChangedEvent()'],['../class_meow_mirai_lib_1_1_event_1_1_friend_nick_changed_event.html#a2ac03fdbdf4b07e2e1cf8fce46768da1',1,'MeowMiraiLib.Event.FriendNickChangedEvent.FriendNickChangedEvent()']]],
   ['friendprofile_14',['FriendProfile',['../class_friend_profile.html#ac8e06fcfad411d227fd5343b35c35371',1,'FriendProfile']]],
-  ['friendrecallevent_15',['FriendRecallEvent',['../class_meow_mirai_lib_1_1_event_1_1_friend_recall_event.html#a4359b53dfe358011e0a9f27ccb15e7e3',1,'MeowMiraiLib::Event::FriendRecallEvent']]]
+  ['friendrecallevent_15',['FriendRecallEvent',['../class_meow_mirai_lib_1_1_client.html#a186990b8e26cfd56307b8e84feb01721',1,'MeowMiraiLib.Client.FriendRecallEvent()'],['../class_meow_mirai_lib_1_1_event_1_1_friend_recall_event.html#a4359b53dfe358011e0a9f27ccb15e7e3',1,'MeowMiraiLib.Event.FriendRecallEvent.FriendRecallEvent()']]]
 ];

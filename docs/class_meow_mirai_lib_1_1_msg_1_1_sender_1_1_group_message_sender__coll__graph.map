@@ -1,5 +1,5 @@
 <map id="MeowMiraiLib.Msg.Sender.GroupMessageSender" name="MeowMiraiLib.Msg.Sender.GroupMessageSender">
-<area shape="rect" id="node1" title="群信息句柄" alt="" coords="22,109,201,151"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="5,13,68,39"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_group_message_sender_1_1_group.html" title="群信息句柄群信息类" alt="" coords="92,5,283,47"/>
+<area shape="rect" id="node1" title="群信息句柄" alt="" coords="22,189,201,355"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="5,27,68,105"/>
+<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_group_message_sender_1_1_group.html" title="群信息句柄群信息类" alt="" coords="92,5,283,127"/>
 </map>

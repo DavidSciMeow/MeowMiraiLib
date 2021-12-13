@@ -1,4 +1,4 @@
 <map id="MeowMiraiLib.Msg.Sender.OtherClientMessageSender" name="MeowMiraiLib.Msg.Sender.OtherClientMessageSender">
-<area shape="rect" id="node1" title="其他客户端信息句柄" alt="" coords="5,80,187,121"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="65,5,127,32"/>
+<area shape="rect" id="node1" title="其他客户端信息句柄" alt="" coords="5,131,187,223"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="65,5,127,83"/>
 </map>

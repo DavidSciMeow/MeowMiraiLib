@@ -1,7 +1,7 @@
 <map id="MeowMiraiLib.Event.GroupEntranceAnnouncementChangeEvent" name="MeowMiraiLib.Event.GroupEntranceAnnouncementChangeEvent">
-<area shape="rect" id="node1" title="某群入群公告改变" alt="" coords="19,213,257,255"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="5,117,89,143"/>
-<area shape="rect" id="node3" title=" " alt="" coords="6,13,89,39"/>
-<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_group.html" title="群类" alt="" coords="155,5,326,47"/>
-<area shape="rect" id="node5" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_member_holder.html" title="长成员类" alt="" coords="199,109,370,151"/>
+<area shape="rect" id="node1" title="某群入群公告改变" alt="" coords="19,432,257,553"/>
+<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="5,241,89,318"/>
+<area shape="rect" id="node3" title=" " alt="" coords="6,27,89,105"/>
+<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_group.html" title="群类" alt="" coords="159,5,330,127"/>
+<area shape="rect" id="node5" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_member_holder.html" title="长成员类" alt="" coords="207,189,378,369"/>
 </map>

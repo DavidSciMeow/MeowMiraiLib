@@ -25,9 +25,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">MeowMiraiLib<span id="projectnumber">&#160;3.1.1</span>
+   <div id="projectname">MeowMiraiLib<span id="projectnumber">&#160;3.1.2</span>
    </div>
-   <div id="projectbrief">Mirai HTTP-API Library (C# version)</div>
   </td>
  </tr>
  </tbody>
@@ -86,10 +85,13 @@ $(document).ready(function(){initNavTree('functions_c.html',''); initResizable()
 <div class="textblock">这里列出了所有类成员，并附带类的详细说明:</div>
 
 <h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
+<li>Client()&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_client.html#a60e8925d9f925f703f517aa4e6639617">MeowMiraiLib.Client</a></li>
 <li>code&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_msg_1_1_type_1_1_mirai_code.html#af4a89db1598c0903da5b82c1c1194618">MeowMiraiLib.Msg.Type.MiraiCode</a></li>
 <li>command&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html#a06ffbd94849eb16c5339840d1727d31f">MeowMiraiLib.Msg.SSM</a></li>
-<li>CommandExecutedEvent()&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_event_1_1_command_executed_event.html#a2f26b452de8b42adfee649d047e352c0">MeowMiraiLib.Event.CommandExecutedEvent</a></li>
+<li>CommandExecutedEvent()&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_client.html#a1bd708182897a4283a31f9f846eecd51">MeowMiraiLib.Client</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_command_executed_event.html#a2f26b452de8b42adfee649d047e352c0">MeowMiraiLib.Event.CommandExecutedEvent</a></li>
 <li>confessTalk&#160;:&#160;<a class="el" href="class_group_config___update_1_1_group_config_set.html#a72c5924987c92ab74fb0c501cc585edc">GroupConfig_Update.GroupConfigSet</a></li>
+<li>Connect()&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_client.html#a6650fe53cd894760d6c6f1b85e152ba3">MeowMiraiLib.Client</a></li>
+<li>ConnectAsync()&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_client.html#a0ed46f33a3b2bba258e2af615413b38d">MeowMiraiLib.Client</a></li>
 <li>content&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_msg_1_1_s_s_m.html#ae50b86ceefa6eefd7d29513a19a9b057">MeowMiraiLib.Msg.SSM</a>, <a class="el" href="class_meow_mirai_lib_1_1_msg_1_1_type_1_1_app.html#a6fa85e52f5024265a4a2e75b3b7e6af4">MeowMiraiLib.Msg.Type.App</a></li>
 <li>current&#160;:&#160;<a class="el" href="class_meow_mirai_lib_1_1_event_1_1_bot_group_permission_change_event.html#a715a4d7d0136dfb3784c592b80a6c3dc">MeowMiraiLib.Event.BotGroupPermissionChangeEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_allow_anonymous_chat_event.html#aa3f4d0bd2dee5d46118cdf3971428876">MeowMiraiLib.Event.GroupAllowAnonymousChatEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_allow_confess_talk_event.html#a5a2a73c147bac9edab5ac3b13961d8c7">MeowMiraiLib.Event.GroupAllowConfessTalkEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_allow_member_invite_event.html#a9046935ed1fdf627b92f8dc59561dc56">MeowMiraiLib.Event.GroupAllowMemberInviteEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_entrance_announcement_change_event.html#a191318c026cb4ad0085862f5337b647c">MeowMiraiLib.Event.GroupEntranceAnnouncementChangeEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_mute_all_event.html#a456dac0d7f4f1328cf16fb01776b8256">MeowMiraiLib.Event.GroupMuteAllEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_group_name_change_event.html#ad3803db93a0568dfa187430a75043b10">MeowMiraiLib.Event.GroupNameChangeEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_member_card_change_event.html#a6cff500c96ed458f48b8bab79ff2d30f">MeowMiraiLib.Event.MemberCardChangeEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_member_permission_change_event.html#a98c3fab72dd24a205ee72359bf2a95d1">MeowMiraiLib.Event.MemberPermissionChangeEvent</a>, <a class="el" href="class_meow_mirai_lib_1_1_event_1_1_member_special_title_change_event.html#a1184da13c85d9035d7f5e7414a7492c5">MeowMiraiLib.Event.MemberSpecialTitleChangeEvent</a></li>
 </ul>
@@ -98,7 +100,7 @@ $(document).ready(function(){initNavTree('functions_c.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
+    <li class="footer">生成于 2021年 十二月 13日 星期一 16:21:32 , 为 MeowMiraiLib使用  <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.2 </li>
   </ul>
 </div>
 </body>
