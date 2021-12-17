@@ -2,11 +2,11 @@
 
 一个简易使用的轻量化 Mirai-C# (.net 5) 后端
 
-
 ## 使用示例
 
-1. 异步
-```
+1.异步
+
+```csharp
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
 using System;
@@ -41,8 +41,10 @@ namespace Test
     }
 }
 ```
-2. 同步
-```
+
+2.同步
+
+```csharp
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
 using System;
