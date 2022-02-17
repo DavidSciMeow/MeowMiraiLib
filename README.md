@@ -20,7 +20,7 @@ namespace Test
         static async Task Main(string[] args)
         {
             await c.ConnectAsync();
-            c.OnFriendMessageRecieve += (s, e) => 
+            c.OnFriendMessageReceive += (s, e) => 
             { 
                 //.....
             };
@@ -57,7 +57,7 @@ namespace Test
         static void Main(string[] args)
         {
             c.Connect();
-            c.OnFriendMessageRecieve += (s, e) => 
+            c.OnFriendMessageReceive += (s, e) => 
             { 
                 //.....
             };
