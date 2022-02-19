@@ -23,11 +23,6 @@ namespace MeowMiraiLib
     public partial class Client
     {
         private readonly Queue<JObject> SSMRequestList = new(); //返回队列长度
-        private void Ws_Opened(object? sender, EventArgs e)
-        {
-            Console.WriteLine("Connected");
-            _OnServeiceConnected?.Invoke("Connected");
-        }
         private Message[] RectifyMessage(string messagestr)
         {
             try
@@ -61,17 +56,27 @@ namespace MeowMiraiLib
                         case "App": l.Add(k.ToObject<App>()); break;
                         case "Poke": l.Add(k.ToObject<Poke>()); break;
                         case "Dice": l.Add(k.ToObject<Dice>()); break;
+                        case "MarketFace": l.Add(k.ToObject<MarketFace>()); break; //20221902 added MarketFace
                         case "MusicShare": l.Add(k.ToObject<MusicShare>()); break;
                         case "Forward": l.Add(k.ToObject<ForwardMessage>()); break;
                         case "File": l.Add(k.ToObject<File>()); break;
-                        default: Console.WriteLine($"err parse {k["type"]}"); return null;
+                        case "MiraiCode": l.Add(k.ToObject<MiraiCode>()); break;
+                        default:
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine($"[MeowMiraiLib] Err Parse Message Type On: {k["type"]}");
+                                Console.ForegroundColor = default;
+                            }
+                            break;
                     }
                 }
                 return l.ToArray();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message} :: {messagestr}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[MeowMiraiLib] {DateTime.Now:g} {ex.Message} \n--:in:--\n :{messagestr}");
+                Console.ForegroundColor = default;
                 Console.WriteLine();
                 return null;
             }
@@ -116,6 +121,28 @@ namespace MeowMiraiLib
                                 OnStrangerMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
                                 return;
                             }
+                            /*-20220219-*/
+                        case "OnFriendSyncMessageReceive":
+                            {
+                                OnFriendSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                return;
+                            }
+                        case "OnGroupSyncMessageReceive":
+                            {
+                                OnGroupSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                return;
+                            }
+                        case "OnTempSyncMessageReceive":
+                            {
+                                OnTempSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                return;
+                            }
+                        case "OnStrangerSyncMessageReceive":
+                            {
+                                OnStrangerSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                return;
+                            }
+                            /*-*/
                         case "OtherClientMessage":
                             {
                                 OnOtherMessageReceive?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
@@ -847,8 +874,6 @@ namespace MeowMiraiLib
                                 return;
                             }
                     }
-
-
                 }
                 catch (Exception ex)
                 {

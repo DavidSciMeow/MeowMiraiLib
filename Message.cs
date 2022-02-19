@@ -534,4 +534,29 @@ namespace MeowMiraiLib.Msg.Type
             this.code = code;
         }
     }
+    /// <summary>
+    /// 商城表情
+    /// </summary>
+    public sealed class MarketFace : Message
+    {
+        /// <summary>
+        /// 商城表情唯一标识
+        /// </summary>
+        public int id;
+        /// <summary>
+        /// 表情显示名称
+        /// </summary>
+        public string name;
+        /// <summary>
+        /// 构造一个商城表情
+        /// <para>目前商城表情仅支持接收和转发,不支持构造发送</para>
+        /// </summary>
+        /// <param name="id">商城表情唯一标识</param>
+        /// <param name="name">表情显示名称</param>
+        public MarketFace(int id, string name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+    }
 }

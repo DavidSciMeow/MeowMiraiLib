@@ -39,28 +39,29 @@ namespace MeowMiraiLib
         /// <summary>
         /// 会话进程号
         /// </summary>
-        public string session;
+        public string session { get; private set; } //update for more general security
         /// <summary>
         /// 调试标识
         /// </summary>
-        public bool debug = false;
+        public bool debug { get; set; } = false;
         /// <summary>
         /// 事件调试标识
         /// </summary>
-        public bool eventdebug = false;
+        public bool eventdebug { get; set; } = false;
         /// <summary>
         /// 生成一个端
         /// </summary>
         /// <param name="url">地址</param>
         /// <param name="debug">全调试输出</param>
         /// <param name="eventdebug">事件调试输出</param>
-        public Client(string url,bool debug = false,bool eventdebug = false)
+        public Client(string url, bool debug = false, bool eventdebug = false)
         {
             this.url = url;
             this.debug = debug;
             this.eventdebug = eventdebug;
-            ws = new WebSocket(url);
-            ws.Opened += Ws_Opened;
+            ws = new(url);
+            ws.Opened += (s, e) => _OnServeiceConnected?.Invoke("Connected");
+            ws.Closed += (s, e) => _OnServiceDropped.Invoke("Closed");
             ws.MessageReceived += Ws_MessageReceived;
         }
         /// <summary>
@@ -125,7 +126,7 @@ namespace MeowMiraiLib
         /// 异步链接
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> ConnectAsync()
+        public Task<bool> ConnectAsync()
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -133,7 +134,7 @@ namespace MeowMiraiLib
             }
             else
             {
-                return await ws.OpenAsync();
+                return ws.OpenAsync();
             }
         }
     }

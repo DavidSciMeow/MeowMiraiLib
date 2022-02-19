@@ -5,6 +5,7 @@
  * by use of identify the sender,
  * and do not alter the order of the class
  */
+
 namespace MeowMiraiLib.Msg.Sender
 {
     /// <summary>
@@ -101,4 +102,20 @@ namespace MeowMiraiLib.Msg.Sender
         /// </summary>
         public string platform;
     }
+    /// <summary>
+    /// 同步好友信息
+    /// </summary>
+    public class FriendSyncMessageSender : FriendMessageSender { }
+    /// <summary>
+    /// 同步群信息
+    /// </summary>
+    public class GroupSyncMessageSender : GroupMessageSender { }
+    /// <summary>
+    /// 同步群临时信息
+    /// </summary>
+    public class TempSyncMessageSender : TempMessageSender { }
+    /// <summary>
+    /// 同步陌生人消息
+    /// </summary>
+    public class StrangerSyncMessageSender : StrangerMessageSender { }
 }

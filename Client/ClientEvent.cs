@@ -1,5 +1,6 @@
 ﻿using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
+using System;
 
 /*
  * 所有后台引起事件文件
@@ -29,6 +30,15 @@ namespace MeowMiraiLib
         /// 接收到Websocket端链接成功信息
         /// </summary>
         public event ServiceConnected _OnServeiceConnected;
+        /// <summary>
+        /// Websocket端链接关闭信息
+        /// </summary>
+        /// <param name="e">信息内容</param>
+        public delegate void ServiceDropped(string e);
+        /// <summary>
+        /// 接收到Websocket端链接关闭信息
+        /// </summary>
+        public event ServiceDropped _OnServiceDropped;
         /// <summary>
         /// 后端传送其他客户端上线通知
         /// </summary>
@@ -117,6 +127,46 @@ namespace MeowMiraiLib
         /// 接收到其他类型信息
         /// </summary>
         public event OtherClientMessage OnOtherMessageReceive;
+        /// <summary>
+        /// 接收到同步好友消息
+        /// </summary>
+        /// <param name="s">同步好友消息接收者句柄</param>
+        /// <param name="e">信息内容</param>
+        public delegate void FriendSyncMessage(FriendSyncMessageSender s, Message[] e);
+        /// <summary>
+        /// 接收到同步好友消息
+        /// </summary>
+        public event FriendSyncMessage OnFriendSyncMessageReceive;
+        /// <summary>
+        /// 接收到同步群消息
+        /// </summary>
+        /// <param name="s">同步群消息接收者句柄</param>
+        /// <param name="e">信息内容</param>
+        public delegate void GroupSyncMessage(GroupSyncMessageSender s, Message[] e);
+        /// <summary>
+        /// 接收到同步群消息
+        /// </summary>
+        public event GroupSyncMessage OnGroupSyncMessageReceive;
+        /// <summary>
+        /// 接收到同步群临时消息
+        /// </summary>
+        /// <param name="s">同步群临时接收者句柄</param>
+        /// <param name="e">信息内容</param>
+        public delegate void TempSyncMessage(TempSyncMessageSender s, Message[] e);
+        /// <summary>
+        /// 接收到同步群临时消息
+        /// </summary>
+        public event TempSyncMessage OnTempSyncMessageReceive;
+        /// <summary>
+        /// 接收到同步陌生人消息
+        /// </summary>
+        /// <param name="s">同步陌生人接收者句柄</param>
+        /// <param name="e">信息内容</param>
+        public delegate void StrangerSyncMessage(StrangerSyncMessageSender s, Message[] e);
+        /// <summary>
+        /// 接收到同步陌生人消息
+        /// </summary>
+        public event StrangerSyncMessage OnStrangerSyncMessageReceive;
 
         /*--Type of Event--*/
         /// <summary>

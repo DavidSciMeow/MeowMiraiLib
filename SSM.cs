@@ -41,7 +41,6 @@ namespace MeowMiraiLib.Msg
         /// Session标识
         /// </summary>
         public string session;
-
         private string PackMsg(int? syncid = null)
         {
             string s;
@@ -55,14 +54,11 @@ namespace MeowMiraiLib.Msg
             }
             if (content is SMessage)
             {
-                s = JsonConvert.SerializeObject(this, Formatting.None,
-                    new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                s = JsonConvert.SerializeObject(this, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             else
             {
-                s = $"{{\"syncId\":{syncId},\"command\":\"{command}\"," +
-                    $"{(subCommand != null ? $"\"subCommand\":\"{subCommand}\"," : "")}" +
-                    $"\"content\":{content}}}";
+                s = JsonConvert.SerializeObject(new { syncId, session, command, subCommand, content }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             return s;
         }
@@ -75,7 +71,7 @@ namespace MeowMiraiLib.Msg
         /// <returns></returns>
         public (bool isTimedOut, JObject? Return) Send(Client c, int? syncid = null, int TimeOut = 10)
         {
-            this.session = c.session;
+            session = c.session;
             return c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut).GetAwaiter().GetResult();
         }
         /// <summary>
@@ -87,7 +83,7 @@ namespace MeowMiraiLib.Msg
         /// <returns></returns>
         public async Task<(bool isTimedOut, JObject? Return)> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
         {
-            this.session = c.session;
+            session = c.session;
             return await c.SendAndWaitResponse(PackMsg(syncid), syncId, TimeOut);
         }
     }
@@ -175,7 +171,8 @@ namespace MeowMiraiLib.Msg
         public MessageFromId(long id)
         {
             command = "messageFromId";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":{id}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":{id}}}";
         }
     }
     /// <summary>
@@ -189,7 +186,8 @@ namespace MeowMiraiLib.Msg
         public FriendList()
         {
             command = "friendList";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = JsonConvert.SerializeObject(new {sessionKey = session}, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -203,7 +201,8 @@ namespace MeowMiraiLib.Msg
         public GroupList()
         {
             command = "groupList";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -218,7 +217,8 @@ namespace MeowMiraiLib.Msg
         public MemberList(long target)
         {
             command = "memberList";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session ,target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -232,7 +232,8 @@ namespace MeowMiraiLib.Msg
         public BotProfile()
         {
             command = "botProfile";
-            content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\"}}";
         }
     }
     /// <summary>
@@ -247,7 +248,8 @@ namespace MeowMiraiLib.Msg
         public FriendProfile(long qq)
         {
             command = "friendProfile";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qq}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target = qq }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{qq}}}";
         }
     }
     /// <summary>
@@ -263,7 +265,8 @@ namespace MeowMiraiLib.Msg
         public MemberProfile(long qqgroup, long qq)
         {
             command = "memberProfile";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target = qqgroup, memberId = qq }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
         }
     }
     /// <summary>
@@ -332,8 +335,8 @@ namespace MeowMiraiLib.Msg
         public SendNudge(long target, long subject, string kind)
         {
             command = "sendNudge";
-            content = $"{{\"sessionKey\":\"{session}\"," +
-                $"\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, subject, kind }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
         }
     }
     /// <summary>
@@ -348,7 +351,8 @@ namespace MeowMiraiLib.Msg
         public Recall(long target)
         {
             command = "recall";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target}, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -370,9 +374,10 @@ namespace MeowMiraiLib.Msg
         public File_list(string id,string path,long target,long group,long qq,bool? withDownloadInfo,long offset,long size)
         {
             command = "file_list";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-                $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))}" +
-                $",\"offset\":{offset},\"size\":{size}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq, withDownloadInfo, offset, size }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
+            //    $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))}" +
+            //    $",\"offset\":{offset},\"size\":{size}}}";
         }
     }
     /// <summary>
@@ -392,8 +397,9 @@ namespace MeowMiraiLib.Msg
         public File_info(string id, string path, long target, long group, long qq, bool? withDownloadInfo)
         {
             command = "file_info";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-                $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))} }}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq, withDownloadInfo }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
+            //   $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))} }}";
         }
     }
     /// <summary>
@@ -413,8 +419,9 @@ namespace MeowMiraiLib.Msg
         public File_mkdir(string id, string path, long target, long group, long qq, string directoryName)
         {
             command = "file_mkdir";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-                $",\"group\":{group},\"qq\":{qq},\"directoryName\":\"{directoryName}\" }}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq, directoryName }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
+            //    $",\"group\":{group},\"qq\":{qq},\"directoryName\":\"{directoryName}\" }}";
         }
     }
     /// <summary>
@@ -433,7 +440,8 @@ namespace MeowMiraiLib.Msg
         public File_delete(string id, string path, long target, long group, long qq)
         {
             command = "file_delete";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq}}}";
         }
     }
     /// <summary>
@@ -454,7 +462,8 @@ namespace MeowMiraiLib.Msg
         public File_move(string id, string path, long target, long group, long qq, string moveTo, string moveToPath)
         {
             command = "file_move";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"moveTo\":\"{moveTo}\",\"moveToPath\":\"{moveToPath}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq, moveTo, moveToPath }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"moveTo\":\"{moveTo}\",\"moveToPath\":\"{moveToPath}\"}}";
         }
     }
     /// <summary>
@@ -474,7 +483,8 @@ namespace MeowMiraiLib.Msg
         public File_rename(string id, string path, long target, long group, long qq, string renameTo)
         {
             command = "file_rename";
-            content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"renameTo\":\"{renameTo}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, id, path, target, group, qq, renameTo }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"renameTo\":\"{renameTo}\"}}";
         }
     }
     /// <summary>
@@ -489,7 +499,8 @@ namespace MeowMiraiLib.Msg
         public DeleteFriend(long target)
         {
             command = "deleteFriend";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target}, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -506,7 +517,8 @@ namespace MeowMiraiLib.Msg
         public Mute(long target, long memberId, long time)
         {
             command = "mute";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"time\":{time}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId, time }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"time\":{time}}}";
         }
     }
     /// <summary>
@@ -522,7 +534,8 @@ namespace MeowMiraiLib.Msg
         public Unmute(long target, long memberId)
         {
             command = "unmute";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
         }
     }
     /// <summary>
@@ -539,7 +552,8 @@ namespace MeowMiraiLib.Msg
         public Kick(long target, long memberId, long msg)
         {
             command = "kick";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"msg\":{msg}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId, msg }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"msg\":{msg}}}";
         }
     }
     /// <summary>
@@ -554,7 +568,8 @@ namespace MeowMiraiLib.Msg
         public Quit(long target)
         {
             command = "quit";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -569,7 +584,8 @@ namespace MeowMiraiLib.Msg
         public MuteAll(long target)
         {
             command = "muteAll";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -584,7 +600,8 @@ namespace MeowMiraiLib.Msg
         public UnmuteAll(long target)
         {
             command = "unmuteAll";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -599,7 +616,8 @@ namespace MeowMiraiLib.Msg
         public SetEssence(long target)
         {
             command = "setEssence";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -615,7 +633,8 @@ namespace MeowMiraiLib.Msg
         {
             command = "groupConfig";
             subCommand = "get";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
         }
     }
     /// <summary>
@@ -632,7 +651,8 @@ namespace MeowMiraiLib.Msg
         {
             command = "groupConfig";
             subCommand = "update";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"config\":{{{JsonConvert.SerializeObject(set)}}}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target ,config = JsonConvert.SerializeObject(set) }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"config\":{{{JsonConvert.SerializeObject(set)}}}}}";
         }
         /// <summary>
         /// 群设置类
@@ -679,7 +699,8 @@ namespace MeowMiraiLib.Msg
         {
             command = "memberInfo";
             subCommand = "get";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
         }
     }
     /// <summary>
@@ -697,7 +718,8 @@ namespace MeowMiraiLib.Msg
         {
             command = "memberInfo";
             subCommand = "update";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"config\":{{{JsonConvert.SerializeObject(set)}}}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId, config = JsonConvert.SerializeObject(set) }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"config\":{{{JsonConvert.SerializeObject(set)}}}}}";
         }
         /// <summary>
         /// 群员设置类
@@ -728,7 +750,8 @@ namespace MeowMiraiLib.Msg
         public MemberAdmin(long target, long memberId, bool assign)
         {
             command = "memberAdmin";
-            content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"assign\":{(assign?"true":"false")}}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, target, memberId, assign }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"assign\":{(assign?"true":"false")}}}";
         }
     }
     /// <summary>
@@ -739,17 +762,18 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 处理加好友请求
         /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝,2添加至黑名单</param>
+        /// <param name="eventId"></param>
+        /// <param name="fromId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="operate">0同意,1拒绝,2添加至黑名单</param>
         /// <param name="message"></param>
-        public Resp_newFriendRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        public Resp_newFriendRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_newFriendRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, eventId, fromId, groupId, operate, message }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
+            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+            //          $"\"message\":\"{message}\"}}";
         }
     }
     /// <summary>
@@ -760,17 +784,18 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 用户加群
         /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝,2忽略,3拒绝并黑名单,4忽略并黑名单</param>
+        /// <param name="eventId"></param>
+        /// <param name="fromId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="operate">0同意,1拒绝,2忽略,3拒绝并黑名单,4忽略并黑名单</param>
         /// <param name="message"></param>
-        public Resp_memberJoinRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        public Resp_memberJoinRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_memberJoinRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, eventId, fromId, groupId, operate, message }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
+            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+            //          $"\"message\":\"{message}\"}}";
         }
     }
     /// <summary>
@@ -781,17 +806,18 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// Bot被邀请入群
         /// </summary>
-        /// <param name="eventid"></param>
-        /// <param name="fromid"></param>
-        /// <param name="groupid"></param>
-        /// <param name="operatenum">0同意,1拒绝</param>
+        /// <param name="eventId"></param>
+        /// <param name="fromId"></param>
+        /// <param name="groupId"></param>
+        /// <param name="operate">0同意,1拒绝</param>
         /// <param name="message"></param>
-        public Resp_botInvitedJoinGroupRequestEvent(long eventid, long fromid, long groupid, int operatenum, string message)
+        public Resp_botInvitedJoinGroupRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_botInvitedJoinGroupRequestEvent";
-            content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-                      $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-                      $"\"message\":\"{message}\"}}";
+            content = JsonConvert.SerializeObject(new { sessionKey = session, eventId, fromId, groupId, operate, message }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
+            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
+            //          $"\"message\":\"{message}\"}}";
         }
     }
 }

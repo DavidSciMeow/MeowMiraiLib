@@ -1,9 +1,5 @@
-﻿using MeowMiraiLib.Msg;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /* 所有事件模型文件 
  * 本文件类解析方案与网页 https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/EventType.md 完全一致
