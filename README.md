@@ -2,11 +2,11 @@
 
 一个简易使用的轻量化 Mirai-C# (.net 5) 后端
 
-
 ## 使用示例
 
-1. 异步
-```
+1.异步
+
+```csharp
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
 using System;
@@ -20,7 +20,7 @@ namespace Test
         static async Task Main(string[] args)
         {
             await c.ConnectAsync();
-            c.OnFriendMessageRecieve += (s, e) => 
+            c.OnFriendMessageReceive += (s, e) => 
             { 
                 //.....
             };
@@ -41,8 +41,10 @@ namespace Test
     }
 }
 ```
-2. 同步
-```
+
+2.同步
+
+```csharp
 using MeowMiraiLib;
 using MeowMiraiLib.Msg;
 using System;
@@ -55,7 +57,7 @@ namespace Test
         static void Main(string[] args)
         {
             c.Connect();
-            c.OnFriendMessageRecieve += (s, e) => 
+            c.OnFriendMessageReceive += (s, e) => 
             { 
                 //.....
             };
@@ -77,7 +79,7 @@ namespace Test
 }
 ```
 
-其他功能详见源码注释。
+其他功能详见源码注释或者右侧 GitPage/帮助
 
 ## 最新版本&特性
 
