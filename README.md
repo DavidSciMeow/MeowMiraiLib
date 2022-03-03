@@ -138,9 +138,9 @@ c.OnFriendMessageReceive += MeowMiraiLibTest.MessageX.OnFriendMessageReceive;
 1.首先需要先规定命令的格式 例如: 重复 [要重复的内容]   
 2.写一个处理这个事件的函数, 传入数据为原始信息需要的部分, 输出为一个Message[]数组等待发送.  
 3.发送这个信息,使用某个端发送.  
-### 注: 您也可以从`端 A` 接受信息 发送到`端 B` 的某个用户, 互操作性`由您自己在发送函数中规定`.  
+### 注: 您也可以从`端 A` 接受信息 发送到`端 B` 的某个用户, 互操作性`由您自己在发送函数中规定`.
+原始写法
 ```csharp
-//原始写法
 using MeowMiraiLib.Msg;
 using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
@@ -165,8 +165,31 @@ namespace Test
         public static Message[] Repeat(string s) => new Message[] { new Plain(s) };
     }
 }
-//扩展写法
-
+```
+扩展写法
+```csharp
+using MeowMiraiLib.Msg;
+using MeowMiraiLib.Msg.Sender;
+using MeowMiraiLib.Msg.Type;
+namespace Test
+{
+    internal class MessageX
+    {
+        public static void OnFriendMessageReceive(FriendMessageSender s, Message[] e)
+        {
+            //MGetPlainStringSplit() 是一个关于Message类的数组扩展方法,
+            //用于返回信息里的文字部分后按照 Splitor进行分割, splitor默认是空格
+            var sx = e.MGetPlainStringSplit();
+            var sendto = s.id;
+            var (t,j) = sx[0] switch
+            {
+                                                            //使用信息类的扩展发送方法
+                "重复" => new Message[] { new Plain(sx[1]) }.SendToFriend(sendto,ClientX.c),
+            };
+            Console.WriteLine(j);
+        }
+    }
+}
 ```
 到现在为止, 您可以尝试发送给您的机器人一个消息, 内容如下:  `重复 这句话`   
 您的机器人应该回复: `这句话`  
