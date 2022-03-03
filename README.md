@@ -140,6 +140,7 @@ c.OnFriendMessageReceive += MeowMiraiLibTest.MessageX.OnFriendMessageReceive;
 3.发送这个信息,使用某个端发送.  
 ### 注: 您也可以从`端 A` 接受信息 发送到`端 B` 的某个用户, 互操作性`由您自己在发送函数中规定`.  
 ```csharp
+//原始写法
 using MeowMiraiLib.Msg;
 using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
@@ -164,6 +165,8 @@ namespace Test
         public static Message[] Repeat(string s) => new Message[] { new Plain(s) };
     }
 }
+//扩展写法
+
 ```
 到现在为止, 您可以尝试发送给您的机器人一个消息, 内容如下:  `重复 这句话`   
 您的机器人应该回复: `这句话`  
