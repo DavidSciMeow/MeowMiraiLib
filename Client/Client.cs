@@ -39,31 +39,94 @@ namespace MeowMiraiLib
         /// <summary>
         /// 会话进程号
         /// </summary>
-        public string session { get; private set; } //update for more general security
+        public string session { get; private set; }
         /// <summary>
         /// 调试标识
         /// </summary>
-        public bool debug { get; set; } = false;
+        public bool debug { get; private set; } = false;
         /// <summary>
         /// 事件调试标识
         /// </summary>
-        public bool eventdebug { get; set; } = false;
+        public bool eventdebug { get; private set; } = false;
         /// <summary>
-        /// 生成一个端
+        /// 重连标识
+        /// </summary>
+        public int reconnect { get; private set; }
+        /// <summary>
+        /// 生成一个端(原始方法)
         /// </summary>
         /// <param name="url">地址</param>
         /// <param name="debug">全调试输出</param>
         /// <param name="eventdebug">事件调试输出</param>
-        public Client(string url, bool debug = false, bool eventdebug = false)
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public Client(string url, bool debug = false, bool eventdebug = false, int reconnect = -1)
         {
             this.url = url;
             this.debug = debug;
             this.eventdebug = eventdebug;
+            this.reconnect = reconnect;
             ws = new(url);
-            ws.Opened += (s, e) => _OnServeiceConnected?.Invoke("Connected");
-            ws.Closed += (s, e) => _OnServiceDropped.Invoke("Closed");
+            ws.Opened += (s, e) =>
+            {
+                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Opened -");
+                _OnServeiceConnected?.Invoke(e.ToString());
+            };
+            ws.Error += (s, e) =>
+            {
+                _OnServeiceError.Invoke(e.Exception);
+                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Error , Running to Close or Reconnect -");
+                ws.Close();
+                
+            };
+            ws.Closed += (s, e) =>
+            {
+                _OnServiceDropped.Invoke(e.ToString());
+                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Closed -");
+                if (reconnect != 0)
+                {
+                    while (reconnect == -1 || reconnect --> 0)
+                    {
+                        if (ws.State == WebSocketState.Closed && ws.State == WebSocketState.None)
+                        {
+                            ws.Open();
+                            System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Trying To Reconnect (in 5 second)-");
+                            Task.Delay(5 * 1000).GetAwaiter().GetResult();
+                        }
+                        else
+                        {
+                            System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Reconnect Complete-");
+                            return;
+                        }
+                    }
+                }
+            };
             ws.MessageReceived += Ws_MessageReceived;
         }
+        /// <summary>
+        /// 生成一个端(含有VerifyKey)
+        /// </summary>
+        /// <param name="ip">地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="verifyKey">验证</param>
+        /// <param name="qq">登陆的机器人qq</param>
+        /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public Client(string ip, int port, string verifyKey, long qq, string type = "all", bool debug = false, bool eventdebug = false, int reconnect = -1)
+            : this($"ws://{ip}:{port}/{type}?verifyKey={verifyKey}&qq={qq}", debug, eventdebug, reconnect) { }
+        /// <summary>
+        /// 生成一个端(不含VerifyKey)
+        /// </summary>
+        /// <param name="ip">地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="qq">登陆的机器人qq</param>
+        /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public Client(string ip, int port, long qq, string type = "all", bool debug = false, bool eventdebug = false, int reconnect = -1)
+            : this($"ws://{ip}:{port}/{type}?&qq={qq}", debug, eventdebug, reconnect) { }
         /// <summary>
         /// 发送并且等待回值
         /// </summary>

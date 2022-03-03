@@ -13,8 +13,42 @@
  * for more of message and classes standard or Mirai Code, Visit website: https://github.com/mamoe/mirai/blob/dev/docs/Messages.md
  */
 
+using System;
+using System.Text;
+
 namespace MeowMiraiLib.Msg.Type
 {
+    /// <summary>
+    /// 信息类的扩展方法
+    /// </summary>
+    public static class MessageUtil
+    {
+        /// <summary>
+        /// 获取信息的字符串表示
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        public static string MGetPlainString(this Message[] array)
+        {
+            StringBuilder sb = new();
+            foreach (var i in array)
+            {
+                if (i is Plain)
+                {
+                    sb.Append((i as Plain).text);
+                }
+            }
+            return sb.ToString();
+        }
+        /// <summary>
+        /// 获取命令形式的扩展
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="splitor">分隔符</param>
+        /// <returns></returns>
+        public static string[] MGetPlainStringSplit(this Message[] array, string splitor = " ") 
+            => MGetPlainString(array).Trim().Split(splitor);
+    }
     /// <summary>
     /// 信息类的公开定义
     /// </summary>

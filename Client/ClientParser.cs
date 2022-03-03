@@ -882,7 +882,6 @@ namespace MeowMiraiLib
                         Console.WriteLine($"{DateTime.Now} :: {ex.Message}");
                     }
                 }
-                
             }
             else
             {

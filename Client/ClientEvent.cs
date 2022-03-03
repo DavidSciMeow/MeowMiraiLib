@@ -24,16 +24,22 @@ namespace MeowMiraiLib
         /// <summary>
         /// Websocket端链接成功信息
         /// </summary>
-        /// <param name="e">信息内容</param>
         public delegate void ServiceConnected(string e);
         /// <summary>
         /// 接收到Websocket端链接成功信息
         /// </summary>
         public event ServiceConnected _OnServeiceConnected;
         /// <summary>
+        /// Websocket端错误信息
+        /// </summary>
+        public delegate void ServiceError(Exception e);
+        /// <summary>
+        /// 接收到Websocket端链接成功信息
+        /// </summary>
+        public event ServiceError _OnServeiceError;
+        /// <summary>
         /// Websocket端链接关闭信息
         /// </summary>
-        /// <param name="e">信息内容</param>
         public delegate void ServiceDropped(string e);
         /// <summary>
         /// 接收到Websocket端链接关闭信息

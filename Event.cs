@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using MeowMiraiLib.Msg;
+using Newtonsoft.Json.Linq;
 
 /* 所有事件模型文件 
  * 本文件类解析方案与网页 https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/EventType.md 完全一致
@@ -186,7 +188,104 @@ namespace MeowMiraiLib.Event
         }
     }
     #endregion
-
+    #region 事件扩展
+    /// <summary>
+    /// 需要判断的事件扩展
+    /// </summary>
+    public static class EventUtil
+    {
+        /// <summary>
+        /// 同意
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool,JObject) Grant(this BotInvitedJoinGroupRequestEvent req,Client c, string message = "")
+        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        /// <summary>
+        /// 拒绝
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Deny(this BotInvitedJoinGroupRequestEvent req, Client c, string message="")
+        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        /// <summary>
+        /// 同意
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Grant(this NewFriendRequestEvent req, Client c, string message = "")
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        /// <summary>
+        /// 拒绝
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Deny(this NewFriendRequestEvent req, Client c, string message = "")
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        /// <summary>
+        /// 拒绝并拉黑
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) DenyAndMoveToBlackList(this NewFriendRequestEvent req, Client c, string message = "") 
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).Send(c);
+        /// <summary>
+        /// 同意
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Grant(this MemberJoinRequestEvent req, Client c, string message = "")
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        /// <summary>
+        /// 拒绝
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Deny(this MemberJoinRequestEvent req, Client c, string message = "")
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        /// <summary>
+        /// 忽略
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) Ignore(this MemberJoinRequestEvent req, Client c, string message = "") 
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).Send(c);
+        /// <summary>
+        /// 拒绝并移动到黑名单
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) DenyAndMoveToBlackList(this MemberJoinRequestEvent req, Client c, string message = "") 
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 3, message).Send(c);
+        /// <summary>
+        /// 忽略并移动到黑名单
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="c">传入的端</param>
+        /// <param name="message">返回的消息</param>
+        /// <returns></returns>
+        public static (bool, JObject) IgnoreAndMoveToBlackList(this MemberJoinRequestEvent req, Client c, string message = "")
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 4, message).Send(c);
+    }
+    #endregion
     #region Event & EventClasses -- 事件和事件内容
     /// <summary>
     /// 可接收到的逻辑事件类型
