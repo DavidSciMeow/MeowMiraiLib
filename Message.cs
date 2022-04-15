@@ -14,69 +14,12 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace MeowMiraiLib.Msg.Type
 {
-    /// <summary>
-    /// 信息类的扩展方法
-    /// </summary>
-    public static class MessageUtil
-    {
-        /// <summary>
-        /// 获取信息的字符串表示
-        /// </summary>
-        /// <param name="array"></param>
-        /// <returns></returns>
-        public static string MGetPlainString(this Message[] array)
-        {
-            StringBuilder sb = new();
-            foreach (var i in array)
-            {
-                if (i is Plain)
-                {
-                    sb.Append((i as Plain).text);
-                }
-            }
-            return sb.ToString();
-        }
-        /// <summary>
-        /// 获取命令形式的扩展
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="splitor">分隔符</param>
-        /// <returns></returns>
-        public static string[] MGetPlainStringSplit(this Message[] array, string splitor = " ") 
-            => MGetPlainString(array).Trim().Split(splitor);
-        /// <summary>
-        /// 将信息发送给好友
-        /// </summary>
-        /// <param name="array">信息序列</param>
-        /// <param name="target">目标</param>
-        /// <param name="c">要发送的端</param>
-        /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToFriend(this Message[] array, long target, Client c, long? quote = null) 
-        => new FriendMessage(target, array, quote).Send(c);
-        /// <summary>
-        /// 将信息发送给群
-        /// </summary>
-        /// <param name="array">信息序列</param>
-        /// <param name="target">目标</param>
-        /// <param name="c">要发送的端</param>
-        /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToGroup(this Message[] array, long target, Client c, long? quote = null) 
-        => new GroupMessage(target, array, quote).Send(c);
-        /// <summary>
-        /// 将信息发送给临时聊天
-        /// </summary>
-        /// <param name="array">信息序列</param>
-        /// <param name="target">目标</param>
-        /// <param name="group">发起临时聊天的群号</param>
-        /// <param name="c">要发送的端</param>
-        /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToTemp(this Message[] array, long target, long group, Client c, long? quote = null) 
-        => new TempMessage(target, group, array, quote).Send(c);
-    }
     /// <summary>
     /// 信息类的公开定义
     /// </summary>

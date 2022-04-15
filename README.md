@@ -37,7 +37,12 @@
 > 1. [其他参考资料](#7)
 >    1. [类图和参照设计图](#71)
 >    1. [处理时序](#72)
-> 1. [鸣 谢](#8)
+> 1. [信息快速编写功能类](#8)
+>    1. [MGetPlainString](#81)
+>    1. [MGetPlainStringSplit](#82)
+>    1. [MGetEachImageUrl](#83)
+>    1. [MGetEachImageImage](#84)
+> 1. [鸣 谢](#9)
 -----    
 # 1. 主框<a name="1"></a>  
 ## 对应的 信息/事件 类型等请参照源码内的第一行注释.
@@ -318,6 +323,90 @@ User .Send() / .SendAsync()
 || => Client.SendAndWaitResponse() \{./Client/Client.cs\}  
 || => *Wait...**  
 ||| => *User*.__Return_JObject_
-# 8 鸣谢<a name="8"></a>  
+# 8 信息快速编写功能类 <a name="8"></a>
+## (MessageUtil / 引用位置:MeowMiraiLib.Msg.Type)
+
+## 8.1 MGetPlainString <a name="81"></a>
+### 使用 MGetPlainString 获取消息中的所有字符集合
+### 源码方案(foreach/(is/as))
+```csharp
+//调用方案 (扩展)
+rinko.OnFriendMessageReceive += (s, e) =>
+{
+    if(s.id != qqid) //过滤自己发出的信息
+    {
+        var str = e.MGetPlainString();
+        Console.WriteLine(str);
+    }
+};
+```
+```
+//调用方案 (方法)
+MGetPlainString(message:array)
+```
+
+## 8.2 MGetPlainString <a name="82"></a>
+### 使用 MGetPlainStringSplit 获取消息中的所有字符集合并且使用(splitor参数)分割
+### 源码方案(MGetPlainString的string.split())
+```csharp
+//调用方案 (扩展)
+rinko.OnFriendMessageReceive += (s, e) =>
+{
+    if(s.id != qqid) //过滤自己发出的信息
+    {
+        var str = e.MGetPlainStringSplit(); //默认使用空格分隔
+        //var str = e.MGetPlainStringSplit(","); //使用逗号分割
+        Console.WriteLine(str);
+    }
+};
+```
+```
+//调用方案 (方法)
+MGetPlainStringSplit(message:array,spiltor:string)
+```
+
+## 8.3 MGetEachImageUrl <a name="83"></a>
+### 使用 MGetEachImageUrl 获取消息中的所有图片集合的Url
+### 源码方案(foreach / is(as))
+```csharp
+//调用方案 (扩展)
+rinko.OnFriendMessageReceive += (s, e) =>
+{
+    if(s.id != qqid) //过滤自己发出的信息
+    {
+        var sx = e.MGetEachImageUrl();
+        Console.WriteLine(sx[1].url);
+    }
+};
+```
+```
+//调用方案 (方法)
+MGetEachImageUrl(message:array)
+```
+
+## 8.4 MGetEachImage <a name="84"></a>
+### 使用 MGetEachImage 获取消息中的所有图片集合并转换成Image类
+```csharp
+### 注: linux等 请先加入 libgdiplus 库 ###
+```
+### 源码方案(foreach / is(as))
+```csharp
+//调用方案 (扩展)
+rinko.OnFriendMessageReceive += (s, e) =>
+{
+    if(s.id != qqid) //过滤自己发出的信息
+    {
+        var sx = e.MGetEachImage();
+        Image i = sx[1].img;
+        //....
+    }
+};
+```
+```
+//调用方案 (方法)
+MGetEachImage(message:array)
+```
+
+# 9 鸣谢<a name="9"></a>  
 ## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.  
 ## 也感谢各位其他大佬对小项目的关注.
