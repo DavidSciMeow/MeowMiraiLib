@@ -1,5 +1,9 @@
 # Meow.MiraiLib
 
+[![CI](https://github.com/DavidSciMeow/MeowMiraiLib/actions/workflows/main.yml/badge.svg)](https://github.com/DavidSciMeow/MeowMiraiLib/actions/workflows/main.yml)
+![](https://img.shields.io/nuget/vpre/Electronicute.MeowMiraiLib?label=NuGet%20Version)
+![](https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download)
+
 >## 一个简易使用的轻量化 Mirai-C# 后端  
 >> .net 5[ver &lt;= 4.0.0]  
 >> .net 6[ver > 4.0.0]  
