@@ -3,6 +3,7 @@
 >## 一个简易使用的轻量化 Mirai-C# 后端  
 >> .net 5[ver &lt;= 4.0.0]  
 >> .net 6[ver > 4.0.0]  
+>> .net 6(适配linux-gdi画图版)[ver > 5.0.0]
 
 ```
 @{
@@ -11,6 +12,8 @@
     我们建议所有用户升级至 .net 6 进行编写, 统一适应微软的生命周期.  
     指南将 .不.再.继.续.提.供. 关于 .net 5 的任何后续编写支持. 请您自行研判. 
     -- .net 6 最低编写版本为 Visual Studio 2022 --  
+    关于linux平台启用gdi画图,请在应用程序首行加入
+    AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
 }
 ```
 ----

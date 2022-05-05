@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 //linux needs lib called - libgdiplus
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:MeowMiraiLib.Msg.Type.MessageUtil.MGetEachImageBitmap(MeowMiraiLib.Msg.Type.Message[])~System.ValueTuple{System.Boolean,System.Drawing.Image}[]")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:MeowMiraiLib.Msg.Type.MessageUtil.MGetEachImage(MeowMiraiLib.Msg.Type.Message[])~System.ValueTuple{System.Boolean,System.Drawing.Image}[]")]
