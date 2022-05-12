@@ -36,7 +36,6 @@ namespace MeowMiraiLib.Msg
         /// <summary>
         /// 内容
         /// </summary>
-        [JsonProperty(ItemIsReference = true, IsReference = true)]
         public dynamic content { get; set; }
         /// <summary>
         /// Session标识

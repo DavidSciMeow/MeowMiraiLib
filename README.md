@@ -5,13 +5,13 @@
 ![](https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download)
 
 >## 一个简易使用的轻量化 Mirai-C# 后端  
->> .net 6 [ver 6.0.0]
+>> .net 6 [ver 6.0.x]
 ```
 @{
     所.有.用.户.必.须.更.新.至.最.新.版.本
     ver 6.0.0 删除了关于Linux对于System.Drawing.Common的引用; 
     由于微软不再支持libgdi+,故删除
-    
+    ver 6.0.1 修改了一处序列化错误
     改动说明:
     maj 1.修复了信息内容的更新操作
     maj 2.增加了戳回去 e.NudgeBack(Client)函数
