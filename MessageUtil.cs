@@ -58,32 +58,6 @@ namespace MeowMiraiLib.Msg.Type
             }
             return l.ToArray();
         }
-        /// <summary>
-        /// 通过下载的方式获取Image
-        /// <para>通过测试数组长度来确定是否含有图片</para>
-        /// </summary>
-        /// <param name="array"></param>
-        /// <returns>返回一个(bool,Image)的结构来判断(是否闪图,图片)</returns>
-        public static (bool _isFlashMessage, System.Drawing.Image img)[] MGetEachImage(this Message[] array)
-        {
-            List<(bool, System.Drawing.Image)> l = new();
-            foreach (var i in array)
-            {
-                if (i is Image)
-                {
-                    var url = (i as Image).url;
-                    var imag = Meow.Util.Network.Http.Get.Image(url).GetAwaiter().GetResult();
-                    l.Add((false, imag));
-                }
-                else if (i is FlashImage)
-                {
-                    var url = (i as FlashImage).url;
-                    var imag = Meow.Util.Network.Http.Get.Image(url).GetAwaiter().GetResult();
-                    l.Add((true, imag));
-                }
-            }
-            return l.ToArray();
-        }
 
         /*Sender Util*/
         /// <summary>

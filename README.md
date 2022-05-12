@@ -1,19 +1,20 @@
 # Meow.MiraiLib
 
 >## 一个简易使用的轻量化 Mirai-C# 后端  
->> .net 5[ver &lt;= 4.0.0]  
->> .net 6[ver > 4.0.0]  
->> .net 6(适配linux-gdi画图版)[ver > 5.0.0]
-
+>> .net 6 [ver 6.0.0]
 ```
 @{
-    框架集合从4.0.0后升级为 .net 6,
-    跟随微软产品生命周期逐步取消 .net 5 支持.  
-    我们建议所有用户升级至 .net 6 进行编写, 统一适应微软的生命周期.  
-    指南将 .不.再.继.续.提.供. 关于 .net 5 的任何后续编写支持. 请您自行研判. 
-    -- .net 6 最低编写版本为 Visual Studio 2022 --  
-    关于linux平台启用gdi画图,请在应用程序首行加入
-    AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
+    所.有.用.户.必.须.更.新.至.最.新.版.本
+    ver 6.0.0 删除了关于Linux对于System.Drawing.Common的引用; 
+    由于微软不再支持libgdi+,故删除
+    
+    改动说明:
+    maj 1.修复了信息内容的更新操作
+    maj 2.增加了戳回去 e.NudgeBack(Client)函数
+    maj 3.优化了标准处理流,增加了WatchDog守护链
+    maj 4.MGetEachImageImage()扩展删除
+    min 1.修改了序列化操作的代码
+    min 2.增加了信息类.SendTo__(target,client)方法
 }
 ```
 ----
@@ -44,7 +45,6 @@
 >    1. [MGetPlainString](#81)
 >    1. [MGetPlainStringSplit](#82)
 >    1. [MGetEachImageUrl](#83)
->    1. [MGetEachImageImage](#84)
 > 1. [鸣 谢](#9)
 -----    
 # 1. 主框<a name="1"></a>  
@@ -385,29 +385,6 @@ rinko.OnFriendMessageReceive += (s, e) =>
 ```
 //调用方案 (方法)
 MGetEachImageUrl(message:array)
-```
-
-## 8.4 MGetEachImage <a name="84"></a>
-### 使用 MGetEachImage 获取消息中的所有图片集合并转换成Image类
-```csharp
-### 注: linux等 请先加入 libgdiplus 库 ###
-```
-### 源码方案(foreach / is(as))
-```csharp
-//调用方案 (扩展)
-rinko.OnFriendMessageReceive += (s, e) =>
-{
-    if(s.id != qqid) //过滤自己发出的信息
-    {
-        var sx = e.MGetEachImage();
-        Image i = sx[1].img;
-        //....
-    }
-};
-```
-```
-//调用方案 (方法)
-MGetEachImage(message:array)
 ```
 
 # 9 鸣谢<a name="9"></a>  

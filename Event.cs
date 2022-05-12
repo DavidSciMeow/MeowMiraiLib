@@ -1204,6 +1204,15 @@ namespace MeowMiraiLib.Event
             this.action = action;
             this.suffix = suffix;
         }
+        /// <summary>
+        /// 戳回去
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public (bool isTimedOut, JObject? Return) NudgeBack(Client c)
+        {
+            return new SendNudge(fromId, fromKindId, fromKind).Send(c);
+        }
     }
     /// <summary>
     /// 好友消息撤回
