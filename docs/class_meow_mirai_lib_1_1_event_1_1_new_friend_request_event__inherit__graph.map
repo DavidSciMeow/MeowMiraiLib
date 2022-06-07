@@ -1,5 +1,0 @@
-<map id="MeowMiraiLib.Event.NewFriendRequestEvent" name="MeowMiraiLib.Event.NewFriendRequestEvent">
-<area shape="rect" id="node1" title="添加好友申请" alt="" coords="5,256,209,407"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="65,131,149,208"/>
-<area shape="rect" id="node3" title=" " alt="" coords="66,5,149,83"/>
-</map>

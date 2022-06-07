@@ -1,6 +1,0 @@
-<map id="MeowMiraiLib.Msg.Type.ForwardMessage" name="MeowMiraiLib.Msg.Type.ForwardMessage">
-<area shape="rect" id="node1" title="转发信息" alt="" coords="5,344,219,436"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_type_1_1_message.html" title="信息类的公开定义" alt="" coords="23,175,97,252"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_type_1_1_forward_message_1_1_node.html" title="转发信息节点" alt="" coords="121,145,335,281"/>
-<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_msg_1_1_type_1_1_message.html" title="信息类的公开定义" alt="" coords="118,5,338,83"/>
-</map>

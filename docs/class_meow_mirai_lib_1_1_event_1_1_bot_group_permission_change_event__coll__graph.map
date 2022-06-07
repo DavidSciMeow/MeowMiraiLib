@@ -1,6 +1,0 @@
-<map id="MeowMiraiLib.Event.BotGroupPermissionChangeEvent" name="MeowMiraiLib.Event.BotGroupPermissionChangeEvent">
-<area shape="rect" id="node1" title="Bot在群里的权限改变" alt="" coords="24,316,223,437"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="5,154,89,231"/>
-<area shape="rect" id="node3" title=" " alt="" coords="6,5,89,83"/>
-<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_group.html" title="群类" alt="" coords="114,132,285,253"/>
-</map>

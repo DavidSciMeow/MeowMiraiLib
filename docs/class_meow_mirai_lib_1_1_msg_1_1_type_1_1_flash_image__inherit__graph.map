@@ -1,5 +1,0 @@
-<map id="MeowMiraiLib.Msg.Type.FlashImage" name="MeowMiraiLib.Msg.Type.FlashImage">
-<area shape="rect" id="node1" title="闪照图片信息" alt="" coords="5,300,204,392"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_type_1_1_image.html" title="图片信息" alt="" coords="65,131,145,252"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_type_1_1_message.html" title="信息类的公开定义" alt="" coords="67,5,142,83"/>
-</map>

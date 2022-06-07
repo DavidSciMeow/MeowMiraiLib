@@ -1,4 +1,0 @@
-<map id="MeowMiraiLib.Client.SendAndWaitResponse" name="MeowMiraiLib.Client.SendAndWaitResponse">
-<area shape="rect" id="node1" title="发送并且等待回值" alt="" coords="255,5,427,47"/>
-<area shape="rect" id="node2" href="$namespace_meow_mirai_lib_1_1_msg.html#aaddbef299b423a50f9de37366a479872" title="异步发送信息" alt="" coords="5,13,207,39"/>
-</map>

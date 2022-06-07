@@ -1,8 +1,0 @@
-<map id="MeowMiraiLib.Msg.Sender.Sender" name="MeowMiraiLib.Msg.Sender.Sender">
-<area shape="rect" id="node1" title="消息引起者定义" alt="" coords="208,5,387,97"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_friend_message_sender.html" title="好友信息好友句柄" alt="" coords="5,182,184,289"/>
-<area shape="rect" id="node4" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_group_message_sender.html" title="群信息句柄" alt="" coords="208,145,387,325"/>
-<area shape="rect" id="node6" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_other_client_message_sender.html" title="其他客户端信息句柄" alt="" coords="411,189,592,281"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_stranger_message_sender.html" title="陌生人信息句柄" alt="" coords="5,373,184,465"/>
-<area shape="rect" id="node5" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_temp_message_sender.html" title="临时信息句柄" alt="" coords="208,373,387,465"/>
-</map>

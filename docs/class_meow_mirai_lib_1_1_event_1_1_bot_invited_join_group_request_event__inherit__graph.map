@@ -1,5 +1,0 @@
-<map id="MeowMiraiLib.Event.BotInvitedJoinGroupRequestEvent" name="MeowMiraiLib.Event.BotInvitedJoinGroupRequestEvent">
-<area shape="rect" id="node1" title="bot被邀请入群申请" alt="" coords="5,256,208,436"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="65,131,149,208"/>
-<area shape="rect" id="node3" title=" " alt="" coords="65,5,148,83"/>
-</map>

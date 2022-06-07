@@ -1,5 +1,0 @@
-<map id="MeowMiraiLib.Msg.Sender.StrangerMessageSender" name="MeowMiraiLib.Msg.Sender.StrangerMessageSender">
-<area shape="rect" id="node1" title="陌生人信息句柄" alt="" coords="5,271,184,363"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_friend_message_sender.html" title="好友信息好友句柄" alt="" coords="19,131,171,223"/>
-<area shape="rect" id="node3" href="$class_meow_mirai_lib_1_1_msg_1_1_sender_1_1_sender.html" title="消息引起者定义" alt="" coords="63,5,126,83"/>
-</map>

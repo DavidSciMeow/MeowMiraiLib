@@ -1,5 +1,0 @@
-<map id="MeowMiraiLib.Event.OtherClientOnlineEvent" name="MeowMiraiLib.Event.OtherClientOnlineEvent">
-<area shape="rect" id="node1" title="其他客户端上线" alt="" coords="5,256,184,377"/>
-<area shape="rect" id="node2" href="$class_meow_mirai_lib_1_1_event_1_1_mirai_event.html" title="Mirai事件继承基类" alt="" coords="53,131,137,208"/>
-<area shape="rect" id="node3" title=" " alt="" coords="53,5,136,83"/>
-</map>
