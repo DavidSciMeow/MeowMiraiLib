@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
 
@@ -86,7 +88,7 @@ namespace MeowMiraiLib
                 {
                     while (reconnect == -1 || reconnect --> 0)
                     {
-                        if (ws.State == WebSocketState.Closed && ws.State == WebSocketState.None)
+                        if (ws.State == WebSocketState.Closed || ws.State == WebSocketState.None)
                         {
                             ws.Open();
                             System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Trying To Reconnect (in 5 second)-");
@@ -136,7 +138,8 @@ namespace MeowMiraiLib
         /// <returns></returns>
         public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 10)
         {
-            var ts = new Task<JObject?> (() =>
+            using var cancelTokenSource = new CancellationTokenSource(TimeOut * 1000);
+            var ts = Task.Run(async () =>
             {
                 if (ws == null)
                 {
@@ -148,27 +151,29 @@ namespace MeowMiraiLib
                 ws?.Send(json);
                 while (true)
                 {
+                    if (cancelTokenSource.IsCancellationRequested)
+                    {
+                        return null;
+                    }
+                    await Task.Delay(1);
                     if (SSMRequestList.Count != 0)
                     {
-                        if (SSMRequestList.First()["syncId"].ToObject<int?>() == syncId)
+                        if (SSMRequestList.TryDequeue(out JObject ssm) && ssm != null)
                         {
-                            return SSMRequestList.Dequeue();
-                        }
-                        else
-                        {
-                            SSMRequestList.Enqueue(SSMRequestList.Dequeue());
-                        }
-
-                        if(SSMRequestList.Count == 0)
-                        {
-                            return null;
+                            if (ssm["syncId"].ToObject<int?>() == syncId)
+                            {
+                                return ssm;
+                            }
+                            else
+                            {
+                                SSMRequestList.Enqueue(ssm);
+                            }
                         }
                     }
                 }
-            });
-            ts.Start();
+            }, cancelTokenSource.Token);
 
-            if (await Task.WhenAny(ts, Task.Delay(TimeOut * 1000)) == ts)
+            if (ts.Wait(TimeSpan.FromMilliseconds(TimeOut * 1000)))
             {
                 return (false, await ts);
             }
