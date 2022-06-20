@@ -138,7 +138,14 @@ namespace MeowMiraiLib
         {
             var ts = new Task<JObject?> (() =>
             {
-                ws.Send(json);
+                if (ws == null)
+                {
+                    System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Socket Closed -");
+                    ws.Close();
+                    System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Trying Reconnect Socket -");
+                    ws.Open();
+                }
+                ws?.Send(json);
                 while (true)
                 {
                     if (SSMRequestList.Count != 0)
