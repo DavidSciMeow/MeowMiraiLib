@@ -3,6 +3,7 @@ using MeowMiraiLib.Msg.Type;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebSocket4Net;
 
 /*
@@ -81,7 +82,7 @@ namespace MeowMiraiLib
                 return null;
             }
         }
-        private void Ws_MessageReceived(object? s, MessageReceivedEventArgs e)
+        private async void Ws_MessageReceived(object? s, MessageReceivedEventArgs e)
         {
             var jo = JObject.Parse(e.Message);
             if (debug)
@@ -103,80 +104,80 @@ namespace MeowMiraiLib
                     {
                         case "GroupMessage":
                             {
-                                OnGroupMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnGroupMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "FriendMessage":
                             {
-                                OnFriendMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnFriendMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "TempMessage":
                             {
-                                OnTempMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnTempMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "StrangerMessage":
                             {
-                                OnStrangerMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnStrangerMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
-                            /*-20220219-*/
+                        /*-20220219-*/
                         case "OnFriendSyncMessageReceive":
                             {
-                                OnFriendSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnFriendSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<FriendSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "OnGroupSyncMessageReceive":
                             {
-                                OnGroupSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnGroupSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<GroupSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "OnTempSyncMessageReceive":
                             {
-                                OnTempSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnTempSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<TempSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "OnStrangerSyncMessageReceive":
                             {
-                                OnStrangerSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnStrangerSyncMessageReceive?.Invoke(jo["data"]["sender"].ToObject<StrangerSyncMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
-                            /*-*/
+                        /*-*/
                         case "OtherClientMessage":
                             {
-                                OnOtherMessageReceive?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString()));
+                                await Task.Run(() => OnOtherMessageReceive?.Invoke(jo["data"]["sender"].ToObject<OtherClientMessageSender>(), RectifyMessage(jo["data"]["messageChain"].ToString())));
                                 return;
                             }
                         case "BotOnlineEvent":
                             {
-                                OnEventBotOnlineEvent?.Invoke(new(jo["data"]["qq"].ToObject<long>()));
+                                await Task.Run(() => OnEventBotOnlineEvent?.Invoke(new(jo["data"]["qq"].ToObject<long>())));
                                 return;
                             }
                         case "BotOfflineEventActive":
                             {
-                                OnEventBotOfflineEventActive?.Invoke(new(jo["data"]["qq"].ToObject<long>()));
+                                await Task.Run(() => OnEventBotOfflineEventActive?.Invoke(new(jo["data"]["qq"].ToObject<long>())));
                                 return;
                             }
                         case "BotOfflineEventForce":
                             {
-                                OnEventBotOfflineEventForce?.Invoke(new(jo["data"]["qq"].ToObject<long>()));
+                                await Task.Run(() => OnEventBotOfflineEventForce?.Invoke(new(jo["data"]["qq"].ToObject<long>())));
                                 return;
                             }
                         case "BotOfflineEventDropped":
                             {
-                                OnEventBotOfflineEventDropped?.Invoke(new(jo["data"]["qq"].ToObject<long>()));
+                                await Task.Run(() => OnEventBotOfflineEventDropped?.Invoke(new(jo["data"]["qq"].ToObject<long>())));
                                 return;
                             }
                         case "BotReloginEvent":
                             {
-                                OnEventBotReloginEvent?.Invoke(new(jo["data"]["qq"].ToObject<long>()));
+                                await Task.Run(() => OnEventBotReloginEvent?.Invoke(new(jo["data"]["qq"].ToObject<long>())));
                                 return;
                             }
                         case "FriendInputStatusChangedEvent":
                             {
-                                var j = jo["data"];
-                                OnEventFriendInputStatusChangedEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventFriendInputStatusChangedEvent?.Invoke(
                                     new(
                                         new(
                                             j["friend"]["id"].ToObject<long>(),
@@ -185,13 +186,13 @@ namespace MeowMiraiLib
                                             ),
                                         j["inputting"].ToObject<bool>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "FriendNickChangedEvent":
                             {
-                                var j = jo["data"];
-                                OnEventFriendNickChangedEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventFriendNickChangedEvent?.Invoke(
                                     new(
                                         new(
                                             j["friend"]["id"].ToObject<long>(),
@@ -200,13 +201,13 @@ namespace MeowMiraiLib
                                             ),
                                         j["from"].ToString(),
                                         j["to"].ToString())
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotGroupPermissionChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventBotGroupPermissionChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotGroupPermissionChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -216,13 +217,13 @@ namespace MeowMiraiLib
                                             j["group"]["permission"].ToString()
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotMuteEvent":
                             {
-                                var j = jo["data"];
-                                OnEventBotMuteEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotMuteEvent?.Invoke(
                                     new(
                                         j["durationSeconds"].ToObject<long>(),
                                         new(
@@ -240,13 +241,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotUnmuteEvent":
                             {
-                                var j = jo["data"];
-                                OnEventBotUnmuteEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotUnmuteEvent?.Invoke(
                                     new(
                                         new(
                                             j["operator"]["id"].ToObject<long>(),
@@ -263,13 +264,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotJoinGroupEvent":
                             {
-                                var j = jo["data"];
-                                OnEventBotJoinGroupEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotJoinGroupEvent?.Invoke(
                                     new(
                                         new(
                                             j["group"]["id"].ToObject<long>(),
@@ -278,13 +279,13 @@ namespace MeowMiraiLib
                                             ),
                                         j["group"]["invitor"].ToObject<object>()
                                     )
-                                );
+                                ));
                                 return;
                             }
                         case "BotLeaveEventActive":
                             {
-                                var j = jo["data"];
-                                OnEventBotLeaveEventActive?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotLeaveEventActive?.Invoke(
                                     new(
                                         new(
                                             j["group"]["id"].ToObject<long>(),
@@ -292,13 +293,13 @@ namespace MeowMiraiLib
                                             j["group"]["permission"].ToString()
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotLeaveEventKick":
                             {
-                                var j = jo["data"];
-                                OnEventBotLeaveEventKick?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotLeaveEventKick?.Invoke(
                                     new(
                                         new(
                                             j["group"]["id"].ToObject<long>(),
@@ -307,17 +308,17 @@ namespace MeowMiraiLib
                                             ),
                                         j["operator"].ToObject<object>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupRecallEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupRecallEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupRecallEvent?.Invoke(
                                     new(
                                         j["authorId"].ToObject<long>(),
                                         j["messageId"].ToObject<long>(),
-                                        j["time"].ToObject<long>(), 
+                                        j["time"].ToObject<long>(),
                                         new(
                                             j["group"]["id"].ToObject<long>(),
                                             j["group"]["name"].ToString(),
@@ -338,39 +339,39 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "FriendRecallEvent":
                             {
-                                var j = jo["data"];
-                                OnEventFriendRecallEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventFriendRecallEvent?.Invoke(
                                     new(
                                         j["authorId"].ToObject<long>(),
                                         j["messageId"].ToObject<long>(),
                                         j["time"].ToObject<long>(),
                                         j["operator"].ToObject<long>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "NudgeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventNudgeEvent?.Invoke(new(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventNudgeEvent?.Invoke(new(
                                     j["fromId"].ToObject<long>(),
                                     j["target"].ToObject<long>(),
                                     j["subject"]["kind"].ToString(),
                                     j["subject"]["id"].ToObject<long>(),
                                     j["action"].ToString(),
                                     j["suffix"].ToString()
-                                ));
+                                )));
                                 return;
                             }
                         case "GroupNameChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupNameChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupNameChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -394,13 +395,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupEntranceAnnouncementChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupEntranceAnnouncementChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupEntranceAnnouncementChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -424,13 +425,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupMuteAllEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupMuteAllEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupMuteAllEvent?.Invoke(
                                     new(
                                         j["origin"].ToObject<bool>(),
                                         j["current"].ToObject<bool>(),
@@ -454,13 +455,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupAllowAnonymousChatEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupAllowAnonymousChatEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupAllowAnonymousChatEvent?.Invoke(
                                     new(
                                         j["origin"].ToObject<bool>(),
                                         j["current"].ToObject<bool>(),
@@ -484,13 +485,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupAllowConfessTalkEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupAllowConfessTalkEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupAllowConfessTalkEvent?.Invoke(
                                     new(
                                         j["origin"].ToObject<bool>(),
                                         j["current"].ToObject<bool>(),
@@ -501,13 +502,13 @@ namespace MeowMiraiLib
                                             ),
                                         j["isByBot"].ToObject<bool>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "GroupAllowMemberInviteEvent":
                             {
-                                var j = jo["data"];
-                                OnEventGroupAllowMemberInviteEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventGroupAllowMemberInviteEvent?.Invoke(
                                     new(
                                         j["origin"].ToObject<bool>(),
                                         j["current"].ToObject<bool>(),
@@ -531,13 +532,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberJoinEvent":
                             {
-                                var j = jo["data"];
-                                OnEventMemberJoinEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberJoinEvent?.Invoke(
                                     new(
                                         new(
                                             j["member"]["id"].ToObject<long>(),
@@ -555,13 +556,13 @@ namespace MeowMiraiLib
                                             ),
                                         j["invitor"].ToObject<object>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberLeaveEventKick":
                             {
-                                var j = jo["data"];
-                                OnEventMemberLeaveEventKick?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberLeaveEventKick?.Invoke(
                                     new(
                                         new(
                                             j["member"]["id"].ToObject<long>(),
@@ -593,13 +594,13 @@ namespace MeowMiraiLib
                                             )
 
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberLeaveEventQuit":
                             {
-                                var j = jo["data"];
-                                OnEventMemberLeaveEventQuit?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberLeaveEventQuit?.Invoke(
                                     new(
                                         new(
                                             j["member"]["id"].ToObject<long>(),
@@ -612,13 +613,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberCardChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventCardChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventCardChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -637,13 +638,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberSpecialTitleChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventSpecialTitleChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventSpecialTitleChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -658,13 +659,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberPermissionChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventPermissionChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventPermissionChangeEvent?.Invoke(
                                     new(
                                         j["origin"].ToString(),
                                         j["current"].ToString(),
@@ -679,13 +680,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberMuteEvent":
                             {
-                                var j = jo["data"];
-                                OnEventMemberMuteEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberMuteEvent?.Invoke(
                                     new(
                                         j["durationSeconds"].ToObject<long>(),
                                         new(
@@ -717,13 +718,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberUnmuteEvent":
                             {
-                                var j = jo["data"];
-                                OnEventMemberUnmuteEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberUnmuteEvent?.Invoke(
                                     new(
                                         new(
                                             j["member"]["id"].ToObject<long>(),
@@ -754,13 +755,13 @@ namespace MeowMiraiLib
                                                 )
                                             )
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberHonorChangeEvent":
                             {
-                                var j = jo["data"];
-                                OnEventMemberHonorChangeEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberHonorChangeEvent?.Invoke(
                                     new(
                                         new(
                                             j["member"]["id"].ToObject<long>(),
@@ -779,13 +780,13 @@ namespace MeowMiraiLib
                                         j["action"].ToString(),
                                         j["honor"].ToString()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "NewFriendRequestEvent":
                             {
-                                var j = jo["data"];
-                                OnEventNewFriendRequestEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventNewFriendRequestEvent?.Invoke(
                                         new(
                                             j["eventId"].ToObject<long>(),
                                             j["fromId"].ToObject<long>(),
@@ -793,13 +794,13 @@ namespace MeowMiraiLib
                                             j["nick"].ToString(),
                                             j["message"].ToString()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "MemberJoinRequestEvent":
                             {
-                                var j = jo["data"];
-                                OnEventMemberJoinRequestEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventMemberJoinRequestEvent?.Invoke(
                                         new(
                                             j["eventId"].ToObject<long>(),
                                             j["fromId"].ToObject<long>(),
@@ -808,13 +809,13 @@ namespace MeowMiraiLib
                                             j["nick"].ToString(),
                                             j["message"].ToString()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "BotInvitedJoinGroupRequestEvent":
                             {
-                                var j = jo["data"];
-                                OnEventBotInvitedJoinGroupRequestEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotInvitedJoinGroupRequestEvent?.Invoke(
                                         new(
                                             j["eventId"].ToObject<long>(),
                                             j["fromId"].ToObject<long>(),
@@ -823,54 +824,54 @@ namespace MeowMiraiLib
                                             j["nick"].ToString(),
                                             j["message"].ToString()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "OtherClientOnlineEvent":
                             {
-                                var j = jo["data"];
-                                _OnClientOnlineEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => _OnClientOnlineEvent?.Invoke(
                                     new(
                                         j["client"]["id"].ToObject<long>(),
                                         j["client"]["platform"].ToString(),
                                         j["kind"].ToObject<long>()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "OtherClientOfflineEvent":
                             {
-                                var j = jo["data"];
-                                _OnOtherClientOfflineEvent?.Invoke(
+                                JToken j = jo["data"];
+                                await Task.Run(() => _OnOtherClientOfflineEvent?.Invoke(
                                     new(
                                         j["client"]["id"].ToObject<long>(),
                                         j["client"]["platform"].ToString()
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         case "CommandExecutedEvent":
                             {
-                                var j = jo["data"];
+                                JToken j = jo["data"];
                                 JArray ja = JArray.Parse(j["args"].ToString());
                                 List<(string, string)> args = new();
-                                foreach(var i in ja)
+                                foreach (JToken i in ja)
                                 {
-                                    args.Add((i["type"].ToString(),i["text"].ToString()));
+                                    args.Add((i["type"].ToString(), i["text"].ToString()));
                                 }
-                                _OnCommandExecutedEvent?.Invoke(
+                                await Task.Run(() => _OnCommandExecutedEvent?.Invoke(
                                     new(
                                         j["name"].ToString(),
                                         j["friend"].ToObject<object>(),
                                         j["member"].ToObject<object>(),
                                         args
                                         )
-                                    );
+                                    ));
                                 return;
                             }
                         default:
                             {
-                                _OnUnknownEvent?.Invoke(jo.ToString());
+                                await Task.Run(() => _OnUnknownEvent?.Invoke(jo.ToString()));
                                 return;
                             }
                     }
@@ -888,7 +889,7 @@ namespace MeowMiraiLib
                 if (string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
                 {
                     session = jo["data"]["session"].ToString();
-                    _OnServeiceConnected?.Invoke(jo.ToString());
+                    await Task.Run(() => _OnServeiceConnected?.Invoke(jo.ToString()));
                     return;
                 }
             }
