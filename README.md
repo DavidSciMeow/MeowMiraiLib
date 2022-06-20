@@ -5,22 +5,10 @@
 ![](https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download)
 
 >## 一个简易使用的轻量化 Mirai-C# 后端  
->> .net 6 [ver 6.0.x]
-```
-@{
-    所.有.用.户.必.须.更.新.至.最.新.版.本
-    ver 6.0.0 删除了关于Linux对于System.Drawing.Common的引用; 
-    由于微软不再支持libgdi+,故删除
-    ver 6.0.1 修改了一处序列化错误
-    改动说明:
-    maj 1.修复了信息内容的更新操作
-    maj 2.增加了戳回去 e.NudgeBack(Client)函数
-    maj 3.优化了标准处理流,增加了WatchDog守护链
-    maj 4.MGetEachImageImage()扩展删除
-    min 1.修改了序列化操作的代码
-    min 2.增加了信息类.SendTo__(target,client)方法
-}
-```
+>> .net 6 [ver 7.0.x]
+>>> maj 1.修复了在模式下由于网络波动而引起的队列空置问题, 由于我本地没有网络问题无法复现,   
+>>> 感谢 [@LittleFish-233](https://github.com/LittleFish-233) 的调试,努力探究和辛勤付出.
+
 ----
 # <center> 程序编写指南目录 </center>
 > 1. [主 框](#1)
@@ -69,7 +57,7 @@ while (true)
 }
 ```  
 # 2. 端实例化<a name="2"></a>  
-## 2.1 以下的端实例化完全一致,由 4.1.0 版本后的 .net 6 提供支持<a name="21"></a>  
+## 2.1 以下的端实例化完全一致,由 .net 6 提供支持<a name="21"></a>  
 ```csharp
 MeowMiraiLib.Client c = new("ws://test.com.cn:8888/all?verifyKey=123456&qq=1234567", true, true);
 MeowMiraiLib.Client c2 = new("test.com.cn", 8888, "123456", 1234567, "all", true, true);
@@ -311,11 +299,19 @@ public class NewMessageType : Message //..Plain
 所有未知的事件处理都由 Client实例的 事件代理 _OnUnknownEvent触发 `(ClientEvent.cs文件内)`   
 此事件代理含有一个 string 的内参, 负责传输标准的 Json字符串.  
 如果您知道这是个什么类型,为什么传输,您可以自己捕获然后自己处理.  
+
 # 6 最新版本&特性<a name="6"></a>  
 >>3.0.0 加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.  
 >>4.0.0 更新了异步处理的标准流程,防止CPU空转等待  
 >>4.1.0 更新到 `.net 6` 使用更简单书写方案来控制程序, 增加了扩展方法  
->>### 4.1.1 增加了扩展方法 Message[].send(c); 简易发送方案. 
+>>4.1.1 增加了扩展方法 Message[].send(c); 简易发送方案.
+>>4.2.0 修复了XML发送的匹配Json问题
+>>5.0.0 增加了Image适配linux的(libgdi+)
+>>6.0.0 移除了Image问题和Base64自动转换,相关类库(System.Drawing.Common),*由于微软对其跨平台不再支持*
+>>6.1.0 增加优化了守护链,保持进程稳定
+>>7.0.0 更改了队列机制,防止CPU空转和等待出队消耗. 
+
+
 # 7 其他参考资料<a name="7"></a>  
 ## 7.1 类图和参照设计图<a name="71"></a>  
 ### *正在更新制作*
@@ -328,8 +324,9 @@ WebSocketClientRecieve
 User .Send() / .SendAsync()  
 | => Client.SSM.*type*.Construct() \{./SSM.cs\}  
 || => Client.SendAndWaitResponse() \{./Client/Client.cs\}  
-|| => *Wait...**  
+|| => *Wait...(Queue.)**  
 ||| => *User*.__Return_JObject_
+
 # 8 信息快速编写功能类 <a name="8"></a>
 ## (MessageUtil / 引用位置:MeowMiraiLib.Msg.Type)
 
@@ -392,5 +389,6 @@ MGetEachImageUrl(message:array)
 ```
 
 # 9 鸣谢<a name="9"></a>  
-## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.  
+## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.
+## 感谢大佬 [@LittleFish-233](https://github.com/LittleFish-233) 对于多线程稳定度的探索以及对新版算法的优化.
 ## 也感谢各位其他大佬对小项目的关注.
