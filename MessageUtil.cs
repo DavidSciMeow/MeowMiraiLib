@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MeowMiraiLib.GenericModel;
+using System.Collections.Generic;
 using System.Text;
 
 namespace MeowMiraiLib.Msg.Type
@@ -8,6 +9,8 @@ namespace MeowMiraiLib.Msg.Type
     /// </summary>
     public static class MessageUtil
     {
+        
+
         /*caller Util*/
         /// <summary>
         /// 获取信息的字符串表示
@@ -67,7 +70,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <param name="target">目标</param>
         /// <param name="c">要发送的端</param>
         /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToFriend(this Message[] array, long target, Client c, long? quote = null)
+        public static MessageId SendToFriend(this Message[] array, long target, Client c, long? quote = null)
         => new FriendMessage(target, array, quote).Send(c);
         /// <summary>
         /// 将信息发送给群
@@ -76,7 +79,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <param name="target">目标</param>
         /// <param name="c">要发送的端</param>
         /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToGroup(this Message[] array, long target, Client c, long? quote = null)
+        public static MessageId SendToGroup(this Message[] array, long target, Client c, long? quote = null)
         => new GroupMessage(target, array, quote).Send(c);
         /// <summary>
         /// 将信息发送给临时聊天
@@ -86,7 +89,74 @@ namespace MeowMiraiLib.Msg.Type
         /// <param name="group">发起临时聊天的群号</param>
         /// <param name="c">要发送的端</param>
         /// <param name="quote">是否回复某条</param>
-        public static (bool isTimedOut, Newtonsoft.Json.Linq.JObject? Return) SendToTemp(this Message[] array, long target, long group, Client c, long? quote = null)
+        public static MessageId SendToTemp(this Message[] array, long target, long group, Client c, long? quote = null)
         => new TempMessage(target, group, array, quote).Send(c);
+
+        /*GenericModel util*/
+        /// <summary>
+        /// 给好友发送信息
+        /// </summary>
+        /// <param name="friend">好友列表的好友</param>
+        /// <param name="array">信息组</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this QQFriend friend, Message[] array, Client c, long? quote = null)
+        => new FriendMessage(friend.id, array, quote).Send(c);
+        /// <summary>
+        /// 给好友发送信息(简写逻辑)
+        /// </summary>
+        /// <param name="a">简写逻辑写法</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this (QQFriend friend, Message[] array) a, Client c, long? quote = null)
+        => new FriendMessage(a.friend.id, a.array, quote).Send(c);
+        /// <summary>
+        /// 给某群发送信息
+        /// </summary>
+        /// <param name="g">群</param>
+        /// <param name="array">信息组</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this QQGroup g, Message[] array, Client c, long? quote = null)
+        => new GroupMessage(g.id, array, quote).Send(c);
+        /// <summary>
+        /// 给某群发送信息(简写逻辑)
+        /// </summary>
+        /// <param name="a">简写逻辑写法</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this (QQGroup g, Message[] array) a, Client c, long? quote = null)
+        => new GroupMessage(a.g.id, a.array, quote).Send(c);
+        /// <summary>
+        /// 给某群成员(非好友)发送信息
+        /// </summary>
+        /// <param name="gm">群</param>
+        /// <param name="array">信息组</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this QQGroupMember gm, Message[] array, Client c, long? quote = null)
+        => new TempMessage(gm.id, gm.group.id, array, quote).Send(c);
+        /// <summary>
+        /// 给某群成员(非好友)发送信息(简写逻辑)
+        /// </summary>
+        /// <param name="a">简写逻辑写法</param>
+        /// <param name="c">端</param>
+        /// <param name="quote">引用</param>
+        /// <returns></returns>
+        public static MessageId SendMessage(this (QQGroupMember gm, Message[] array) a, Client c, long? quote = null)
+        => new TempMessage(a.gm.id, a.gm.group.id, a.array, quote).Send(c);
+
+        /// <summary>
+        /// 获取群列表内的某个群的群员列表
+        /// </summary>
+        /// <param name="gp">群</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public static QQGroupMember[]? GetMemberList(this QQGroup gp, Client c) => new MemberList(gp.id).Send(c);
     }
 }

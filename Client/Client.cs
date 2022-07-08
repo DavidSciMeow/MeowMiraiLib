@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebSocket4Net;
@@ -70,35 +69,36 @@ namespace MeowMiraiLib
             ws = new(url);
             ws.Opened += (s, e) =>
             {
-                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Opened -");
+                Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Opened -");
                 _OnServeiceConnected?.Invoke(e.ToString());
             };
             ws.Error += (s, e) =>
             {
-                _OnServeiceError.Invoke(e.Exception);
-                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Error , Running to Close or Reconnect -");
-                ws.Close();
-                
+                _OnServeiceError?.Invoke(e.Exception);
+                Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Error , Running to Close or Reconnect -");
+                Console.WriteLine($"{e.Exception}");
+                ws.Close();//当客户端出错时,拒绝链接并关闭socket 置socket到Close阶段
             };
             ws.Closed += (s, e) =>
             {
-                _OnServiceDropped.Invoke(e.ToString());
-                System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Closed -");
-                if (reconnect != 0)
+                _OnServiceDropped?.Invoke(e.ToString());
+                Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Socket Closed -");
+                while (reconnect == -1 || reconnect --> 0)
                 {
-                    while (reconnect == -1 || reconnect --> 0)
+                    if (ws.State is WebSocketState.Open)
                     {
-                        if (ws.State == WebSocketState.Closed || ws.State == WebSocketState.None)
+                        Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Reconnect Complete-");
+                        return;
+                    }
+                    else
+                    {
+                        if (ws.State is not (WebSocketState.Connecting or WebSocketState.Closing))
                         {
+                            Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Tryin Reconnecting");
                             ws.Open();
-                            System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Trying To Reconnect (in 5 second)-");
-                            Task.Delay(5 * 1000).GetAwaiter().GetResult();
                         }
-                        else
-                        {
-                            System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Reconnect Complete-");
-                            return;
-                        }
+                        Console.WriteLine($"[MeowMiraiLib-SocketWatchdog] - Trying To Reconnect (in 5 second)-");
+                        Task.Delay(5 * 1000).GetAwaiter().GetResult();
                     }
                 }
             };
@@ -128,7 +128,7 @@ namespace MeowMiraiLib
         /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
         public Client(string ip, int port, long qq, string type = "all", bool debug = false, bool eventdebug = false, int reconnect = -1)
-            : this($"ws://{ip}:{port}/{type}?&qq={qq}", debug, eventdebug, reconnect) { }
+            : this($"ws://{ip}:{port}/{type}?qq={qq}", debug, eventdebug, reconnect) { }
         /// <summary>
         /// 发送并且等待回值
         /// </summary>
@@ -143,9 +143,9 @@ namespace MeowMiraiLib
             {
                 if (ws == null)
                 {
-                    System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Socket Closed -");
+                    Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Socket Closed -");
                     ws.Close();
-                    System.Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Trying Reconnect Socket -");
+                    Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Trying Reconnect Socket -");
                     ws.Open();
                 }
                 ws?.Send(json);

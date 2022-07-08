@@ -1,16 +1,28 @@
 # Meow.MiraiLib
+## 一个简易使用的轻量化 Mirai-C# 后端  
 
 [![CI](https://github.com/DavidSciMeow/MeowMiraiLib/actions/workflows/main.yml/badge.svg)](https://github.com/DavidSciMeow/MeowMiraiLib/actions/workflows/main.yml)
 ![](https://img.shields.io/nuget/vpre/Electronicute.MeowMiraiLib?label=NuGet%20Version)
 ![](https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download)
 
+<<<<<<< Updated upstream
 >## 一个简易使用的轻量化 Mirai-C# 后端  
 >> .net 6 [ver 7.0.x]
 >>> maj 1.修复了在模式下由于网络波动而引起的队列空置问题, 由于我本地没有网络问题无法复现,   
 >>> 感谢 [@LittleFish-233](https://github.com/LittleFish-233) 的调试,努力探究和辛勤付出.
 
 ----
+=======
+## 最新版本更新改动较大,请酌情更新或者适配.
+
+|MI 维护指数|CC 圈复杂度|DoI 继承深度|ClC 类耦合度|LoSc 源码行数|LoEc 执行代码行数|
+|---------|--------|----------|---------|------------|--------------|
+|86 :green_book: |420|4|187|5464|747|
+
+-------
+>>>>>>> Stashed changes
 # <center> 程序编写指南目录 </center>
+> 0. [最新更新速报](#0)
 > 1. [主 框](#1)
 > 1. [端实例化](#2)  
 >    1. [普通实例化的两种方式](#21)  
@@ -29,16 +41,139 @@
 > 1. [如何扩展](#5)
 >    1. [扩展未知的信息类型](#51)
 >    1. [扩展未知的事件类型](#52)
-> 1. [最新版本 & 特性](#6)
-> 1. [其他参考资料](#7)
->    1. [类图和参照设计图](#71)
->    1. [处理时序](#72)
-> 1. [信息快速编写功能类](#8)
->    1. [MGetPlainString](#81)
->    1. [MGetPlainStringSplit](#82)
->    1. [MGetEachImageUrl](#83)
-> 1. [鸣 谢](#9)
+> 1. [其他参考资料](#6)
+>    1. [类图和参照设计图](#61)
+>    1. [处理时序](#62)
+> 1. [信息快速编写功能类](#7)
+> 1. [鸣 谢](#8)
 -----    
+# 0. 最新更新<a name="0"></a>  
+## 8.0.0 更新信息
+1. 将SSM(发送信息回收端) 的标准方案适配回值改为`T`而非`(bool,JObject)`,  
+   您可以通过检查MessageId来进行判断消息是否成功, 您也可以使用MessageId快速撤回消息  
+   如果您需要以前的返回值请使用函数`OSend`或者`OSendAsync`  
+   除了`文件管理`类,其他类均已解析实例类  
+
+   详细信息如本例:
+   ```csharp
+    var k = new Message[] { new Plain("test") }.SendToFriend(qq,client);
+    if(k.Id > 0)//您可以不适用此检测方案
+    {
+        //发送成功 且MessageId = k.Id
+    }
+    else if(k.Id == -1)
+    {
+        //失败
+    }
+    k.ReCall();//快速撤回
+    var d = k.ReCall(2);//2秒后撤回
+    if (d)//您可以不适用此检测方案
+    {
+        //撤回成功
+    }
+    else
+    {
+        //撤回失败
+    }
+   ```
+   接口对应解析类有`ConfirmationTypoGeneral`/`MessageTypoGeneral`/`ProfileClassGeneral`  
+   `ConfirmationTypoGeneral` 返回一个 `int` 类型值, `-1`为失败, `0`为成功, +N为其他API保留值  
+   `MessageTypoGeneral` 返回一个 `MessageId` 结构体, 您可以使用他进行撤回, 或者其他高级消息操作  
+   `ProfileClassGeneral` 返回一个 `QQProfile` 类, 本类是所有资料类型类的标准扩展类
+   
+    任意类继承对应关系如下表:  
+
+    |原指令类|扩展适配接口类|自是否含有扩展功能|
+    |:---|:---:|:---:|
+    |About|SSM(Base)| :x: |
+    |MessageFromId|SSM(Base)| :x: |
+    |FriendList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
+    |GroupList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
+    |MemberList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
+    |BotProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
+    |FriendProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
+    |MemberProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
+    |UserProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
+    |FriendMessage|MessageTypoGeneral| :heavy_check_mark: (继承)|
+    |GroupMessage|MessageTypoGeneral| :heavy_check_mark: (继承)|
+    |TempMessage|MessageTypoGeneral| :heavy_check_mark: (继承)|
+    |SendNudge|ConfirmationTypoGeneral| :heavy_check_mark: (继承)|
+    |Recall|ConfirmationTypoGeneral| :heavy_check_mark: (继承)|
+    |File_list|SSM(Base)| :x: |
+    |File_info|SSM(Base)| :x: |
+    |File_mkdir|SSM(Base)| :x: |
+    |File_delete|SSM(Base)| :x: |
+    |File_move|SSM(Base)| :x: |
+    |File_rename|SSM(Base)| :x: |
+    |DeleteFriend|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |Mute|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |Unmute|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |Kick|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |Quit|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |MuteAll|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |UnmuteAll|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |SetEssence|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |GroupConfig_Get|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |GroupConfig_Update|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |MemberInfo_Get|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |MemberInfo_Update|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |MemberAdmin|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
+    |Anno_list|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |Anno_publish|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |Anno_delete|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |Resp_newFriendRequestEvent|SSM(Base)| :x: |
+    |Resp_memberJoinRequestEvent|SSM(Base)| :x: |
+    |Resp_botInvitedJoinGroupRequestEvent|SSM(Base)| :x: |
+
+
+1. 加入了GenericModel.cs文件用于解析标准返回值  
+   例如`QQFriend`/`QQGroup`/`QQGroupMember`等,  
+   如下可以解析好友列表/群列表
+   ```csharp
+    //获取好友列表
+    var fl = new FriendList().Send(c);
+    Console.WriteLine(fl.Length);
+    (fl[1], new Message[] { new Plain("test") }).SendMessage(c); //朝好友1快速发消息
+
+    //获取群列表
+    var gl = new GroupList().Send(c);
+    Console.WriteLine(gl.Length);
+    (gl[1], new Message[] { new Plain("test") }).SendMessage(c); //朝群1快速发消息
+
+    //获取群列表并朝第一个群的一个群员发信息
+    var gl = new GroupList().Send(c);
+    gl[1].GetMemberList(c)[1].SendMessage(c, new Message[] { new Plain("test") });
+    
+    //朝群1里的每个群员发信息
+    var gl = new GroupList().Send(rinko);
+    foreach(var i in gl[1].GetMemberList(c))
+    {
+        i.SendMessage(c, new Message[] { new Plain("test") });
+    }
+   ```
+   新增合并模式快速写法 (a,b).Send(c); 等...  
+   剩余特性您可以详细查看 [信息快速编写功能类](#7) 的函数定义, 或者`MessageUtil.cs`文件
+1. 实例化类增加了获取资料类
+   ```csharp
+   //获取bot的资料
+   var bp = new BotProfile().Send(c); //获取Bot资料
+   var fp = new FriendProfile(qq).Send(c);//获取好友资料
+   var mp = new MemberProfile(qqgroup,qqnumber).Send(c);//获取群员资料
+   var up = new UserProfile(1500294830).Send(c);//获取用户资料
+   Console.WriteLine(bp.ToString());//重写了ToString方法适配逻辑
+   Console.WriteLine(fp.ToString());
+   Console.WriteLine(mp.ToString());
+   Console.WriteLine(up.ToString());
+   ```
+1. 新增了`群公告`相关接口, 其接口表达式值(函数)为 `Anno_list` `Anno_publish` `Anno_delete`  
+   ```csharp
+   //获取群公告&&推送群公告
+   var k = new Anno_list(qqgroup).Send(c); 
+   k[1].Delete(c);//删除群公告1 (快速写法)
+   var k1 = new Anno_publish(qqgroup, "Bot 带图公告推送").Send(c);
+   var k2 = new Anno_publish(qqgroup, "Bot 带图公告推送实验",imageUrl: "https://static.rinko.com.cn/static/bggs.png").Send(c);
+   ```
+
 # 1. 主框<a name="1"></a>  
 ## 对应的 信息/事件 类型等请参照源码内的第一行注释.
 ```csharp
@@ -300,6 +435,7 @@ public class NewMessageType : Message //..Plain
 此事件代理含有一个 string 的内参, 负责传输标准的 Json字符串.  
 如果您知道这是个什么类型,为什么传输,您可以自己捕获然后自己处理.  
 
+<<<<<<< Updated upstream
 # 6 最新版本&特性<a name="6"></a>  
 >>3.0.0 加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.  
 >>4.0.0 更新了异步处理的标准流程,防止CPU空转等待  
@@ -314,27 +450,39 @@ public class NewMessageType : Message //..Plain
 
 # 7 其他参考资料<a name="7"></a>  
 ## 7.1 类图和参照设计图<a name="71"></a>  
+=======
+# 7 其他参考资料<a name="6"></a>  
+## 7.1 类图和参照设计图<a name="61"></a>  
+>>>>>>> Stashed changes
 ### *正在更新制作*
-## 7.2 处理参照时序<a name="72"></a>  
+## 7.2 处理参照时序<a name="62"></a>  
 WebSocketClientRecieve  
 | => Client.Ws_MessageReceived \{./Client/ClientParser.cs\}  
 || => *EventName* .Invoke() \{./Client/ClientEvent.cs\}  
 ||| => *User* _Lambda() ...  
 ...  
-User .Send() / .SendAsync()  
+User .OSend() / .OSendAsync()  
 | => Client.SSM.*type*.Construct() \{./SSM.cs\}  
 || => Client.SendAndWaitResponse() \{./Client/Client.cs\}  
 || => *Wait...(Queue.)**  
 ||| => *User*.__Return_JObject_
+<<<<<<< Updated upstream
 
 # 8 信息快速编写功能类 <a name="8"></a>
 ## (MessageUtil / 引用位置:MeowMiraiLib.Msg.Type)
+=======
+>>>>>>> Stashed changes
 
-## 8.1 MGetPlainString <a name="81"></a>
-### 使用 MGetPlainString 获取消息中的所有字符集合
-### 源码方案(foreach/(is/as))
+User .Send() / .SendAsync()  
+| => Client.SSM.*type*.Construct() \{./SSM.cs\}  
+|| => Client.SendAndWaitResponse() \{./Client/Client.cs\}  
+|| => *Wait...**  
+||| => *Interpreter* - \<T\> -> new T();  
+|||| => *return* (type)T Instance*
+# 8 信息快速编写功能类 <a name="7"></a>
+## (MessageUtil / 引用位置:MeowMiraiLib.Msg.Type)
+> ### 1. MGetPlainString 获取消息中的所有字符集合
 ```csharp
-//调用方案 (扩展)
 rinko.OnFriendMessageReceive += (s, e) =>
 {
     if(s.id != qqid) //过滤自己发出的信息
@@ -344,16 +492,9 @@ rinko.OnFriendMessageReceive += (s, e) =>
     }
 };
 ```
-```
-//调用方案 (方法)
-MGetPlainString(message:array)
-```
 
-## 8.2 MGetPlainString <a name="82"></a>
-### 使用 MGetPlainStringSplit 获取消息中的所有字符集合并且使用(splitor参数)分割
-### 源码方案(MGetPlainString的string.split())
+> ### 2. MGetPlainString 获取消息中的所有字符集合并且使用(splitor参数)分割
 ```csharp
-//调用方案 (扩展)
 rinko.OnFriendMessageReceive += (s, e) =>
 {
     if(s.id != qqid) //过滤自己发出的信息
@@ -364,16 +505,8 @@ rinko.OnFriendMessageReceive += (s, e) =>
     }
 };
 ```
-```
-//调用方案 (方法)
-MGetPlainStringSplit(message:array,spiltor:string)
-```
-
-## 8.3 MGetEachImageUrl <a name="83"></a>
-### 使用 MGetEachImageUrl 获取消息中的所有图片集合的Url
-### 源码方案(foreach / is(as))
+> ### 3. MGetEachImageUrl 获取消息中的所有图片集合的Url
 ```csharp
-//调用方案 (扩展)
 rinko.OnFriendMessageReceive += (s, e) =>
 {
     if(s.id != qqid) //过滤自己发出的信息
@@ -383,12 +516,43 @@ rinko.OnFriendMessageReceive += (s, e) =>
     }
 };
 ```
+> ### 4. SendToFriend 信息类前置发送好友信息
+```csharp
+new Message[] { new Plain("...") }.SendToFriend(qqnumber,c);
 ```
-//调用方案 (方法)
-MGetEachImageUrl(message:array)
+> ### 5. SendToGroup 信息类前置发送群信息
+```csharp
+new Message[] { new Plain("...") }.SendToGroup(qqgroupnumber,c);
+```
+> ### 6. SendToTemp 信息类前置发送临时信息
+```csharp
+new Message[] { new Plain("...") }.SendToTemp(qqnumber,qqgroupnumber,c);
+```
+> ### 7. SendMessage 对于GenericModel的群发信息逻辑
+> 注:您也可以使用`foreach`对每个`群`/`好友`/`群员`发送
+```csharp
+var msg = new Message[] { new Plain("...") };
+var fl = new FriendList().Send(c);//获取好友列表
+(fl[1], msg).SendMessage(c);
+fl[1].SendMessage(msg,c);
+
+var gl = new GroupList().Send(c);//获取群列表
+(gl[1], msg).SendMessage(c);
+gl[1].SendMessage(msg,c);
+
+var gl = new GroupList().Send(c);//获取群列表
+var gml = gl[1].GetMemberList(c);//获取群1的群员列表
+(gml[1], msg).SendMessage(c);
+gml[1].SendMessage(msg,c);
 ```
 
+<<<<<<< Updated upstream
 # 9 鸣谢<a name="9"></a>  
 ## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.
 ## 感谢大佬 [@LittleFish-233](https://github.com/LittleFish-233) 对于多线程稳定度的探索以及对新版算法的优化.
+=======
+# 9 鸣谢<a name="8"></a>  
+## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.  
+## 感谢大佬 [@LittleFish-233](https://github.com/LittleFish-233) 对于网络问题的探索和修改.  
+>>>>>>> Stashed changes
 ## 也感谢各位其他大佬对小项目的关注.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MeowMiraiLib.GenericModel;
 using MeowMiraiLib.Msg;
 using Newtonsoft.Json.Linq;
 
@@ -29,164 +30,6 @@ namespace MeowMiraiLib.Event
         /// </summary>
         public EventType type;
     }
-    /// <summary>
-    /// 好友类
-    /// </summary>
-    public sealed class MiraiFriend
-    {
-        /// <summary>
-        /// 好友qq号
-        /// </summary>
-        public long id;
-        /// <summary>
-        /// 好友昵称
-        /// </summary>
-        public string nickname;
-        /// <summary>
-        /// 好友备注
-        /// </summary>
-        public string remark;
-        /// <summary>
-        /// 实例化好友类
-        /// </summary>
-        /// <param name="id">QQ号{Friend->id}</param>
-        /// <param name="nickname">昵称{Friend->nickname}</param>
-        /// <param name="remark">备注{Friend->remark}</param>
-        public MiraiFriend(long id, string nickname, string remark)
-        {
-            this.id = id;
-            this.nickname = nickname;
-            this.remark = remark;
-        }
-    }
-    /// <summary>
-    /// 群类
-    /// </summary>
-    public sealed class MiraiGroup
-    {
-        /// <summary>
-        /// 群号
-        /// </summary>
-        public long id;
-        /// <summary>
-        /// 群名
-        /// </summary>
-        public string name;
-        /// <summary>
-        /// 外围基类(包含)的对应人在群的权限
-        /// </summary>
-        public string permission;
-        /// <summary>
-        /// 实例化一个群类
-        /// </summary>
-        /// <param name="id">群号{group->id}</param>
-        /// <param name="name">群名{group->name}</param>
-        /// <param name="permission">群权限{group->permission}</param>
-        public MiraiGroup(long id, string name, string permission)
-        {
-            this.id = id;
-            this.name = name;
-            this.permission = permission;
-        }
-    }
-    /// <summary>
-    /// 长成员类
-    /// </summary>
-    public sealed class MiraiMemberHolder
-    {
-        /// <summary>
-        /// 成员QQ号
-        /// </summary>
-        public long id;
-        /// <summary>
-        /// 成员名称
-        /// </summary>
-        public string memberName;
-        /// <summary>
-        /// 成员群头衔
-        /// </summary>
-        public string specialTitle;
-        /// <summary>
-        /// 成员权限
-        /// </summary>
-        public string permission;
-        /// <summary>
-        /// 加入时的时间戳
-        /// </summary>
-        public long joinTimestamp;
-        /// <summary>
-        /// 最后一次说话时间戳
-        /// </summary>
-        public long lastSpeakTimestamp;
-        /// <summary>
-        /// 禁言剩余时间
-        /// </summary>
-        public long muteTimeRemaining;
-        /// <summary>
-        /// 引用成员的群类
-        /// </summary>
-        public MiraiGroup group;
-        /// <summary>
-        /// 生成一个长成员
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="memberName"></param>
-        /// <param name="specialTitle"></param>
-        /// <param name="permission"></param>
-        /// <param name="joinTimestamp"></param>
-        /// <param name="lastSpeakTimestamp"></param>
-        /// <param name="muteTimeRemaining"></param>
-        /// <param name="group"></param>
-        public MiraiMemberHolder(long id, string memberName, string specialTitle, 
-            string permission, long joinTimestamp, long lastSpeakTimestamp, 
-            long muteTimeRemaining, MiraiGroup group)
-        {
-            this.id = id;
-            this.memberName = memberName;
-            this.specialTitle = specialTitle;
-            this.permission = permission;
-            this.joinTimestamp = joinTimestamp;
-            this.lastSpeakTimestamp = lastSpeakTimestamp;
-            this.muteTimeRemaining = muteTimeRemaining;
-            this.group = group;
-        }
-    }
-    /// <summary>
-    /// 短成员类
-    /// </summary>
-    public sealed class MiraiMemberHolderShort
-    {
-        /// <summary>
-        /// 短成员QQ号
-        /// </summary>
-        public long id;
-        /// <summary>
-        /// 短成员昵称
-        /// </summary>
-        public string memberName;
-        /// <summary>
-        /// 短成员权限
-        /// </summary>
-        public string permission;
-        /// <summary>
-        /// 引用短成员的群类
-        /// </summary>
-        public MiraiGroup group;
-        /// <summary>
-        /// 生成一个短成员
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="memberName"></param>
-        /// <param name="permission"></param>
-        /// <param name="group"></param>
-        public MiraiMemberHolderShort(long id, string memberName, string permission, MiraiGroup group)
-        {
-            this.id = id;
-            this.memberName = memberName;
-            this.permission = permission;
-            this.group = group;
-        }
-    }
     #endregion
     #region 事件扩展
     /// <summary>
@@ -201,8 +44,8 @@ namespace MeowMiraiLib.Event
         /// <param name="c">传入的端</param>
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
-        public static (bool,JObject) Grant(this BotInvitedJoinGroupRequestEvent req,Client c, string message = "")
-        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        public static (bool, JObject) Grant(this BotInvitedJoinGroupRequestEvent req,Client c, string message = "")
+        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).OSend(c);
         /// <summary>
         /// 拒绝
         /// </summary>
@@ -211,7 +54,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Deny(this BotInvitedJoinGroupRequestEvent req, Client c, string message="")
-        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        => new Resp_botInvitedJoinGroupRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).OSend(c);
         /// <summary>
         /// 同意
         /// </summary>
@@ -220,7 +63,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Grant(this NewFriendRequestEvent req, Client c, string message = "")
-        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).OSend(c);
         /// <summary>
         /// 拒绝
         /// </summary>
@@ -229,7 +72,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Deny(this NewFriendRequestEvent req, Client c, string message = "")
-        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).OSend(c);
         /// <summary>
         /// 拒绝并拉黑
         /// </summary>
@@ -238,7 +81,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) DenyAndMoveToBlackList(this NewFriendRequestEvent req, Client c, string message = "") 
-        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).Send(c);
+        => new Resp_newFriendRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).OSend(c);
         /// <summary>
         /// 同意
         /// </summary>
@@ -247,7 +90,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Grant(this MemberJoinRequestEvent req, Client c, string message = "")
-        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).Send(c);
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 0, message).OSend(c);
         /// <summary>
         /// 拒绝
         /// </summary>
@@ -256,7 +99,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Deny(this MemberJoinRequestEvent req, Client c, string message = "")
-        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).Send(c);
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 1, message).OSend(c);
         /// <summary>
         /// 忽略
         /// </summary>
@@ -265,7 +108,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) Ignore(this MemberJoinRequestEvent req, Client c, string message = "") 
-        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).Send(c);
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 2, message).OSend(c);
         /// <summary>
         /// 拒绝并移动到黑名单
         /// </summary>
@@ -274,7 +117,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) DenyAndMoveToBlackList(this MemberJoinRequestEvent req, Client c, string message = "") 
-        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 3, message).Send(c);
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 3, message).OSend(c);
         /// <summary>
         /// 忽略并移动到黑名单
         /// </summary>
@@ -283,7 +126,7 @@ namespace MeowMiraiLib.Event
         /// <param name="message">返回的消息</param>
         /// <returns></returns>
         public static (bool, JObject) IgnoreAndMoveToBlackList(this MemberJoinRequestEvent req, Client c, string message = "")
-        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 4, message).Send(c);
+        => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 4, message).OSend(c);
     }
     #endregion
     #region Event & EventClasses -- 事件和事件内容
@@ -685,7 +528,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被取消禁言的群员的信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 称号变化行为：achieve获得称号，lose失去称号
         /// </summary>
@@ -700,7 +543,7 @@ namespace MeowMiraiLib.Event
         /// <param name="member">被取消禁言的群员的信息</param>
         /// <param name="action">称号变化行为：achieve获得称号，lose失去称号</param>
         /// <param name="honor">称号名称</param>
-        public MemberHonorChangeEvent(MiraiMemberHolder member, string action, string honor)
+        public MemberHonorChangeEvent(QQGroupMember member, string action, string honor)
         {
             this.type = EventType.MemberHonorChangeEvent;
             this.member = member;
@@ -716,17 +559,17 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被取消禁言的群员的信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 操作者的信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 群成员被取消禁言事件(不是Bot)
         /// </summary>
         /// <param name="member">被取消禁言的群员的信息</param>
         /// <param name="operator">操作者的信息，当null时为Bot操作</param>
-        public MemberUnmuteEvent(MiraiMemberHolder member, MiraiMemberHolder @operator)
+        public MemberUnmuteEvent(QQGroupMember member, QQGroupMember @operator)
         {
             this.type = EventType.MemberUnmuteEvent;
             this.member = member;
@@ -745,18 +588,18 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被禁言的群员的信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 操作者的信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 群成员被禁言事件(不是Bot)
         /// </summary>
         /// <param name="durationSecond">禁言时长，单位为秒</param>
         /// <param name="member">被禁言的群员的信息</param>
         /// <param name="operator">操作者的信息，当null时为Bot操作</param>
-        public MemberMuteEvent(long durationSecond, MiraiMemberHolder member, MiraiMemberHolder @operator)
+        public MemberMuteEvent(long durationSecond, QQGroupMember member, QQGroupMember @operator)
         {
             this.type = EventType.MemberMuteEvent;
             this.durationSecond = durationSecond;
@@ -780,14 +623,14 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 权限改动的群员的信息
         /// </summary>
-        public MiraiMemberHolderShort member;
+        public QQGroupMemberShort member;
         /// <summary>
         /// 成员权限改变(不是Bot)
         /// </summary>
         /// <param name="origin">原权限</param>
         /// <param name="current">现权限</param>
         /// <param name="member">权限改动的群员的信息</param>
-        public MemberPermissionChangeEvent(string origin, string current, MiraiMemberHolderShort member)
+        public MemberPermissionChangeEvent(string origin, string current, QQGroupMemberShort member)
         {
             this.type = EventType.MemberPermissionChangeEvent;
             this.origin = origin;
@@ -811,14 +654,14 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 头衔改动的群员的信息
         /// </summary>
-        public MiraiMemberHolderShort member;
+        public QQGroupMemberShort member;
         /// <summary>
         /// 群头衔改动(仅群主操作)
         /// </summary>
         /// <param name="origin">原头衔</param>
         /// <param name="current">现头衔</param>
         /// <param name="member">头衔改动的群员的信息</param>
-        public MemberSpecialTitleChangeEvent(string origin, string current, MiraiMemberHolderShort member)
+        public MemberSpecialTitleChangeEvent(string origin, string current, QQGroupMemberShort member)
         {
             this.type = EventType.MemberSpecialTitleChangeEvent;
             this.origin = origin;
@@ -842,14 +685,14 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 名片改动的群员的信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 群名片改动
         /// </summary>
         /// <param name="origin">原本名片</param>
         /// <param name="current">现在名片</param>
         /// <param name="member">名片改动的群员的信息</param>
-        public MemberCardChangeEvent(string origin, string current, MiraiMemberHolder member)
+        public MemberCardChangeEvent(string origin, string current, QQGroupMember member)
         {
             this.type = EventType.MemberCardChangeEvent;
             this.origin = origin;
@@ -865,12 +708,12 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 退群群员的信息
         /// </summary>
-        public MiraiMemberHolderShort member;
+        public QQGroupMemberShort member;
         /// <summary>
         /// 成员主动离开(不是Bot)
         /// </summary>
         /// <param name="member">退群群员的信息</param>
-        public MemberLeaveEventQuit( MiraiMemberHolderShort member)
+        public MemberLeaveEventQuit( QQGroupMemberShort member)
         {
             this.type = EventType.MemberLeaveEventKick;
             this.member = member;
@@ -884,17 +727,17 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被踢者的信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 成员被踢出(不是Bot)
         /// </summary>
         /// <param name="member">被踢者的信息</param>
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
-        public MemberLeaveEventKick(MiraiMemberHolder member, MiraiMemberHolder @operator)
+        public MemberLeaveEventKick(QQGroupMember member, QQGroupMember @operator)
         {
             this.type = EventType.MemberLeaveEventKick;
             this.member = member;
@@ -909,7 +752,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 新人信息
         /// </summary>
-        public MiraiMemberHolder member;
+        public QQGroupMember member;
         /// <summary>
         /// 如果被要求入群的话，则为邀请人的 Member 对象
         /// </summary>
@@ -919,7 +762,7 @@ namespace MeowMiraiLib.Event
         /// </summary>
         /// <param name="member">新人信息</param>
         /// <param name="invitor">如果被要求入群的话，则为邀请人的 Member 对象</param>
-        public MemberJoinEvent(MiraiMemberHolder member, object invitor)
+        public MemberJoinEvent(QQGroupMember member, object invitor)
         {
             this.type = EventType.MemberJoinEvent;
             this.member = member;
@@ -942,11 +785,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 允许群员邀请好友加群状态改变的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 允许群员邀请好友加群
         /// </summary>
@@ -954,7 +797,7 @@ namespace MeowMiraiLib.Event
         /// <param name="current">现在是否允许群员邀请好友加群</param>
         /// <param name="group">允许群员邀请好友加群状态改变的群信息</param>
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
-        public GroupAllowMemberInviteEvent(bool origin, bool current, MiraiGroup group, MiraiMemberHolder @operator)
+        public GroupAllowMemberInviteEvent(bool origin, bool current, QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupAllowMemberInviteEvent;
             this.origin = origin;
@@ -979,7 +822,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 坦白说状态改变的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 是否Bot进行该操作
         /// </summary>
@@ -991,7 +834,7 @@ namespace MeowMiraiLib.Event
         /// <param name="current">现在坦白说是否开启</param>
         /// <param name="group">坦白说状态改变的群信息</param>
         /// <param name="isByBot">是否Bot进行该操作</param>
-        public GroupAllowConfessTalkEvent(bool origin, bool current, MiraiGroup group, bool isByBot)
+        public GroupAllowConfessTalkEvent(bool origin, bool current, QQGroup group, bool isByBot)
         {
             this.type = EventType.GroupAllowConfessTalkEvent;
             this.origin = origin;
@@ -1016,11 +859,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 匿名聊天状态改变的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 匿名聊天
         /// </summary>
@@ -1028,7 +871,7 @@ namespace MeowMiraiLib.Event
         /// <param name="current">现在匿名聊天是否开启</param>
         /// <param name="group">匿名聊天状态改变的群信息</param>
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
-        public GroupAllowAnonymousChatEvent(bool origin, bool current, MiraiGroup group, MiraiMemberHolder @operator)
+        public GroupAllowAnonymousChatEvent(bool origin, bool current, QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupAllowAnonymousChatEvent;
             this.origin = origin;
@@ -1053,11 +896,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 全员禁言的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 全员禁言
         /// </summary>
@@ -1067,7 +910,7 @@ namespace MeowMiraiLib.Event
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
         public GroupMuteAllEvent(
             bool origin, bool current, 
-            MiraiGroup group, MiraiMemberHolder @operator)
+            QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupMuteAllEvent;
             this.origin = origin;
@@ -1092,11 +935,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 公告改变的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 某群入群公告改变
         /// </summary>
@@ -1106,7 +949,7 @@ namespace MeowMiraiLib.Event
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
         public GroupEntranceAnnouncementChangeEvent(
             string origin, string current, 
-            MiraiGroup group, MiraiMemberHolder @operator)
+            QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupEntranceAnnouncementChangeEvent;
             this.origin = origin;
@@ -1131,11 +974,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 群名改名的群信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 某个群名改变
         /// </summary>
@@ -1145,7 +988,7 @@ namespace MeowMiraiLib.Event
         /// <param name="operator">操作的管理员或群主信息，当null时为Bot操作</param>
         public GroupNameChangeEvent(
             string origin, string current, 
-            MiraiGroup group, MiraiMemberHolder @operator)
+            QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupNameChangeEvent;
             this.origin = origin;
@@ -1209,7 +1052,7 @@ namespace MeowMiraiLib.Event
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public (bool isTimedOut, JObject? Return) NudgeBack(Client c)
+        public int NudgeBack(Client c)
         {
             return new SendNudge(fromId, fromKindId, fromKind).Send(c);
         }
@@ -1271,11 +1114,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 消息撤回所在的群
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 撤回消息的操作人，当null时为bot操作
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// 群消息撤回
         /// </summary>
@@ -1286,7 +1129,7 @@ namespace MeowMiraiLib.Event
         /// <param name="operator">撤回消息的操作人，当null时为bot操作</param>
         public GroupRecallEvent(
             long authorId, long messageId, long time, 
-            MiraiGroup group, MiraiMemberHolder @operator)
+            QQGroup group, QQGroupMember @operator)
         {
             this.type = EventType.GroupRecallEvent;
             this.authorId = authorId;
@@ -1304,7 +1147,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot被踢出的群的信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// Bot被踢后获取操作人的 Member 对象
         /// </summary>
@@ -1314,7 +1157,7 @@ namespace MeowMiraiLib.Event
         /// </summary>
         /// <param name="group">Bot被踢出的群的信息</param>
         /// <param name="op">Bot被踢后获取操作人的 Member 对象</param>
-        public BotLeaveEventKick(MiraiGroup group, object op)
+        public BotLeaveEventKick(QQGroup group, object op)
         {
             this.type = EventType.BotLeaveEventKick;
             this.group = group;
@@ -1329,12 +1172,12 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot退出的群的信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// Bot主动退出一个群
         /// </summary>
         /// <param name="group">Bot退出的群的信息</param>
-        public BotLeaveEventActive(MiraiGroup group)
+        public BotLeaveEventActive(QQGroup group)
         {
             this.type = EventType.BotLeaveEventActive;
             this.group = group;
@@ -1348,7 +1191,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot新加入群的信息
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// 如果被要求入群的话，则为邀请人的 Member 对象
         /// </summary>
@@ -1358,7 +1201,7 @@ namespace MeowMiraiLib.Event
         /// </summary>
         /// <param name="group">Bot新加入群的信息</param>
         /// <param name="invitor">如果被要求入群的话，则为邀请人的 Member 对象</param>
-        public BotJoinGroupEvent(MiraiGroup group, object invitor)
+        public BotJoinGroupEvent(QQGroup group, object invitor)
         {
             this.type = EventType.BotJoinGroupEvent;
             this.group = group;
@@ -1373,12 +1216,12 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 操作的管理员或群主信息
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// Bot被解除禁言
         /// </summary>
         /// <param name="operator">操作的管理员或群主信息</param>
-        public BotUnmuteEvent(MiraiMemberHolder @operator)
+        public BotUnmuteEvent(QQGroupMember @operator)
         {
             this.type = EventType.BotUnmuteEvent;
             this.@operator = @operator;
@@ -1396,13 +1239,13 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 操作的管理员或群主信息
         /// </summary>
-        public MiraiMemberHolder @operator;
+        public QQGroupMember @operator;
         /// <summary>
         /// Bot被禁言
         /// </summary>
         /// <param name="durationSecond">禁言时长，单位为秒</param>
         /// <param name="operator">操作的管理员或群主信息</param>
-        public BotMuteEvent(long durationSecond, MiraiMemberHolder @operator)
+        public BotMuteEvent(long durationSecond, QQGroupMember @operator)
         {
             this.durationSecond = durationSecond;
             this.@operator = @operator;
@@ -1424,14 +1267,14 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 
         /// </summary>
-        public MiraiGroup group;
+        public QQGroup group;
         /// <summary>
         /// Bot在群里的权限改变
         /// </summary>
         /// <param name="origin">Bot的原权限，OWNER、ADMINISTRATOR或MEMBER</param>
         /// <param name="current">Bot的新权限，OWNER、ADMINISTRATOR或MEMBER</param>
         /// <param name="group">权限改变所在的群信息</param>
-        public BotGroupPermissionChangeEvent(string origin, string current, MiraiGroup group)
+        public BotGroupPermissionChangeEvent(string origin, string current, QQGroup group)
         {
             this.type = EventType.BotGroupPermissionChangeEvent;
             this.origin = origin;
@@ -1447,7 +1290,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 好友详细信息
         /// </summary>
-        public MiraiFriend friend;
+        public QQFriend friend;
         /// <summary>
         /// 从昵称...
         /// </summary>
@@ -1462,7 +1305,7 @@ namespace MeowMiraiLib.Event
         /// <param name="friend"></param>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        public FriendNickChangedEvent(MiraiFriend friend, string from, string to)
+        public FriendNickChangedEvent(QQFriend friend, string from, string to)
         {
             this.type = EventType.FriendNickChangedEvent;
             this.friend = friend;
@@ -1478,7 +1321,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 好友的详细信息
         /// </summary>
-        public MiraiFriend friend;
+        public QQFriend friend;
         /// <summary>
         /// 输入状态
         /// </summary>
@@ -1488,7 +1331,7 @@ namespace MeowMiraiLib.Event
         /// </summary>
         /// <param name="friend"></param>
         /// <param name="inputting"></param>
-        public FriendInputStatusChangedEvent(MiraiFriend friend, bool inputting)
+        public FriendInputStatusChangedEvent(QQFriend friend, bool inputting)
         {
             this.type = EventType.FriendInputStatusChangedEvent;
             this.friend = friend;

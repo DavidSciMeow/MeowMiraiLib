@@ -3,6 +3,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using MeowMiraiLib.GenericModel;
 
 /*
  * 本文件是发送信息的标准定义文件,
@@ -16,6 +17,108 @@ using System.Threading.Tasks;
 
 namespace MeowMiraiLib.Msg
 {
+    #region 消息合成类
+    /// <summary>
+    /// 资料类逻辑处理类
+    /// </summary>
+    public abstract class ProfileClassGeneral : SSM
+    {
+        /// <summary>
+        /// 获取资料
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public QQProfile Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <summary>
+        /// 获取资料
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public async Task<QQProfile> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
+            if (!a)
+            {
+                return JsonConvert.DeserializeObject<QQProfile>(b["data"].ToString());
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+    /// <summary>
+    /// 信息类合并逻辑类
+    /// </summary>
+    public abstract class MessageTypoGeneral : SSM
+    {
+        /// <summary>
+        /// 发送信息
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public MessageId Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <summary>
+        /// 发送信息
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public async Task<MessageId> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
+            if (!a)
+            {
+                return new(JsonConvert.DeserializeObject<long>(b?["data"]?["messageId"]?.ToString() ?? "-1"), c);
+            }
+            else
+            {
+                return new(-1, c);
+            }
+        }
+    }
+    /// <summary>
+    /// 确认类型消息合成类
+    /// </summary>
+    public abstract class ConfirmationTypoGeneral : SSM
+    {
+        /// <summary>
+        /// 发送
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public int Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <summary>
+        /// 发送
+        /// </summary>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        public async Task<int> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
+            if (!a)
+            {
+                return JsonConvert.DeserializeObject<int>(b["data"]["code"].ToString());
+            }
+            else
+            {
+                return -1;
+            }
+        }
+    }
+    #endregion
+
     /// <summary>
     /// Socket Send Message (命令报文)
     /// </summary>
@@ -68,22 +171,66 @@ namespace MeowMiraiLib.Msg
         /// </summary>
         /// <param name="c">要发送到的客户端</param>
         /// <param name="syncid">同步的id(默认自动生成)</param>
-        /// <param name="TimeOut">超时取消,默认20s(秒)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public (bool isTimedOut, JObject? Return) Send(Client c, int? syncid = null, int TimeOut = 10)
-            => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public (bool isTimedOut, JObject? Return) OSend(Client c, int? syncid = null, int TimeOut = 10)
+            => OSendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 异步发送信息
         /// </summary>
         /// <param name="c">要发送到的客户端</param>
         /// <param name="syncid">同步的id(默认自动生成)</param>
-        /// <param name="TimeOut">超时取消,默认20s(秒)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public async Task<(bool isTimedOut, JObject? Return)> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        public async Task<(bool isTimedOut, JObject? Return)> OSendAsync(Client c, int? syncid = null, int TimeOut = 10)
         {
             session = c.session;
             var ms = PackMsg(syncid);
             return await c.SendAndWaitResponse(ms, syncId, TimeOut);
+        }
+        /// <summary>
+        /// 逻辑模式获取消息
+        /// </summary>
+        /// <typeparam name="T">逻辑模式</typeparam>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        protected T Send<T>(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            session = c.session;
+            var ms = PackMsg(syncid);
+            var (a, b) = c.SendAndWaitResponse(ms, syncId, TimeOut).GetAwaiter().GetResult();
+            if (!a)
+            {
+                return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
+            }
+            else
+            {
+                return default;
+            }
+        }
+        /// <summary>
+        /// 异步逻辑模式发送信息
+        /// </summary>
+        /// <typeparam name="T">逻辑模式</typeparam>
+        /// <param name="c">要发送到的客户端</param>
+        /// <param name="syncid">同步的id(默认自动生成)</param>
+        /// <param name="TimeOut">超时取消,默认10s(秒)</param>
+        /// <returns></returns>
+        protected async Task<T> SendAsync<T>(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            session = c.session;
+            var ms = PackMsg(syncid);
+            var (a, b) = await c.SendAndWaitResponse(ms, syncId, TimeOut);
+            if (!a)
+            {
+                return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
+            }
+            else
+            {
+                return default;
+            }
         }
     }
 
@@ -134,7 +281,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="quote">引用字段</param>
         /// <param name="qq">发送目标(备用)</param>
         /// <param name="group">群</param>
-        public SMessage(long target, Message[] messageChain, 
+        public SMessage(long target, Message[] messageChain,
             long? quote = null, long? qq = null, long? group = null)
         {
             this.target = target;
@@ -145,6 +292,7 @@ namespace MeowMiraiLib.Msg
         }
     }
 
+    #region 获取插件信息 && 缓存操作
     /// <summary>
     /// 获取插件信息
     /// </summary>
@@ -170,10 +318,15 @@ namespace MeowMiraiLib.Msg
         public MessageFromId(long id)
         {
             command = "messageFromId";
-            content = new { sessionKey = session, id };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":{id}}}";
+            content = new
+            {
+                sessionKey = session,
+                id
+            };
         }
     }
+    #endregion
+    #region 获取账号信息
     /// <summary>
     /// 获取好友列表
     /// </summary>
@@ -185,9 +338,15 @@ namespace MeowMiraiLib.Msg
         public FriendList()
         {
             command = "friendList";
-            content = new {sessionKey = session};
-            //content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = new
+            {
+                sessionKey = session
+            };
         }
+        /// <inheritdoc/>
+        public QQFriend[] Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQFriend[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQFriend[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取群列表
@@ -200,9 +359,15 @@ namespace MeowMiraiLib.Msg
         public GroupList()
         {
             command = "groupList";
-            content = new { sessionKey = session };
-            //content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = new
+            {
+                sessionKey = session
+            };
         }
+        /// <inheritdoc/>
+        public QQGroup[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQGroup[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroup[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取群员列表
@@ -216,14 +381,21 @@ namespace MeowMiraiLib.Msg
         public MemberList(long target)
         {
             command = "memberList";
-            content = new { sessionKey = session ,target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
+        /// <inheritdoc/>
+        public QQGroupMember[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQGroupMember[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取bot资料
     /// </summary>
-    public sealed class BotProfile : SSM
+    public sealed class BotProfile : ProfileClassGeneral
     {
         /// <summary>
         /// 获取bot资料
@@ -231,14 +403,16 @@ namespace MeowMiraiLib.Msg
         public BotProfile()
         {
             command = "botProfile";
-            content = new { sessionKey = session };
-            //content = $"{{\"sessionKey\":\"{session}\"}}";
+            content = new
+            {
+                sessionKey = session
+            };
         }
     }
     /// <summary>
     /// 获取某个好友的资料
     /// </summary>
-    public sealed class FriendProfile : SSM
+    public sealed class FriendProfile : ProfileClassGeneral
     {
         /// <summary>
         /// 获取某个好友的资料
@@ -247,14 +421,17 @@ namespace MeowMiraiLib.Msg
         public FriendProfile(long qq)
         {
             command = "friendProfile";
-            content = new { sessionKey = session, target = qq };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{qq}}}";
+            content = new
+            {
+                sessionKey = session,
+                target = qq
+            };
         }
     }
     /// <summary>
     /// 获取某个群友的资料
     /// </summary>
-    public sealed class MemberProfile : SSM
+    public sealed class MemberProfile : ProfileClassGeneral
     {
         /// <summary>
         /// 获取群友资料
@@ -264,14 +441,38 @@ namespace MeowMiraiLib.Msg
         public MemberProfile(long qqgroup, long qq)
         {
             command = "memberProfile";
-            content = new { sessionKey = session, target = qqgroup, memberId = qq };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{qqgroup},\"memberId\":{qq}}}";
+            content = new
+            {
+                sessionKey = session,
+                target = qqgroup,
+                memberId = qq
+            };
         }
     }
     /// <summary>
+    /// 获取某个QQ用户的资料
+    /// </summary>
+    public sealed class UserProfile : ProfileClassGeneral
+    {
+        /// <summary>
+        /// 获取某个QQ用户的资料
+        /// </summary>
+        public UserProfile(long target)
+        {
+            command = "userProfile";
+            content = new
+            {
+                sessionKey = session,
+                target,
+            };
+        }
+    }
+    #endregion
+    #region 消息发送与撤回
+    /// <summary>
     /// 发送好友信息
     /// </summary>
-    public sealed class FriendMessage : SSM
+    public sealed class FriendMessage : MessageTypoGeneral
     {
         /// <summary>
         /// 发送好友信息
@@ -288,7 +489,7 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// 发送群信息
     /// </summary>
-    public sealed class GroupMessage : SSM
+    public sealed class GroupMessage : MessageTypoGeneral
     {
         /// <summary>
         /// 发送群信息
@@ -305,7 +506,7 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// 发送临时信息
     /// </summary>
-    public sealed class TempMessage : SSM
+    public sealed class TempMessage : MessageTypoGeneral
     {
         /// <summary>
         /// 发送临时消息
@@ -323,7 +524,7 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// 发送戳一戳
     /// </summary>
-    public sealed class SendNudge : SSM
+    public sealed class SendNudge : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 发送戳一戳
@@ -334,14 +535,19 @@ namespace MeowMiraiLib.Msg
         public SendNudge(long target, long subject, string kind)
         {
             command = "sendNudge";
-            content = new { sessionKey = session, target, subject, kind };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"subject\":{subject},\"kind\":\"{kind}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                subject,
+                kind
+            };
         }
     }
     /// <summary>
     /// 撤回消息
     /// </summary>
-    public sealed class Recall : SSM
+    public sealed class Recall : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 撤回消息
@@ -350,10 +556,15 @@ namespace MeowMiraiLib.Msg
         public Recall(long target)
         {
             command = "recall";
-            content = new { sessionKey = session, target};
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
+    #endregion
+    #region 文件操作
     /// <summary>
     /// 查看文件列表
     /// </summary>
@@ -370,13 +581,21 @@ namespace MeowMiraiLib.Msg
         /// <param name="withDownloadInfo">是否携带下载信息，额外请求，无必要不要携带(置空null</param>
         /// <param name="offset">分页偏移</param>
         /// <param name="size">分页大小</param>
-        public File_list(string id,string path,long target,long group,long qq,bool? withDownloadInfo,long offset,long size)
+        public File_list(string id, string path, long target, long group, long qq, bool? withDownloadInfo, long offset, long size)
         {
             command = "file_list";
-            content = new { sessionKey = session, id, path, target, group, qq, withDownloadInfo, offset, size };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-            //    $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))}" +
-            //    $",\"offset\":{offset},\"size\":{size}}}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq,
+                withDownloadInfo,
+                offset,
+                size
+            };
         }
     }
     /// <summary>
@@ -396,9 +615,16 @@ namespace MeowMiraiLib.Msg
         public File_info(string id, string path, long target, long group, long qq, bool? withDownloadInfo)
         {
             command = "file_info";
-            content = new { sessionKey = session, id, path, target, group, qq, withDownloadInfo };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-            //   $",\"group\":{group},\"qq\":{qq},\"withDownloadInfo\":{(withDownloadInfo == null ? "" : ((withDownloadInfo ?? true) ? "true" : "false"))} }}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq,
+                withDownloadInfo
+            };
         }
     }
     /// <summary>
@@ -418,9 +644,16 @@ namespace MeowMiraiLib.Msg
         public File_mkdir(string id, string path, long target, long group, long qq, string directoryName)
         {
             command = "file_mkdir";
-            content = new { sessionKey = session, id, path, target, group, qq, directoryName };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target}" +
-            //    $",\"group\":{group},\"qq\":{qq},\"directoryName\":\"{directoryName}\" }}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq,
+                directoryName
+            };
         }
     }
     /// <summary>
@@ -439,8 +672,15 @@ namespace MeowMiraiLib.Msg
         public File_delete(string id, string path, long target, long group, long qq)
         {
             command = "file_delete";
-            content = new { sessionKey = session, id, path, target, group, qq };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq}}}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq
+            };
         }
     }
     /// <summary>
@@ -461,8 +701,17 @@ namespace MeowMiraiLib.Msg
         public File_move(string id, string path, long target, long group, long qq, string moveTo, string moveToPath)
         {
             command = "file_move";
-            content = new { sessionKey = session, id, path, target, group, qq, moveTo, moveToPath };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"moveTo\":\"{moveTo}\",\"moveToPath\":\"{moveToPath}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq,
+                moveTo,
+                moveToPath
+            };
         }
     }
     /// <summary>
@@ -482,14 +731,24 @@ namespace MeowMiraiLib.Msg
         public File_rename(string id, string path, long target, long group, long qq, string renameTo)
         {
             command = "file_rename";
-            content = new { sessionKey = session, id, path, target, group, qq, renameTo };
-            //content = $"{{\"sessionKey\":\"{session}\",\"id\":\"{id}\",\"path\":\"{path}\",\"target\":{target},\"group\":{group},\"qq\":{qq},\"renameTo\":\"{renameTo}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                path,
+                target,
+                group,
+                qq,
+                renameTo
+            };
         }
     }
+    #endregion
+    #region 账号管理
     /// <summary>
     /// 删除好友
     /// </summary>
-    public sealed class DeleteFriend : SSM
+    public sealed class DeleteFriend : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 删除好友
@@ -498,14 +757,19 @@ namespace MeowMiraiLib.Msg
         public DeleteFriend(long target)
         {
             command = "deleteFriend";
-            content = new { sessionKey = session, target};
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
+    #endregion
+    #region 群管理
     /// <summary>
     /// 禁言群成员
     /// </summary>
-    public sealed class Mute : SSM
+    public sealed class Mute : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 禁言群成员
@@ -516,14 +780,19 @@ namespace MeowMiraiLib.Msg
         public Mute(long target, long memberId, long time)
         {
             command = "mute";
-            content = new { sessionKey = session, target, memberId, time };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"time\":{time}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId,
+                time
+            };
         }
     }
     /// <summary>
     /// 解除群成员禁言
     /// </summary>
-    public sealed class Unmute : SSM
+    public sealed class Unmute : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 解除群成员禁言
@@ -533,14 +802,18 @@ namespace MeowMiraiLib.Msg
         public Unmute(long target, long memberId)
         {
             command = "unmute";
-            content = new { sessionKey = session, target, memberId };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId
+            };
         }
     }
     /// <summary>
     /// 移除群成员
     /// </summary>
-    public sealed class Kick : SSM
+    public sealed class Kick : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 移除群成员
@@ -551,14 +824,19 @@ namespace MeowMiraiLib.Msg
         public Kick(long target, long memberId, long msg)
         {
             command = "kick";
-            content = new { sessionKey = session, target, memberId, msg };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"msg\":{msg}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId,
+                msg
+            };
         }
     }
     /// <summary>
     /// 退群
     /// </summary>
-    public sealed class Quit : SSM
+    public sealed class Quit : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 退群
@@ -567,14 +845,17 @@ namespace MeowMiraiLib.Msg
         public Quit(long target)
         {
             command = "quit";
-            content = new { sessionKey = session, target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
     /// <summary>
     /// 全体禁言
     /// </summary>
-    public sealed class MuteAll : SSM
+    public sealed class MuteAll : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 全体禁言
@@ -583,14 +864,17 @@ namespace MeowMiraiLib.Msg
         public MuteAll(long target)
         {
             command = "muteAll";
-            content = new { sessionKey = session, target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
     /// <summary>
     /// 取消全体禁言
     /// </summary>
-    public sealed class UnmuteAll : SSM
+    public sealed class UnmuteAll : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 取消全体禁言
@@ -599,14 +883,17 @@ namespace MeowMiraiLib.Msg
         public UnmuteAll(long target)
         {
             command = "unmuteAll";
-            content = new { sessionKey = session, target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
     /// <summary>
     /// 设置群精华消息
     /// </summary>
-    public sealed class SetEssence : SSM
+    public sealed class SetEssence : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 设置群精华消息
@@ -615,8 +902,11 @@ namespace MeowMiraiLib.Msg
         public SetEssence(long target)
         {
             command = "setEssence";
-            content = new { sessionKey = session, target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
         }
     }
     /// <summary>
@@ -632,14 +922,32 @@ namespace MeowMiraiLib.Msg
         {
             command = "groupConfig";
             subCommand = "get";
-            content = new { sessionKey = session, target };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target}}}";
+            content = new
+            {
+                sessionKey = session,
+                target
+            };
+        }
+        /// <inheritdoc/>
+        public QQGConf Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQGConf> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        {
+            var (a, b) = await base.OSendAsync(c,syncid,TimeOut);
+            if (!a)
+            {
+                return JsonConvert.DeserializeObject<QQGConf>(b["data"]["config"].ToString());
+            }
+            else
+            {
+                return null;
+            }
         }
     }
     /// <summary>
     /// 修改群设置
     /// </summary>
-    public sealed class GroupConfig_Update : SSM
+    public sealed class GroupConfig_Update : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 修改群设置
@@ -650,8 +958,12 @@ namespace MeowMiraiLib.Msg
         {
             command = "groupConfig";
             subCommand = "update";
-            content = new { sessionKey = session, target ,config = set };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"config\":{{{set)}}}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                config = set
+            };
         }
         /// <summary>
         /// 群设置类
@@ -685,12 +997,12 @@ namespace MeowMiraiLib.Msg
         }
     }
     /// <summary>
-    /// 获取群员设置
+    /// 获取群员资料
     /// </summary>
     public sealed class MemberInfo_Get : SSM
     {
         /// <summary>
-        /// 获取群员设置
+        /// 获取群员资料
         /// </summary>
         /// <param name="target">指定群的群号</param>
         /// <param name="memberId">群员QQ号</param>
@@ -698,14 +1010,22 @@ namespace MeowMiraiLib.Msg
         {
             command = "memberInfo";
             subCommand = "get";
-            content = new { sessionKey = session, target, memberId };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId
+            };
         }
+        /// <inheritdoc/>
+        public QQGroupMember? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQGroupMember?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 修改群员设置
     /// </summary>
-    public sealed class MemberInfo_Update : SSM
+    public sealed class MemberInfo_Update : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 修改群员设置
@@ -717,8 +1037,13 @@ namespace MeowMiraiLib.Msg
         {
             command = "memberInfo";
             subCommand = "update";
-            content = new { sessionKey = session, target, memberId, config = set };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"config\":{{{set)}}}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId,
+                config = set
+            };
         }
         /// <summary>
         /// 群员设置类
@@ -738,7 +1063,7 @@ namespace MeowMiraiLib.Msg
     /// <summary>
     /// 修改群员管理员
     /// </summary>
-    public sealed class MemberAdmin : SSM
+    public sealed class MemberAdmin : ConfirmationTypoGeneral
     {
         /// <summary>
         /// 修改群员管理员
@@ -749,10 +1074,112 @@ namespace MeowMiraiLib.Msg
         public MemberAdmin(long target, long memberId, bool assign)
         {
             command = "memberAdmin";
-            content = new { sessionKey = session, target, memberId, assign };
-            //content = $"{{\"sessionKey\":\"{session}\",\"target\":{target},\"memberId\":{memberId},\"assign\":{(assign?"true":"false")}}}";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                memberId,
+                assign
+            };
         }
     }
+    #endregion
+
+    #region 群公告
+    /// <summary>
+    /// 获取群公告
+    /// </summary>
+    public sealed class Anno_list : SSM
+    {
+        /// <summary>
+        /// 获取群公告
+        /// </summary>
+        /// <param name="groupid">群号</param>
+        /// <param name="offset">分页参数</param>
+        /// <param name="size">分页参数，默认10</param>
+        public Anno_list(long groupid, long offset = 0, long size = 10)
+        {
+            command = "anno_list";
+            content = new
+            {
+                sessionKey = session,
+                id = groupid,
+                offset,
+                size
+            };
+        }
+        /// <inheritdoc/>
+        public QQAno[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQAno[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno[]>(c, syncid, TimeOut);
+
+    }
+    /// <summary>
+    /// 发布群公告
+    /// </summary>
+    public sealed class Anno_publish : SSM
+    {
+        /// <summary>
+        /// 发布群公告
+        /// </summary>
+        /// <param name="target">群号</param>
+        /// <param name="Content">公告内容</param>
+        /// <param name="sendToNewMember">是否发送给新成员</param>
+        /// <param name="pinned">是否置顶</param>
+        /// <param name="showEditCard">是否显示群成员修改群名片的引导</param>
+        /// <param name="showPopup">是否自动弹出</param>
+        /// <param name="requireConfirmation">是否需要群成员确认</param>
+        /// <param name="imageUrl">公告图片url</param>
+        /// <param name="imagePath">公告图片本地路径</param>
+        /// <param name="imageBase64">公告图片base64编码</param>
+        public Anno_publish(long target, string Content,
+            bool sendToNewMember = false, bool pinned = false, bool showEditCard = false, bool showPopup = false, bool requireConfirmation = false,
+            string imageUrl = null, string imagePath = null, string imageBase64 = null)
+        {
+            command = "anno_publish";
+            content = new
+            {
+                sessionKey = session,
+                target,
+                content = Content,
+                sendToNewMember,
+                pinned,
+                showEditCard,
+                showPopup,
+                requireConfirmation,
+                imageUrl,
+                imagePath,
+                imageBase64
+            };
+        }
+        /// <inheritdoc/>
+        public QQAno? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        /// <inheritdoc/>
+        public async Task<QQAno?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno>(c, syncid, TimeOut);
+    }
+    /// <summary>
+    /// 删除群公告
+    /// </summary>
+    public sealed class Anno_delete : ConfirmationTypoGeneral
+    {
+        /// <summary>
+        /// 删除群公告
+        /// </summary>
+        /// <param name="id">群号</param>
+        /// <param name="fid">群公告唯一id</param>
+        public Anno_delete(long id, string fid)
+        {
+            command = "anno_delete";
+            content = new
+            {
+                sessionKey = session,
+                id,
+                fid,
+            };
+        }
+    }
+    #endregion
+    #region 事件处理
     /// <summary>
     /// 处理加好友请求
     /// </summary>
@@ -769,10 +1196,15 @@ namespace MeowMiraiLib.Msg
         public Resp_newFriendRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_newFriendRequestEvent";
-            content = new { sessionKey = session, eventId, fromId, groupId, operate, message };
-            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-            //          $"\"message\":\"{message}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                eventId,
+                fromId,
+                groupId,
+                operate,
+                message
+            };
         }
     }
     /// <summary>
@@ -791,10 +1223,15 @@ namespace MeowMiraiLib.Msg
         public Resp_memberJoinRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_memberJoinRequestEvent";
-            content = new { sessionKey = session, eventId, fromId, groupId, operate, message };
-            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-            //          $"\"message\":\"{message}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                eventId,
+                fromId,
+                groupId,
+                operate,
+                message
+            };
         }
     }
     /// <summary>
@@ -813,10 +1250,16 @@ namespace MeowMiraiLib.Msg
         public Resp_botInvitedJoinGroupRequestEvent(long eventId, long fromId, long groupId, int operate, string message)
         {
             command = "resp_botInvitedJoinGroupRequestEvent";
-            content = new { sessionKey = session, eventId, fromId, groupId, operate, message };
-            //content = $"{{\"sessionKey\":\"{session}\",\"eventId\":{eventid}," +
-            //          $"\"fromId\":{fromid},\"groupId\":{groupid},\"operate\":{operatenum}," +
-            //          $"\"message\":\"{message}\"}}";
+            content = new
+            {
+                sessionKey = session,
+                eventId,
+                fromId,
+                groupId,
+                operate,
+                message
+            };
         }
     }
+    #endregion
 }
