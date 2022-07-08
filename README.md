@@ -77,9 +77,9 @@
     |:---|:---:|:---:|
     |About|SSM(Base)| :x: |
     |MessageFromId|SSM(Base)| :x: |
-    |FriendList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
-    |GroupList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
-    |MemberList|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync|
+    |FriendList|SSM(Base)| :heavy_check_mark: (重写)|
+    |GroupList|SSM(Base)| :heavy_check_mark: (重写)|
+    |MemberList|SSM(Base)| :heavy_check_mark: (重写)|
     |BotProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
     |FriendProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
     |MemberProfile|ProfileClassGeneral| :heavy_check_mark: (继承)|
@@ -103,14 +103,14 @@
     |MuteAll|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
     |UnmuteAll|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
     |SetEssence|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
-    |GroupConfig_Get|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |GroupConfig_Get|SSM(Base)| :heavy_check_mark: (重写)|
     |GroupConfig_Update|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
-    |MemberInfo_Get|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |MemberInfo_Get|SSM(Base)| :heavy_check_mark: (重写)|
     |MemberInfo_Update|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
     |MemberAdmin|ConfirmationTypoGeneral| :heavy_check_mark: (继承) |
-    |Anno_list|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
-    |Anno_publish|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
-    |Anno_delete|SSM(Base)| :heavy_check_mark: (重写) Send/SendAsync |
+    |Anno_list|SSM(Base)| :heavy_check_mark: (重写) |
+    |Anno_publish|SSM(Base)| :heavy_check_mark: (重写) |
+    |Anno_delete|SSM(Base)| :heavy_check_mark: (重写) |
     |Resp_newFriendRequestEvent|SSM(Base)| :x: |
     |Resp_memberJoinRequestEvent|SSM(Base)| :x: |
     |Resp_botInvitedJoinGroupRequestEvent|SSM(Base)| :x: |
@@ -160,7 +160,7 @@
    //获取群公告&&推送群公告
    var k = new Anno_list(qqgroup).Send(c); 
    k[1].Delete(c);//删除群公告1 (快速写法)
-   var k1 = new Anno_publish(qqgroup, "Bot 带图公告推送").Send(c);
+   var k1 = new Anno_publish(qqgroup, "Bot 公告推送").Send(c);
    var k2 = new Anno_publish(qqgroup, "Bot 带图公告推送实验",imageUrl: "https://static.rinko.com.cn/static/bggs.png").Send(c);
    ```
 
