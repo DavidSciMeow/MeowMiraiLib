@@ -5,22 +5,12 @@
 ![](https://img.shields.io/nuget/vpre/Electronicute.MeowMiraiLib?label=NuGet%20Version)
 ![](https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download)
 
-<<<<<<< Updated upstream
->## 一个简易使用的轻量化 Mirai-C# 后端  
->> .net 6 [ver 7.0.x]
->>> maj 1.修复了在模式下由于网络波动而引起的队列空置问题, 由于我本地没有网络问题无法复现,   
->>> 感谢 [@LittleFish-233](https://github.com/LittleFish-233) 的调试,努力探究和辛勤付出.
-
-----
-=======
 ## 最新版本更新改动较大,请酌情更新或者适配.
 
 |MI 维护指数|CC 圈复杂度|DoI 继承深度|ClC 类耦合度|LoSc 源码行数|LoEc 执行代码行数|
 |---------|--------|----------|---------|------------|--------------|
 |86 :green_book: |420|4|187|5464|747|
 
--------
->>>>>>> Stashed changes
 # <center> 程序编写指南目录 </center>
 > 0. [最新更新速报](#0)
 > 1. [主 框](#1)
@@ -435,25 +425,8 @@ public class NewMessageType : Message //..Plain
 此事件代理含有一个 string 的内参, 负责传输标准的 Json字符串.  
 如果您知道这是个什么类型,为什么传输,您可以自己捕获然后自己处理.  
 
-<<<<<<< Updated upstream
-# 6 最新版本&特性<a name="6"></a>  
->>3.0.0 加装了异步处理的标准流程, 优化了事件处理, 独立(实例了)端和信息发送的方案.  
->>4.0.0 更新了异步处理的标准流程,防止CPU空转等待  
->>4.1.0 更新到 `.net 6` 使用更简单书写方案来控制程序, 增加了扩展方法  
->>4.1.1 增加了扩展方法 Message[].send(c); 简易发送方案.
->>4.2.0 修复了XML发送的匹配Json问题
->>5.0.0 增加了Image适配linux的(libgdi+)
->>6.0.0 移除了Image问题和Base64自动转换,相关类库(System.Drawing.Common),*由于微软对其跨平台不再支持*
->>6.1.0 增加优化了守护链,保持进程稳定
->>7.0.0 更改了队列机制,防止CPU空转和等待出队消耗. 
-
-
-# 7 其他参考资料<a name="7"></a>  
-## 7.1 类图和参照设计图<a name="71"></a>  
-=======
 # 7 其他参考资料<a name="6"></a>  
 ## 7.1 类图和参照设计图<a name="61"></a>  
->>>>>>> Stashed changes
 ### *正在更新制作*
 ## 7.2 处理参照时序<a name="62"></a>  
 WebSocketClientRecieve  
@@ -466,12 +439,6 @@ User .OSend() / .OSendAsync()
 || => Client.SendAndWaitResponse() \{./Client/Client.cs\}  
 || => *Wait...(Queue.)**  
 ||| => *User*.__Return_JObject_
-<<<<<<< Updated upstream
-
-# 8 信息快速编写功能类 <a name="8"></a>
-## (MessageUtil / 引用位置:MeowMiraiLib.Msg.Type)
-=======
->>>>>>> Stashed changes
 
 User .Send() / .SendAsync()  
 | => Client.SSM.*type*.Construct() \{./SSM.cs\}  
@@ -546,13 +513,7 @@ var gml = gl[1].GetMemberList(c);//获取群1的群员列表
 gml[1].SendMessage(msg,c);
 ```
 
-<<<<<<< Updated upstream
-# 9 鸣谢<a name="9"></a>  
+# 9 鸣谢<a name="8"></a>  
 ## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.
 ## 感谢大佬 [@LittleFish-233](https://github.com/LittleFish-233) 对于多线程稳定度的探索以及对新版算法的优化.
-=======
-# 9 鸣谢<a name="8"></a>  
-## 感谢大佬 [@Executor-Cheng](https://github.com/Executor-Cheng) 的初版建议和意见.  
-## 感谢大佬 [@LittleFish-233](https://github.com/LittleFish-233) 对于网络问题的探索和修改.  
->>>>>>> Stashed changes
 ## 也感谢各位其他大佬对小项目的关注.
