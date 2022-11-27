@@ -47,17 +47,11 @@
 					color: white;
 					text-align: center;
 				}
-				.left-right {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					justify-content: center;
-					margin: 0;
-				}
 				h1 {
 					font-size: 50px;
 					line-height: 1.3;
 					letter-spacing: 5px;
+					color: #ff6699;
 					text-shadow:
 						0 1px 0 #bbbbbb,
 						0 2px 0 #bbbbbb,
@@ -66,19 +60,9 @@
 						0 12px 5px rgba(0, 0, 0, 0.1);
 					animation: rotate ease-in-out 1s infinite alternate;
 				}
-				p {
-					font-size: 20px;
-					text-shadow: 0 1px 0 #efefef;
-					animation: 5s ease 0s normal forwards 1 fadeIn;
-				}
 			</style>
 			<div class="container">
 				<h1>Meow.MiraiLib <br/> 一个轻量化的 Mirai-C# 后端</h1>
-				<div class="left-right">
-					<img src="https://github.com/DavidSciMeow/MeowMiraiLib/actions/workflows/main.yml/badge.svg" alt="CI"/>
-					<img src="https://img.shields.io/nuget/vpre/Electronicute.MeowMiraiLib?label=NuGet%20Version" alt="nugetVersion"/>
-					<img src="https://img.shields.io/nuget/dt/Electronicute.MeowMiraiLib?label=Nuget%20Download" alt="nugetDownload"/>
-				</div>
 			</div>
 		</div>
 	</foreignObject>
