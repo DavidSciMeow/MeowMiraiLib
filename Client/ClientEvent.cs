@@ -34,7 +34,7 @@ namespace MeowMiraiLib
         /// </summary>
         public delegate void ServiceError(Exception e);
         /// <summary>
-        /// 接收到Websocket端链接成功信息
+        /// 接收到Websocket端错误信息
         /// </summary>
         public event ServiceError _OnServeiceError;
         /// <summary>
@@ -69,7 +69,7 @@ namespace MeowMiraiLib
         /// <param name="e">命令被执行通知句柄</param>
         public delegate void CommandExecutedEvent(Event.CommandExecutedEvent e);
         /// <summary>
-        /// 接收到后端传送后端传送命令被执行通知
+        /// 接收到后端传送命令被执行通知
         /// </summary>
         public event CommandExecutedEvent _OnCommandExecutedEvent;
         /// <summary>
@@ -78,7 +78,7 @@ namespace MeowMiraiLib
         /// <param name="e">命令被执行通知句柄</param>
         public delegate void UnknownEvent(string e);
         /// <summary>
-        /// 接收到后端传送后端传送命令被执行通知
+        /// 接收到后端传送未知命令
         /// </summary>
         public event UnknownEvent _OnUnknownEvent;
 
