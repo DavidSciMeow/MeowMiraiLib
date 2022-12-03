@@ -18,20 +18,7 @@ namespace MeowMiraiLib.Msg.Sender
         /// </summary>
         public long id;
     }
-    /// <summary>
-    /// 好友信息好友句柄
-    /// </summary>
-    public class FriendMessageSender : Sender
-    {
-        /// <summary>
-        /// 好友昵称
-        /// </summary>
-        public string nickname;
-        /// <summary>
-        /// 好友备注
-        /// </summary>
-        public string remark;
-    }
+
     /// <summary>
     /// 群信息句柄
     /// </summary>
@@ -89,9 +76,41 @@ namespace MeowMiraiLib.Msg.Sender
     /// </summary>
     public class TempMessageSender : GroupMessageSender { }
     /// <summary>
+    /// 同步群信息
+    /// </summary>
+    public class GroupSyncMessageSender : GroupMessageSender { }
+    /// <summary>
+    /// 同步群临时信息
+    /// </summary>
+    public class TempSyncMessageSender : TempMessageSender { }
+
+    /// <summary>
+    /// 好友信息好友句柄
+    /// </summary>
+    public class FriendMessageSender : Sender
+    {
+        /// <summary>
+        /// 好友昵称
+        /// </summary>
+        public string nickname;
+        /// <summary>
+        /// 好友备注
+        /// </summary>
+        public string remark;
+    }
+    /// <summary>
     /// 陌生人信息句柄
     /// </summary>
     public class StrangerMessageSender : FriendMessageSender { }
+    /// <summary>
+    /// 同步好友信息
+    /// </summary>
+    public class FriendSyncMessageSender : FriendMessageSender { }
+    /// <summary>
+    /// 同步陌生人消息
+    /// </summary>
+    public class StrangerSyncMessageSender : StrangerMessageSender { }
+
     /// <summary>
     /// 其他客户端信息句柄
     /// </summary>
@@ -102,20 +121,4 @@ namespace MeowMiraiLib.Msg.Sender
         /// </summary>
         public string platform;
     }
-    /// <summary>
-    /// 同步好友信息
-    /// </summary>
-    public class FriendSyncMessageSender : FriendMessageSender { }
-    /// <summary>
-    /// 同步群信息
-    /// </summary>
-    public class GroupSyncMessageSender : GroupMessageSender { }
-    /// <summary>
-    /// 同步群临时信息
-    /// </summary>
-    public class TempSyncMessageSender : TempMessageSender { }
-    /// <summary>
-    /// 同步陌生人消息
-    /// </summary>
-    public class StrangerSyncMessageSender : StrangerMessageSender { }
 }

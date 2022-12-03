@@ -212,5 +212,63 @@ namespace MeowMiraiLib
                 return ws.OpenAsync();
             }
         }
+
+        /* --
+         * For Unsubscribe Delegate, 
+         * those method is for unsubscribe lambda delegate in message, 
+         * if you don't know which delegate nor which event please leave this alone.
+         * --*/
+
+        /// <summary>
+        /// 删除关于好友的所有信息的事件订阅
+        /// </summary>
+        public void ClearDelegateFriendMessage()
+        {
+            foreach (var k in OnFriendMessageReceive.GetInvocationList())
+            {
+                OnFriendMessageReceive -= k as FriendMessage;
+            }
+        }
+        /// <summary>
+        /// 删除关于群的所有信息的事件订阅
+        /// </summary>
+        public void ClearDelegateGroupMessage()
+        {
+            foreach (var k in OnGroupMessageReceive.GetInvocationList())
+            {
+                OnGroupMessageReceive -= k as GroupMessage;
+            }
+        }
+        /// <summary>
+        /// 删除关于群的所有信息的事件订阅
+        /// </summary>
+        public void ClearDelegateTempMessage()
+        {
+            foreach (var k in OnTempMessageReceive.GetInvocationList())
+            {
+                OnTempMessageReceive -= k as TempMessage;
+            }
+        }
+        /// <summary>
+        /// 删除关于陌生人的所有信息的事件订阅
+        /// </summary>
+        public void ClearDelegateStrangerMessage()
+        {
+            foreach (var k in OnStrangerMessageReceive.GetInvocationList())
+            {
+                OnStrangerMessageReceive -= k as StrangerMessage;
+            }
+        }
+        /// <summary>
+        /// 删除关于其他端的所有信息的事件订阅
+        /// </summary>
+        public void ClearDelegateOtherMessage()
+        {
+            foreach (var k in OnOtherMessageReceive.GetInvocationList())
+            {
+                OnOtherMessageReceive -= k as OtherClientMessage;
+            }
+        }
+
     }
 }
