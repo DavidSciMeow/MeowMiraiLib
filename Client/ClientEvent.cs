@@ -21,6 +21,7 @@ namespace MeowMiraiLib
     public partial class Client
     {
         /*--Type of Service--*/
+        
         /// <summary>
         /// Websocket端链接成功信息
         /// </summary>
@@ -283,6 +284,15 @@ namespace MeowMiraiLib
         /// Bot主动退出一个群
         /// </summary>
         public event BotLeaveEventActive OnEventBotLeaveEventActive;
+        /// <summary>
+        /// Bot因群主解散群而退出群
+        /// </summary>
+        /// <param name="e">退群句柄</param>
+        public delegate void BotLeaveEventDisband(Event.BotLeaveEventDisband e);
+        /// <summary>
+        /// Bot因群主解散群而退出群
+        /// </summary>
+        public event BotLeaveEventDisband OnEventBotLeaveEventDisband;
         /// <summary>
         /// Bot被群踢出
         /// </summary>

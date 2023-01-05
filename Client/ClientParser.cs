@@ -296,6 +296,21 @@ namespace MeowMiraiLib
                                     ));
                                 return;
                             }
+                        case "BotLeaveEventDisband":
+                            {
+                                JToken j = jo["data"];
+                                await Task.Run(() => OnEventBotLeaveEventDisband?.Invoke(
+                                    new(
+                                        new(
+                                            j["group"]["id"].ToObject<long>(),
+                                            j["group"]["name"].ToString(),
+                                            j["group"]["permission"].ToString()
+                                            ),
+                                        j["operator"].ToObject<object>()
+                                        )
+                                    ));
+                                return;
+                            }
                         case "BotLeaveEventKick":
                             {
                                 JToken j = jo["data"];
@@ -807,7 +822,8 @@ namespace MeowMiraiLib
                                             j["groupId"].ToObject<long>(),
                                             j["groupName"].ToString(),
                                             j["nick"].ToString(),
-                                            j["message"].ToString()
+                                            j["message"].ToString(),
+                                            j["invitorId"].ToObject<long?>()
                                         )
                                     ));
                                 return;
@@ -889,7 +905,6 @@ namespace MeowMiraiLib
                 if (string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
                 {
                     session = jo["data"]["session"].ToString();
-                    await Task.Run(() => _OnServeiceConnected?.Invoke(jo.ToString()));
                     return;
                 }
             }

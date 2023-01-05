@@ -454,6 +454,10 @@ namespace MeowMiraiLib.Event
         /// </summary>
         public string message;
         /// <summary>
+        /// 邀请人 可能为空
+        /// </summary>
+        public long? InvitorId;
+        /// <summary>
         /// 用户入群申请
         /// </summary>
         /// <param name="eventId">事件标识，响应该事件时的标识</param>
@@ -462,9 +466,10 @@ namespace MeowMiraiLib.Event
         /// <param name="groupName">申请人申请入群的群名称</param>
         /// <param name="nick">申请人的昵称或群名片</param>
         /// <param name="message">申请消息</param>
+        /// <param name="invitorId">邀请人 可能为空</param>
         public MemberJoinRequestEvent(
             long eventId, long fromId, long groupId,
-            string groupName, string nick, string message)
+            string groupName, string nick, string message, long? invitorId)
         {
             this.type = EventType.NewFriendRequestEvent;
             this.eventId = eventId;
@@ -473,6 +478,7 @@ namespace MeowMiraiLib.Event
             this.groupName = groupName;
             this.nick = nick;
             this.message = message;
+            InvitorId = invitorId;
         }
     }
     /// <summary>
@@ -1184,6 +1190,31 @@ namespace MeowMiraiLib.Event
         }
     }
     /// <summary>
+    /// Bot因群主解散群而退出群
+    /// </summary>
+    public sealed class BotLeaveEventDisband : MiraiEvent
+    {
+        /// <summary>
+        /// Bot所在被解散的群的信息 
+        /// </summary>
+        public QQGroup group;
+        /// <summary>
+        /// Bot离开群后获取操作人的 Member 对象 
+        /// </summary>
+        public object invitor;
+
+        /// <summary>
+        /// Bot因群主解散群而退出群
+        /// </summary>
+        /// <param name="group"> Bot所在被解散的群的信息 </param>
+        /// <param name="invitor">Bot离开群后获取操作人的 Member 对象 </param>
+        public BotLeaveEventDisband(QQGroup group, object invitor)
+        {
+            this.group = group;
+            this.invitor = invitor;
+        }
+    }
+    /// <summary>
     /// Bot自身入群事件
     /// </summary>
     public sealed class BotJoinGroupEvent : MiraiEvent
@@ -1433,5 +1464,8 @@ namespace MeowMiraiLib.Event
             this.qq = qq;
         }
     }
+
+   
+
     #endregion
 }
