@@ -7,85 +7,77 @@ using System.Threading.Tasks;
 
 namespace MeowMiraiLib.MultiContext
 {
-    public static class ContextualDataSet
+    /// <summary>
+    /// 上下文类型集合
+    /// </summary>
+    public partial class ConClient : Client
     {
-        private static Dictionary<ContextualSender, ObservableCollection<ContextualMessage>> Set;
-        private static Task InterpreterMainProcess = new Task(() =>
+        /// <summary>
+        /// 上下文端内部列表
+        /// </summary>
+        private readonly Dictionary<ContextualSender, Queue<ContextualMessage>> Set = new();
+
+        /// <summary>
+        /// 生成一个上下文类型的端
+        /// </summary>
+        /// <param name="url">地址</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public ConClient(string url, int reconnect = -1) 
+            : base(url, reconnect)
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[CDS:MeowMiraiLib] {DateTime.Now:yyyy MM/dd HH:mm:ss} {ex.Message} --\n{ex}");
-            }
-        });
-
-        ///内注入函数,解析逻辑
-        public static Task<bool> DoInterpreter(this ObservableCollection<ContextualMessage> Queue, int WaitTime, params Func<ContextualMessage,dynamic>[] F)
-        {
-            return Task.Factory.StartNew(() =>
-            {
-                int funcnum = 0;
-                while (true)
-                {
-                    if(funcnum < F.Length) // 执行的函数列有剩余
-                    {
-                        if (F.Length != 0) // 如果含有消息出队执行
-                        {
-                            F[funcnum]?.Invoke(Queue[Queue.Count - 1]);
-                        }
-
-                        if (!initstate) //初始条件 *(逻辑留空)
-                        {
-                            var k = Task.Factory.StartNew(() => //等待条件: 当且仅当当前队列内存在对象可提出, 若时间过长则触发结束.
-                            {
-                                while (true) //阻塞并等待
-                                {
-                                    if (Queue.Count != 0)// 队列内容不为零
-                                    {
-                                        return true; //返回任务完成
-                                    }
-                                }
-                            }, TaskCreationOptions.LongRunning);
-
-                            if (WaitTime > 0)
-                            {
-                                var bk = k.Wait(WaitTime * 1000);
-                                if (bk)
-                                {
-                                    ; //下一步
-                                }
-                                else
-                                {
-                                    Console.WriteLine("超时");
-                                    funcnum = 0; //从头读取
-                                    initstate = true; //重置初始状态
-                                }
-                            }
-                        }
-                    }
-                }
-            });
+            InjectWholeProcess();
         }
+        /// <summary>
+        /// 生成一个上下文类型的端(含有VerifyKey)
+        /// </summary>
+        /// <param name="ip">地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="verifyKey">验证</param>
+        /// <param name="qq">登陆的机器人qq</param>
+        /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public ConClient(string ip, int port, string verifyKey, long qq, string type = "all", int reconnect = -1) 
+            : base(ip, port, verifyKey, qq, type, reconnect)
+        {
+            InjectWholeProcess();
+        }
+        /// <summary>
+        /// 生成一个上下文类型的端(不含VerifyKey)
+        /// </summary>
+        /// <param name="ip">地址</param>
+        /// <param name="port">端口</param>
+        /// <param name="qq">登陆的机器人qq</param>
+        /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
+        /// <param name="debug">全调试输出</param>
+        /// <param name="eventdebug">事件调试输出</param>
+        /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
+        public ConClient(string ip, int port, long qq, string type = "all", int reconnect = -1) 
+            : base(ip, port, qq, type, reconnect)
+        {
+            InjectWholeProcess();
+        }
+
         /// <summary>
         /// 注入上下文逻辑端
         /// <para>此操作会删除您的现有所有关于信息的事件订阅</para>
         /// </summary>
-        /// <param name="Base"></param>
-        public static void InjectWholeProcess(this Client Base)
+        private void InjectWholeProcess()
         {
-            Base.ClearDelegateFriendMessage();
-            Base.ClearDelegateGroupMessage();
-            Base.ClearDelegateTempMessage();
-            Base.ClearDelegateStrangerMessage();
-            Base.OnFriendMessageReceive += (s, e) => RecieveMessageFrom(s, e);
-            Base.OnGroupMessageReceive += (s, e) => RecieveMessageFrom(s, e);
-            Base.OnStrangerMessageReceive += (s, e) => RecieveMessageFrom(s, e);
-            Base.OnTempMessageReceive += (s, e) => RecieveMessageFrom(s, e);
+            base.OnFriendMessageReceive += Base_OnMessageReceive;
+            base.OnGroupMessageReceive += Base_OnMessageReceive;
+            base.OnStrangerMessageReceive += Base_OnMessageReceive;
+            base.OnTempMessageReceive += Base_OnMessageReceive;
         }
-        private static bool RecieveMessageFrom(Sender s, Message[] e)
+        /// <summary>
+        /// 默认的基础信息分类逻辑
+        /// </summary>
+        /// <param name="s">发送者</param>
+        /// <param name="e">信息源</param>
+        private void Base_OnMessageReceive(Sender s, Message[] e)
         {
             try
             {
@@ -96,38 +88,124 @@ namespace MeowMiraiLib.MultiContext
                     {
                         GroupId = (s as GroupMessageSender).group.id,
                         SenderId = s.id,
-                    };
+                    };        
                 }
-                else if(s is FriendMessageSender or StrangerMessageSender)
+                else if (s is FriendMessageSender or StrangerMessageSender)
                 {
                     ss = new()
                     {
-                        GroupId = 0,
+                        GroupId = -1,
                         SenderId = s.id,
                     };
                 }
                 else
                 {
-                    return false;
+                    ss = new()
+                    {
+                        GroupId = -1,
+                        SenderId = -1,
+                    };
                 }
+                //sender init, require as if GroupId is Equal to SenderId
 
                 if (Set.ContainsKey(ss))
                 {
                     Set.TryGetValue(ss, out var sm);
-                    sm.Add(new(s, e));
+                    sm.Enqueue(new(s, e));
+                    _OnMessageRecieve?.Invoke(ss);
                 }
                 else
                 {
-                    Set.Add(ss, new ObservableCollection<ContextualMessage>
-                    {
-                        new(s, e)
-                    });
+                    var smx = new Queue<ContextualMessage>();
+                    smx.Enqueue(new(s, e));
+                    Set.Add(ss, smx);
+                    _OnMessageRecieve?.Invoke(ss);
                 }
-                return true;
             }
             catch
             {
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// 当前信息队列长度
+        /// </summary>
+        /// <param name="s">发送者</param>
+        /// <returns></returns>
+        public int? MsgCount(ContextualSender s)
+        {
+            if(Set.TryGetValue(s, out var q))
+            {
+                return q.Count;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 获取某个用户的信息(按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <returns></returns>
+        public ContextualMessage? PeekMsgs(ContextualSender s)
+        {
+            if (Set.TryGetValue(s, out var queue))
+            {
+                if(queue.TryPeek(out var res))
+                {
+                    return res;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取某个用户的信息(按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="pos">队列位置</param>
+        /// <returns></returns>
+        public ContextualMessage? GetMsg(ContextualSender s, int pos = 0)
+        {
+            if (Set.TryGetValue(s, out var queue))
+            {
+                return queue.ToArray()[pos];
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取某个用户的多个信息(按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="num">取数量,不能小于1</param>
+        /// <returns></returns>
+        public ContextualMessage[] GetMsgs(ContextualSender s, int num = 1)
+        {
+            List<ContextualMessage> l = new();
+            if (Set.TryGetValue(s, out var queue) && num > 0)
+            {
+                for(int i = 0; i < num; i++)
+                {
+                    l.Add(queue.ToArray()[i]);
+                }
+            }
+            return l.ToArray();
+        }
+        /// <summary>
+        /// 删除某个用户的多个信息(按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="num">取数量,不能小于1</param>
+        /// <returns></returns>
+        public void DelMsgs(ContextualSender s, int num = 0)
+        {
+            if (Set.TryGetValue(s, out var queue))
+            {
+                for (int i = 0; i < num; i++)
+                {
+                    _ = queue.Dequeue(); //删除元素
+                }
             }
         }
     }

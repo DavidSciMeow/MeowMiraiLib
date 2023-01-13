@@ -1,11 +1,17 @@
-﻿using MeowMiraiLib.Msg.Sender;
+﻿using MeowMiraiLib.Msg;
+using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
+/* 
+ * 版本 8.1.0+ 上下文接收端定义文件, 
+ * 包括接受信息,发送信息等异步触发器(事件)
+ * -------------------------------------------
+ * 
+ */
 
 namespace MeowMiraiLib.MultiContext
 {
@@ -19,7 +25,7 @@ namespace MeowMiraiLib.MultiContext
         /// </summary>
         public long SenderId;
         /// <summary>
-        /// 发送者的群QQ
+        /// 发送者的群号
         /// </summary>
         public long GroupId;
 
@@ -33,7 +39,121 @@ namespace MeowMiraiLib.MultiContext
         {
             return SenderId.GetHashCode() ^ GroupId.GetHashCode();
         }
+        /// <inheritdoc/>
+        public override string ToString() => $"{SenderId} :: {(GroupId != -1 ? GroupId : "Null")}";
+
+        /// <summary>
+        /// 往原处发送信息
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public MessageId SendMsgBack(Message[] s, ConClient? c = null) => SendMsgBackAsync(s, c).GetAwaiter().GetResult();
+
+        /// <summary>
+        /// 往原处发送信息
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public async Task<MessageId> SendMsgBackAsync(Message[] s, ConClient? c = null)
+        {
+            if(c is null)
+            {
+                if(Global.G_Client is null)
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+
+                if (SenderId != -1 && GroupId == -1)
+                {
+                    return await SendMessageToFriendAsync(s, Global.G_Client as ConClient);
+                }
+                else if (SenderId != -1 && GroupId != -1)
+                {
+                    return await SendMessageToGroupAsync(s, Global.G_Client as ConClient);
+                }
+                else
+                {
+                    Global.Log.Error(ErrorDefine.E1000);
+                    throw new Exception(ErrorDefine.E1000);
+                }
+            }
+            else
+            {
+                if (SenderId != -1 && GroupId == -1)
+                {
+                    return await SendMessageToFriendAsync(s, c);
+                }
+                else if (SenderId != -1 && GroupId != -1)
+                {
+                    return await SendMessageToGroupAsync(s, c);
+                }
+                else
+                {
+                    Global.Log.Error(ErrorDefine.E1000);
+                    throw new Exception(ErrorDefine.E1000);
+                }
+            }
+        }
+        /// <summary>
+        /// 强行往发送者的私聊发送信息(异步)
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public async Task<MessageId> SendMessageToFriendAsync(Message[] s, ConClient c)
+        {
+            if (c is null)
+            {
+                if (Global.G_Client is null)
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+
+                return await new FriendMessage(SenderId, s).SendAsync(Global.G_Client);
+            }
+            return await new FriendMessage(SenderId, s).SendAsync(c);
+        }
+
+        /// <summary>
+        /// 强行往发送者的私聊发送信息
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public MessageId SendMessageToFriend(Message[] s, ConClient c) => SendMessageToFriendAsync(s,c).GetAwaiter().GetResult();
+        /// <summary>
+        /// 强行往发送者的群发送信息(异步)
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public async Task<MessageId> SendMessageToGroupAsync(Message[] s, ConClient c)
+        {
+            if (c is null)
+            {
+                if (Global.G_Client is null)
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+                return await new GroupMessage(GroupId, s).SendAsync(Global.G_Client);
+            }
+            return await new GroupMessage(GroupId, s).SendAsync(c);
+        }
+
+        /// <summary>
+        /// 强行往发送者的群发送信息
+        /// </summary>
+        /// <param name="s">信息</param>
+        /// <param name="c">端</param>
+        /// <returns></returns>
+        public MessageId SendMessageToGroup(Message[] s, ConClient c) => SendMessageToGroupAsync(s, c).GetAwaiter().GetResult();
     }
+
     /// <summary>
     /// 上下文相关的消息定义
     /// </summary>
@@ -57,5 +177,9 @@ namespace MeowMiraiLib.MultiContext
             Sender = sender;
             Message = message;
         }
+
+        /// <inheritdoc/>
+        public override string ToString() => $"{Sender.id} :: [{Message.Length}]";
     }
 }
+

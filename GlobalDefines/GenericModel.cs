@@ -99,7 +99,7 @@ namespace MeowMiraiLib.GenericModel
         /// <param name="c">端</param>
         /// <param name="msg">信息</param>
         /// <returns></returns>
-        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => Msg.Type.MessageUtil.SendMessage((this, msg), c);
+        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => MessageUtil.SendMessage((this, msg), c);
     }
     /// <summary>
     /// 群(列表)
@@ -137,7 +137,7 @@ namespace MeowMiraiLib.GenericModel
         /// <param name="c">端</param>
         /// <param name="msg">信息</param>
         /// <returns></returns>
-        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => Msg.Type.MessageUtil.SendMessage((this, msg), c);
+        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => MessageUtil.SendMessage((this, msg), c);
     }
     /// <summary>
     /// 群成员(列表)
@@ -207,7 +207,7 @@ namespace MeowMiraiLib.GenericModel
         /// <param name="c">端</param>
         /// <param name="msg">信息</param>
         /// <returns></returns>
-        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => Msg.Type.MessageUtil.SendMessage((this, msg), c);
+        public MessageId SendMessage(Client c, Msg.Type.Message[] msg) => MessageUtil.SendMessage((this, msg), c);
     }
     /// <summary>
     /// 获取Bot资料

@@ -42,14 +42,6 @@ namespace MeowMiraiLib
         /// </summary>
         public string session { get; private set; }
         /// <summary>
-        /// 调试标识
-        /// </summary>
-        public bool debug { get; private set; } = false;
-        /// <summary>
-        /// 事件调试标识
-        /// </summary>
-        public bool eventdebug { get; private set; } = false;
-        /// <summary>
         /// 重连标识
         /// </summary>
         public int reconnect { get; private set; }
@@ -60,11 +52,9 @@ namespace MeowMiraiLib
         /// <param name="debug">全调试输出</param>
         /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
-        public Client(string url, bool debug = false, bool eventdebug = false, int reconnect = -1)
+        public Client(string url, int reconnect = -1)
         {
             this.url = url;
-            this.debug = debug;
-            this.eventdebug = eventdebug;
             this.reconnect = reconnect;
             ws = new(url);
             ws.Opened += (s, e) =>
@@ -115,8 +105,8 @@ namespace MeowMiraiLib
         /// <param name="debug">全调试输出</param>
         /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
-        public Client(string ip, int port, string verifyKey, long qq, string type = "all", bool debug = false, bool eventdebug = false, int reconnect = -1)
-            : this($"ws://{ip}:{port}/{type}?verifyKey={verifyKey}&qq={qq}", debug, eventdebug, reconnect) { }
+        public Client(string ip, int port, string verifyKey, long qq, string type = "all", int reconnect = -1)
+            : this($"ws://{ip}:{port}/{type}?verifyKey={verifyKey}&qq={qq}", reconnect) { }
         /// <summary>
         /// 生成一个端(不含VerifyKey)
         /// </summary>
@@ -127,8 +117,8 @@ namespace MeowMiraiLib
         /// <param name="debug">全调试输出</param>
         /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
-        public Client(string ip, int port, long qq, string type = "all", bool debug = false, bool eventdebug = false, int reconnect = -1)
-            : this($"ws://{ip}:{port}/{type}?qq={qq}", debug, eventdebug, reconnect) { }
+        public Client(string ip, int port, long qq, string type = "all", int reconnect = -1)
+            : this($"ws://{ip}:{port}/{type}?qq={qq}", reconnect) { }
         /// <summary>
         /// 发送并且等待回值
         /// </summary>
@@ -136,7 +126,8 @@ namespace MeowMiraiLib
         /// <param name="syncId">同步字段</param>
         /// <param name="TimeOut">超时取消,默认20s(秒)</param>
         /// <returns></returns>
-        public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 10)
+        public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse
+            (string json, int? syncId = null, int TimeOut = 10)
         {
             using var cancelTokenSource = new CancellationTokenSource(TimeOut * 1000);
             var ts = Task.Run(async () =>
@@ -190,7 +181,8 @@ namespace MeowMiraiLib
         {
             if (string.IsNullOrEmpty(url))
             {
-                throw new("No Url Specific");
+                Global.Log.Error(ErrorDefine.E0001);
+                throw new(ErrorDefine.E0001);
             }
             else
             {
@@ -205,70 +197,13 @@ namespace MeowMiraiLib
         {
             if (string.IsNullOrEmpty(url))
             {
-                throw new("No Url Specific");
+                Global.Log.Error(ErrorDefine.E0001);
+                throw new(ErrorDefine.E0001);
             }
             else
             {
                 return ws.OpenAsync();
             }
         }
-
-        /* --
-         * For Unsubscribe Delegate, 
-         * those method is for unsubscribe lambda delegate in message, 
-         * if you don't know which delegate nor which event please leave this alone.
-         * --*/
-
-        /// <summary>
-        /// 删除关于好友的所有信息的事件订阅
-        /// </summary>
-        public void ClearDelegateFriendMessage()
-        {
-            foreach (var k in OnFriendMessageReceive.GetInvocationList())
-            {
-                OnFriendMessageReceive -= k as FriendMessage;
-            }
-        }
-        /// <summary>
-        /// 删除关于群的所有信息的事件订阅
-        /// </summary>
-        public void ClearDelegateGroupMessage()
-        {
-            foreach (var k in OnGroupMessageReceive.GetInvocationList())
-            {
-                OnGroupMessageReceive -= k as GroupMessage;
-            }
-        }
-        /// <summary>
-        /// 删除关于群的所有信息的事件订阅
-        /// </summary>
-        public void ClearDelegateTempMessage()
-        {
-            foreach (var k in OnTempMessageReceive.GetInvocationList())
-            {
-                OnTempMessageReceive -= k as TempMessage;
-            }
-        }
-        /// <summary>
-        /// 删除关于陌生人的所有信息的事件订阅
-        /// </summary>
-        public void ClearDelegateStrangerMessage()
-        {
-            foreach (var k in OnStrangerMessageReceive.GetInvocationList())
-            {
-                OnStrangerMessageReceive -= k as StrangerMessage;
-            }
-        }
-        /// <summary>
-        /// 删除关于其他端的所有信息的事件订阅
-        /// </summary>
-        public void ClearDelegateOtherMessage()
-        {
-            foreach (var k in OnOtherMessageReceive.GetInvocationList())
-            {
-                OnOtherMessageReceive -= k as OtherClientMessage;
-            }
-        }
-
     }
 }

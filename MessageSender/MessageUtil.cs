@@ -1,16 +1,28 @@
 ﻿using MeowMiraiLib.GenericModel;
+using MeowMiraiLib.Msg;
+using MeowMiraiLib.Msg.Type;
+using MeowMiraiLib.MultiContext;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MeowMiraiLib.Msg.Type
+/*
+ * 本文件是快速信息编写类的基础文件,
+ * 本类的编写为纯帮助类, 目的是加速软件开发速度和正确使用功能,
+ * 大部分功能已经在此实现, 您可以提交PR进行增设功能
+ * --------------------------
+ * This File is for quick implement function (helper-class) File,
+ * It's mainly for more quick program-writing and correctly use internal function .
+ * The most majority function is already complete in doc.
+ * You can also trigger a Pull-Request to insert function.
+ */
+
+namespace MeowMiraiLib
 {
     /// <summary>
     /// 信息类的扩展方法
     /// </summary>
     public static class MessageUtil
     {
-        
-
         /*caller Util*/
         /// <summary>
         /// 获取信息的字符串表示
@@ -158,5 +170,137 @@ namespace MeowMiraiLib.Msg.Type
         /// <param name="c">端</param>
         /// <returns></returns>
         public static QQGroupMember[]? GetMemberList(this QQGroup gp, Client c) => new MemberList(gp.id).Send(c);
+
+
+        /// <summary>
+        /// 获取某个用户的信息(全局设置成功且按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <returns></returns>
+        public static Message[]? PeekMsgs(this ContextualSender s)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                return (Global.G_Client as ConClient).PeekMsgs(s)?.Message;
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+        /// <summary>
+        /// 查看当前轮次首位信息
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string? PeekPlainMsg(this ContextualSender s)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                return (Global.G_Client as ConClient).PeekMsgs(s)?.Message?.MGetPlainString();
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+
+        /// <summary>
+        /// 获取某个用户的当前信息数量(全局设置成功且按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <returns></returns>
+        public static int? MsgCount(this ContextualSender s)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                return (Global.G_Client as ConClient).MsgCount(s);
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+        /// <summary>
+        /// 获取某个用户的信息(全局设置成功且按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="pos">队列位置</param>
+        /// <returns></returns>
+        public static ContextualMessage? GetMsg(this ContextualSender s, int pos = 0)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                return (Global.G_Client as ConClient).GetMsg(s, pos);
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+        /// <summary>
+        /// 获取某个用户的多个信息(全局设置成功且按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="num">取数量,不能小于1</param>
+        /// <returns></returns>
+        public static ContextualMessage[] GetMsgs(this ContextualSender s, int num = 1)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                return (Global.G_Client as ConClient).GetMsgs(s, num);
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+        /// <summary>
+        /// 删除某个用户的多个信息(全局设置成功且按队列顺序)
+        /// </summary>
+        /// <param name="s">对象</param>
+        /// <param name="num">取数量,大于1删除数量,[0全部删除]</param>
+        /// <returns></returns>
+        public static void DelMsgs(this ContextualSender s, int num = 0)
+        {
+            if (Global.G_Client is ConClient)
+            {
+                var k = (Global.G_Client as ConClient).MsgCount(s);
+                if (num != 0)
+                {
+                    (Global.G_Client as ConClient).DelMsgs(s, num);
+                }
+                else
+                {
+                    (Global.G_Client as ConClient).DelMsgs(s, k ?? 0);
+                }
+            }
+            else
+            {
+                Global.Log.Error(ErrorDefine.E2000);
+                throw new(ErrorDefine.E2000);
+            }
+        }
+
+        /// <summary>
+        /// 获取上下文消息的某位置的消息
+        /// </summary>
+        /// <param name="queue">上下文消息段</param>
+        /// <param name="num">个数(从1开始)</param>
+        /// <returns></returns>
+        public static string GetPlainMsgAt(this ContextualMessage[] queue, int num = 1)
+        {
+            if ((num < 1) || (num > (queue.Length + 1)))
+            {
+                Global.Log.Error(ErrorDefine.E1010);
+                throw new(ErrorDefine.E1010);
+            }
+            return queue[num - 1].Message.MGetPlainString();
+        }
     }
 }

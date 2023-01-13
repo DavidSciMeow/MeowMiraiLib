@@ -31,6 +31,7 @@ namespace MeowMiraiLib.Event
         public EventType type;
     }
     #endregion
+
     #region 事件扩展
     /// <summary>
     /// 需要判断的事件扩展
@@ -129,6 +130,7 @@ namespace MeowMiraiLib.Event
         => new Resp_memberJoinRequestEvent(req.eventId, req.fromId, req.groupId, 4, message).OSend(c);
     }
     #endregion
+
     #region Event & EventClasses -- 事件和事件内容
     /// <summary>
     /// 可接收到的逻辑事件类型
@@ -167,6 +169,10 @@ namespace MeowMiraiLib.Event
         /// Bot在群里的权限改变
         /// </summary>
         BotGroupPermissionChangeEvent,
+        /// <summary>
+        /// Bot因群主解散群而退出群
+        /// </summary>
+        BotLeaveEventDisband,
         /// <summary>
         /// Bot被禁言
         /// </summary>

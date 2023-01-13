@@ -64,31 +64,23 @@ namespace MeowMiraiLib
                         case "MiraiCode": l.Add(k.ToObject<MiraiCode>()); break;
                         default:
                             {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine($"[MeowMiraiLib] Err Parse Message Type On: {k["type"]}");
-                                Console.ForegroundColor = default;
+                                Global.Log.Warn($"{ErrorDefine.E0012}{{{k["type"]}}}");
                             }
                             break;
                     }
                 }
                 return l.ToArray();
             }
-            catch (Exception ex)
+            catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[MeowMiraiLib] {DateTime.Now:g} {ex.Message} \n--:in:--\n :{messagestr}");
-                Console.ForegroundColor = default;
-                Console.WriteLine();
+                Global.Log.Warn($"{ErrorDefine.E0013}{{{messagestr}}}");
                 return null;
             }
         }
         private async void Ws_MessageReceived(object? s, MessageReceivedEventArgs e)
         {
             var jo = JObject.Parse(e.Message);
-            if (debug)
-            {
-                Console.WriteLine(jo);
-            }
+            Global.Log.Debug(jo.ToString());//log
             if (!string.IsNullOrWhiteSpace(jo["syncId"].ToString().Trim()))
             {
                 if (jo["syncId"].ToObject<long>() != -1)
@@ -894,10 +886,7 @@ namespace MeowMiraiLib
                 }
                 catch (Exception ex)
                 {
-                    if (debug)
-                    {
-                        Console.WriteLine($"{DateTime.Now} :: {ex.Message}");
-                    }
+                    Global.Log.Debug($"{DateTime.Now} :: {ex.Message}");//log
                 }
             }
             else
