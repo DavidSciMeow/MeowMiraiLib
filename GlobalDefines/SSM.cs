@@ -9,10 +9,13 @@ using MeowMiraiLib.GenericModel;
  * 本文件是发送信息的标准定义文件,
  * 文件内容与 https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md 和 https://github.com/project-mirai/mirai-api-http/blob/master/docs/adapter/WebsocketAdapter.md 一一对应
  * 发送定义为 SSM (Socket Sendable Message) 类,
+ * 版本 8.1.0 更改了标准发送的Client类为可选, 如果您默认不传入则使用全局端进行发送, 方便编写程序.
  * --------------------------
  * this file is by define message send function/method
  * this file is one to one match to website https://github.com/project-mirai/mirai-api-http/blob/master/docs/api/API.md and https://github.com/project-mirai/mirai-api-http/blob/master/docs/adapter/WebsocketAdapter.md
  * Sender function/method defines class is SSM (Socket Sendable Message) class.
+ * version 8.1.0+ alters the Basic Code in Func:SendAsync Client now is [Optional],
+ * if you leave blank, the program will using the Global-Client to deliver the Message. using this trick for Easy Edit Program.
  */
 
 namespace MeowMiraiLib.Msg
@@ -30,7 +33,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public QQProfile Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQProfile Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 获取资料
         /// </summary>
@@ -38,7 +41,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public async Task<QQProfile> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        public async Task<QQProfile> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10)
         {
             var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
             if (!a)
@@ -63,7 +66,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public MessageId Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public MessageId Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 发送信息
         /// </summary>
@@ -71,7 +74,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public async Task<MessageId> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        public async Task<MessageId> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10)
         {
             var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
             if (!a)
@@ -96,7 +99,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public int Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public int Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 发送
         /// </summary>
@@ -104,7 +107,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public async Task<int> SendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        public async Task<int> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10)
         {
             var (a, b) = await base.OSendAsync(c, syncid, TimeOut);
             if (!a)
@@ -173,7 +176,7 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public (bool isTimedOut, JObject? Return) OSend(Client c, int? syncid = null, int TimeOut = 10)
+        public (bool isTimedOut, JObject? Return) OSend(Client? c = null, int? syncid = null, int TimeOut = 10)
             => OSendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 异步发送信息
@@ -182,11 +185,28 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        public async Task<(bool isTimedOut, JObject? Return)> OSendAsync(Client c, int? syncid = null, int TimeOut = 10)
+        public async Task<(bool isTimedOut, JObject? Return)> OSendAsync(Client? c = null, int? syncid = null, int TimeOut = 10)
         {
-            session = c.session;
-            var ms = PackMsg(syncid);
-            return await c.SendAndWaitResponse(ms, syncId, TimeOut);
+            if (c is null)
+            {
+                if (Global.G_Client is null)
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+                else
+                {
+                    session = Global.G_Client.session;
+                    var ms = PackMsg(syncid);
+                    return await Global.G_Client.SendAndWaitResponse(ms, syncId, TimeOut);
+                }
+            }
+            else
+            {
+                session = c.session;
+                var ms = PackMsg(syncid);
+                return await c.SendAndWaitResponse(ms, syncId, TimeOut);
+            }
         }
         /// <summary>
         /// 逻辑模式获取消息
@@ -196,20 +216,8 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        protected T Send<T>(Client c, int? syncid = null, int TimeOut = 10)
-        {
-            session = c.session;
-            var ms = PackMsg(syncid);
-            var (a, b) = c.SendAndWaitResponse(ms, syncId, TimeOut).GetAwaiter().GetResult();
-            if (!a)
-            {
-                return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
-            }
-            else
-            {
-                return default;
-            }
-        }
+        protected T Send<T>(Client? c = null, int? syncid = null, int TimeOut = 10) 
+            => SendAsync<T>(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <summary>
         /// 异步逻辑模式发送信息
         /// </summary>
@@ -218,18 +226,43 @@ namespace MeowMiraiLib.Msg
         /// <param name="syncid">同步的id(默认自动生成)</param>
         /// <param name="TimeOut">超时取消,默认10s(秒)</param>
         /// <returns></returns>
-        protected async Task<T> SendAsync<T>(Client c, int? syncid = null, int TimeOut = 10)
+        protected async Task<T> SendAsync<T>(Client? c = null, int? syncid = null, int TimeOut = 10)
         {
-            session = c.session;
-            var ms = PackMsg(syncid);
-            var (a, b) = await c.SendAndWaitResponse(ms, syncId, TimeOut);
-            if (!a)
+            if (c is null)
             {
-                return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
+                if (Global.G_Client is null)
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+                else
+                {
+                    session = Global.G_Client.session;
+                    var ms = PackMsg(syncid);
+                    var (a, b) = await Global.G_Client.SendAndWaitResponse(ms, syncId, TimeOut);
+                    if (!a)
+                    {
+                        return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
+                    }
+                    else
+                    {
+                        return default;
+                    }
+                }
             }
             else
             {
-                return default;
+                session = c.session;
+                var ms = PackMsg(syncid);
+                var (a, b) = await c.SendAndWaitResponse(ms, syncId, TimeOut);
+                if (!a)
+                {
+                    return JsonConvert.DeserializeObject<T>(b["data"]["data"].ToString());
+                }
+                else
+                {
+                    return default;
+                }
             }
         }
     }
@@ -344,9 +377,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQFriend[] Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQFriend[] Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQFriend[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQFriend[]>(c, syncid, TimeOut);
+        public async Task<QQFriend[]?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQFriend[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取群列表
@@ -365,9 +398,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQGroup[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQGroup[]? Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQGroup[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroup[]>(c, syncid, TimeOut);
+        public async Task<QQGroup[]?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroup[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取群员列表
@@ -388,9 +421,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQGroupMember[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQGroupMember[]? Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQGroupMember[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember[]>(c, syncid, TimeOut);
+        public async Task<QQGroupMember[]?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember[]>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 获取bot资料
@@ -1018,9 +1051,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQGroupMember? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQGroupMember? Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQGroupMember?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember>(c, syncid, TimeOut);
+        public async Task<QQGroupMember?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQGroupMember>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 修改群员设置
@@ -1109,9 +1142,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQAno[]? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQAno[]? Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQAno[]?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno[]>(c, syncid, TimeOut);
+        public async Task<QQAno[]?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno[]>(c, syncid, TimeOut);
 
     }
     /// <summary>
@@ -1153,9 +1186,9 @@ namespace MeowMiraiLib.Msg
             };
         }
         /// <inheritdoc/>
-        public QQAno? Send(Client c, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
+        public QQAno? Send(Client? c = null, int? syncid = null, int TimeOut = 10) => SendAsync(c, syncid, TimeOut).GetAwaiter().GetResult();
         /// <inheritdoc/>
-        public async Task<QQAno?> SendAsync(Client c, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno>(c, syncid, TimeOut);
+        public async Task<QQAno?> SendAsync(Client? c = null, int? syncid = null, int TimeOut = 10) => await base.SendAsync<QQAno>(c, syncid, TimeOut);
     }
     /// <summary>
     /// 删除群公告

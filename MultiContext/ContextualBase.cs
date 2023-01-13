@@ -1,9 +1,15 @@
 ﻿using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+
+/*
+ * 本类是上下文交互端的基本定义类型文件,
+ * 此功能为8.1.0新增,可以实现上下文交互.
+ * ------------------------------
+ * this file is a ContextualClient Define Files
+ * this Function is update from version 8.1.0, can do a interact Action.
+ */
+
 
 namespace MeowMiraiLib.MultiContext
 {
@@ -21,8 +27,6 @@ namespace MeowMiraiLib.MultiContext
         /// 生成一个上下文类型的端
         /// </summary>
         /// <param name="url">地址</param>
-        /// <param name="debug">全调试输出</param>
-        /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
         public ConClient(string url, int reconnect = -1) 
             : base(url, reconnect)
@@ -37,8 +41,6 @@ namespace MeowMiraiLib.MultiContext
         /// <param name="verifyKey">验证</param>
         /// <param name="qq">登陆的机器人qq</param>
         /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
-        /// <param name="debug">全调试输出</param>
-        /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
         public ConClient(string ip, int port, string verifyKey, long qq, string type = "all", int reconnect = -1) 
             : base(ip, port, verifyKey, qq, type, reconnect)
@@ -52,8 +54,6 @@ namespace MeowMiraiLib.MultiContext
         /// <param name="port">端口</param>
         /// <param name="qq">登陆的机器人qq</param>
         /// <param name="type">登陆类型,建议默认all,否则无法同时解析推送事件和消息,仅限高级用户</param>
-        /// <param name="debug">全调试输出</param>
-        /// <param name="eventdebug">事件调试输出</param>
         /// <param name="reconnect">0为不进行重连,-1为一直尝试重连,n(n>0)为尝试n次</param>
         public ConClient(string ip, int port, long qq, string type = "all", int reconnect = -1) 
             : base(ip, port, qq, type, reconnect)

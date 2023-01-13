@@ -13,11 +13,6 @@
  * for more of message and classes standard or Mirai Code, Visit website: https://github.com/mamoe/mirai/blob/dev/docs/Messages.md
  */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-
 namespace MeowMiraiLib.Msg.Type
 {
     /// <summary>

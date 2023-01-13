@@ -1,5 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+
+/*
+ * 8.1.0 本类为新加的操作类, 
+ * 是关于上下文依赖的注入帮助类, 使用本类可以进行上下文交互的编写
+ * -------------------------------------------
+ * version 8.1.0+ Files
+ * it's a helper class help SE to injection the Action<T> to Contextual Files, for Easy Edit.
+ */
 
 namespace MeowMiraiLib.MultiContext
 {
@@ -8,18 +15,33 @@ namespace MeowMiraiLib.MultiContext
     /// </summary>
     public class CMsgHelper
     {
-        private ConClient Client;
+        private readonly ConClient Client;
         private int MessagePointer = 1;
-        private Action<ContextualSender, ContextualMessage[]>[] ActionList;
+        private readonly Action<ContextualSender, ContextualMessage[]>[] ActionList;
 
         /// <summary>
         /// 上下文帮助类
         /// </summary>
         /// <param name="client">端</param>
         /// <param name="actionList">行为列表</param>
-        public CMsgHelper(ConClient client,params Action<ContextualSender, ContextualMessage[]>[] actionList)
+        public CMsgHelper(ConClient? client = null,params Action<ContextualSender, ContextualMessage[]>[] actionList)
         {
-            Client = client;
+            if(client is null)
+            {
+                if(Global.G_Client is ConClient)
+                {
+                    Client = Global.G_Client as ConClient;
+                }
+                else
+                {
+                    Global.Log.Error(ErrorDefine.E2000);
+                    throw new(ErrorDefine.E2000);
+                }
+            }
+            else
+            {
+                Client = client;
+            }
             ActionList = actionList;
         }
 

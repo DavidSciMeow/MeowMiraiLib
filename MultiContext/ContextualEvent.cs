@@ -1,8 +1,7 @@
 ﻿/* 
- * 版本 8.1.0+ 上下文接收端主要事件文件, 
- * 包括接受信息,发送信息等异步触发器(事件)
+ * 版本 8.1.0+ 上下文接收端主要事件文件.
  * -------------------------------------------
- * 
+ * this is a file tells the Conclient the Message have recieves.
  */
 
 namespace MeowMiraiLib.MultiContext
