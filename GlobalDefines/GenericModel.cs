@@ -309,5 +309,9 @@ namespace MeowMiraiLib.GenericModel
         /// 匿名聊天是否开启
         /// </summary>
         public bool anonymousChat;
+        /// <summary>
+        /// 是否开启全员禁言
+        /// </summary>
+        public bool muteAll;
     }
 }

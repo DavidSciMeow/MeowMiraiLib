@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>annotations</Nullable>
-    <Version>8.1.0</Version>
+    <Version>8.1.1</Version>
     <Authors>DavidSciMeow</Authors>
     <Company>Electronicute</Company>
     <Product>MeowMiraiLib</Product>
@@ -23,6 +23,9 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <SignAssembly>False</SignAssembly>
+    <PackageReleaseNotes>同步Mirai更新 [2.8.0] - 2023-2-10</PackageReleaseNotes>
+    <PackageTags>MiraiQQBot, Mirai, QQBot, Tencent, SDK</PackageTags>
+    <PackageId>Electronicute.MeowMiraiLib</PackageId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

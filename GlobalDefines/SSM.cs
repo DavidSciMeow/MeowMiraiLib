@@ -359,6 +359,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 获取账号信息
     /// <summary>
     /// 获取好友列表
@@ -501,6 +502,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 消息发送与撤回
     /// <summary>
     /// 发送好友信息
@@ -597,6 +599,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 文件操作
     /// <summary>
     /// 查看文件列表
@@ -777,6 +780,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 账号管理
     /// <summary>
     /// 删除好友
@@ -798,6 +802,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 群管理
     /// <summary>
     /// 禁言群成员
@@ -853,8 +858,9 @@ namespace MeowMiraiLib.Msg
         /// </summary>
         /// <param name="target">指定群的群号</param>
         /// <param name="memberId">指定群员QQ号</param>
+        /// <param name="block">移除后拉黑，默认为 false</param>
         /// <param name="msg">信息</param>
-        public Kick(long target, long memberId, long msg)
+        public Kick(long target, long memberId, bool block = false, string msg = "您已被移出群聊")
         {
             command = "kick";
             content = new
@@ -862,6 +868,7 @@ namespace MeowMiraiLib.Msg
                 sessionKey = session,
                 target,
                 memberId,
+                block,
                 msg
             };
         }
@@ -1212,6 +1219,7 @@ namespace MeowMiraiLib.Msg
         }
     }
     #endregion
+
     #region 事件处理
     /// <summary>
     /// 处理加好友请求

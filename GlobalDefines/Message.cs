@@ -434,6 +434,31 @@ namespace MeowMiraiLib.Msg.Type
         public class Node
         {
             /// <summary>
+            /// 引用缓存中其他对话上下文的消息作为节点
+            /// </summary>
+            public class messageReferenceNode
+            {
+                /// <summary>
+                /// 引用的 messageId
+                /// </summary>
+                public long messageId;
+                /// <summary>
+                /// 引用的上下文目标，群号、好友账号
+                /// </summary>
+                public long target;
+                /// <summary>
+                /// 引用缓存中其他对话上下文的消息作为节点
+                /// </summary>
+                /// <param name="messageId">引用的 messageId</param>
+                /// <param name="target">引用的上下文目标，群号、好友账号</param>
+                public messageReferenceNode(long messageId, long target)
+                {
+                    this.messageId = messageId;
+                    this.target = target;
+                }
+            }
+
+            /// <summary>
             /// 发送人QQ号
             /// </summary>
             public long senderId;
@@ -450,9 +475,19 @@ namespace MeowMiraiLib.Msg.Type
             /// </summary>
             public Message[] messageChain;
             /// <summary>
+            /// 转发的消息数组
+            /// </summary>
+            public long messageId;
+            /// <summary>
+            /// 引用缓存中其他对话上下文的消息作为节点
+            /// </summary>
+            public messageReferenceNode messageRef;
+            /// <summary>
             /// 源ID
             /// </summary>
             public long sourceId;
+            
+
             /// <summary>
             /// 转发消息节点
             /// </summary>
@@ -467,6 +502,38 @@ namespace MeowMiraiLib.Msg.Type
                 this.time = time;
                 this.senderName = senderName;
                 this.messageChain = messageChain;
+                this.sourceId = sourceId;
+            }
+            /// <summary>
+            /// 转发消息节点(只使用消息messageId)
+            /// </summary>
+            /// <param name="senderId">发送人QQ号</param>
+            /// <param name="time">时间</param>
+            /// <param name="senderName">显示名称</param>
+            /// <param name="messageId">消息messageId</param>
+            /// <param name="sourceId">源ID</param>
+            public Node(long senderId, long time, string senderName, long messageId, long sourceId)
+            {
+                this.senderId = senderId;
+                this.time = time;
+                this.senderName = senderName;
+                this.messageId = messageId;
+                this.sourceId = sourceId;
+            }
+            /// <summary>
+            /// 转发消息节点(使用其他对话上下文的消息作为节点)
+            /// </summary>
+            /// <param name="senderId">发送人QQ号</param>
+            /// <param name="time">时间</param>
+            /// <param name="senderName">显示名称</param>
+            /// <param name="messageRef">引用缓存中其他对话上下文的消息作为节点</param>
+            /// <param name="sourceId">源ID</param>
+            public Node(long senderId, long time, string senderName, messageReferenceNode messageRef, long sourceId)
+            {
+                this.senderId = senderId;
+                this.time = time;
+                this.senderName = senderName;
+                this.messageRef = messageRef;
                 this.sourceId = sourceId;
             }
         }
