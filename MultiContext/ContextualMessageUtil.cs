@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 /*
  * 8.1.0 本类为新加的操作类, 
@@ -17,14 +18,14 @@ namespace MeowMiraiLib.MultiContext
     {
         private readonly ConClient Client;
         private int MessagePointer = 1;
-        private readonly Action<ContextualSender, ContextualMessage[]>[] ActionList;
+        private readonly Func<ContextualSender, ContextualMessage[], bool>[] ActionList;
 
         /// <summary>
         /// 上下文帮助类
         /// </summary>
         /// <param name="client">端</param>
         /// <param name="actionList">行为列表</param>
-        public CMsgHelper(ConClient? client = null,params Action<ContextualSender, ContextualMessage[]>[] actionList)
+        public CMsgHelper(ConClient? client = null,params Func<ContextualSender, ContextualMessage[], bool>[] actionList)
         {
             if(client is null)
             {
@@ -54,13 +55,13 @@ namespace MeowMiraiLib.MultiContext
         /// 上下文依赖的注入组件
         /// </summary>
         /// <param name="sender">发送者</param>
-        public void Invoke(ContextualSender sender)
+        public bool Invoke(ContextualSender sender)
         {
+            bool d = false;
             if (Client.MsgCount(sender) == MessagePointer) //提信息
             {
-                ActionList[MessagePointer - 1]?.Invoke(sender, sender.GetMsgs(MessagePointer));
+                d = ActionList[MessagePointer - 1]?.Invoke(sender, sender.GetMsgs(MessagePointer)) ?? false;
             }
-
             if (ActionList.Length > MessagePointer)
             {
                 MessagePointer++;
@@ -69,6 +70,7 @@ namespace MeowMiraiLib.MultiContext
             {
                 Fresh();
             }
+            return d;
         }
     }
 }
