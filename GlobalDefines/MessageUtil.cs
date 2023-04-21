@@ -1,5 +1,6 @@
 ﻿using MeowMiraiLib.GenericModel;
 using MeowMiraiLib.Msg;
+using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
 using MeowMiraiLib.MultiContext;
 using System.Collections.Generic;
@@ -75,6 +76,22 @@ namespace MeowMiraiLib
         }
 
         /*Sender Util*/
+        public static Message[] QuoteThis(this Message[] array, Message[] send, long senderid, long groupid, long targetid, Client? c = null)
+        {
+            List<Message> ret = new();
+            if (array[0] is Source q)
+            {
+                ret.Add(new Quote(q.id, groupid, senderid, targetid, array[1..]));
+                ret.AddRange(send);
+            }
+            else
+            {
+
+            }
+            return ret.ToArray();
+        }
+
+
         /// <summary>
         /// 将信息发送给好友
         /// </summary>
