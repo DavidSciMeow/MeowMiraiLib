@@ -35,19 +35,19 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 短成员QQ号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 短成员昵称
         /// </summary>
-        public string memberName;
+        public string memberName { get; }
         /// <summary>
         /// 短成员权限
         /// </summary>
-        public string permission;
+        public string permission { get; }
         /// <summary>
         /// 引用短成员的群类
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 生成一个短成员
         /// </summary>
@@ -71,15 +71,15 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// QQ号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 昵称
         /// </summary>
-        public string nickname;
+        public string nickname { get; }
         /// <summary>
         /// 标记
         /// </summary>
-        public string remark;
+        public string remark { get; }
         /// <summary>
         /// 实例化一个好友
         /// </summary>
@@ -109,15 +109,15 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 群号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 群名
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 群中权限
         /// </summary>
-        public string permission;
+        public string permission { get; }
         /// <summary>
         /// 实例化一个群
         /// </summary>
@@ -147,35 +147,35 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 群员QQ号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 群员名
         /// </summary>
-        public string memberName;
+        public string memberName { get; }
         /// <summary>
         /// 群员权限
         /// </summary>
-        public string permission;
+        public string permission { get; }
         /// <summary>
         /// 群头衔
         /// </summary>
-        public string specialTitle;
+        public string specialTitle { get; }
         /// <summary>
         /// 加入时间戳
         /// </summary>
-        public long joinTimestamp;
+        public long joinTimestamp { get; }
         /// <summary>
         /// 最后一次发言时间戳
         /// </summary>
-        public long lastSpeakTimestamp;
+        public long lastSpeakTimestamp { get; }
         /// <summary>
         /// 禁言剩余时间
         /// </summary>
-        public long muteTimeRemaining;
+        public long muteTimeRemaining { get; }
         /// <summary>
         /// QQ群(列表)
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
 
         /// <summary>
         /// 生成一个群成员(列表)
@@ -217,27 +217,27 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 昵称
         /// </summary>
-        public string nickname;
+        public string nickname { get; }
         /// <summary>
         /// 电子邮件
         /// </summary>
-        public string email;
+        public string email { get; }
         /// <summary>
         /// 年龄
         /// </summary>
-        public int age;
+        public int age { get; }
         /// <summary>
         /// QQ等级
         /// </summary>
-        public long level;
+        public long level { get; }
         /// <summary>
         /// 签名
         /// </summary>
-        public string sign;
+        public string sign { get; }
         /// <summary>
         /// 性别(UNKNOWN, MALE, FEMALE)
         /// </summary>
-        public string sex;
+        public string sex { get; }
     }
     /// <summary>
     /// 群公告返回类
@@ -247,31 +247,31 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 群公告内容
         /// </summary>
-        public string content;
+        public string content { get; }
         /// <summary>
         /// 发送者账号
         /// </summary>
-        public long senderId;
+        public long senderId { get; }
         /// <summary>
         /// 唯一识别码
         /// </summary>
-        public string fid;
+        public string fid { get; }
         /// <summary>
         /// 是否全部确认
         /// </summary>
-        public bool allConfirmed;
+        public bool allConfirmed { get; }
         /// <summary>
         /// 已经确认的人数
         /// </summary>
-        public long confirmedMembersCount;
+        public long confirmedMembersCount { get; }
         /// <summary>
         /// 发布时间
         /// </summary>
-        public long publicationTime;
+        public long publicationTime { get; }
 
         /// <summary>
         /// 删除这个公告
@@ -288,30 +288,30 @@ namespace MeowMiraiLib.GenericModel
         /// <summary>
         /// 群名
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 群置顶公告
         /// </summary>
-        public string announcement;
+        public string announcement { get; }
         /// <summary>
         /// 坦白说开启状态
         /// </summary>
-        public bool confessTalk;
+        public bool confessTalk { get; }
         /// <summary>
         /// 是否允许群成员邀请
         /// </summary>
-        public bool allowMemberInvite;
+        public bool allowMemberInvite { get; }
         /// <summary>
         /// 是否自动同意入群
         /// </summary>
-        public bool autoApprove;
+        public bool autoApprove { get; }
         /// <summary>
         /// 匿名聊天是否开启
         /// </summary>
-        public bool anonymousChat;
+        public bool anonymousChat { get; }
         /// <summary>
         /// 是否开启全员禁言
         /// </summary>
-        public bool muteAll;
+        public bool muteAll { get; }
     }
 }

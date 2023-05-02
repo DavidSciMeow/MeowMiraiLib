@@ -28,7 +28,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 事件类型
         /// </summary>
-        public EventType type;
+        public EventType type { get; protected set; }
     }
     #endregion
 
@@ -294,19 +294,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 命令名称
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 发送命令的好友, 从控制台发送为 null
         /// </summary>
-        public object friend;
+        public object friend { get; }
         /// <summary>
         /// 发送命令的群成员, 从控制台发送为 null
         /// </summary>
-        public object memeber;
+        public object memeber { get; }
         /// <summary>
         /// 指令的参数, 以消息类型传递
         /// </summary>
-        public List<(string type, string text)> args;
+        public List<(string type, string text)> args { get; }
         /// <summary>
         /// 命令执行反馈
         /// </summary>
@@ -331,11 +331,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 客户端标识号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 客户端类型
         /// </summary>
-        public string platform;
+        public string platform { get; }
         /// <summary>
         /// 其他客户端下线
         /// </summary>
@@ -356,15 +356,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 客户端标识号
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 客户端类型
         /// </summary>
-        public string platform;
+        public string platform { get; }
         /// <summary>
         /// 详细设备类型
         /// </summary>
-        public long? kind;
+        public long? kind { get; }
         /// <summary>
         /// 其他客户端上线
         /// </summary>
@@ -387,27 +387,27 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 事件标识，响应该事件时的标识
         /// </summary>
-        public long eventId;
+        public long eventId { get; }
         /// <summary>
         /// 邀请人（好友）的QQ号
         /// </summary>
-        public long fromId;
+        public long fromId { get; }
         /// <summary>
         /// 被邀请进入群的群号
         /// </summary>
-        public long groupId;
+        public long groupId { get; }
         /// <summary>
         /// 被邀请进入群的群名称
         /// </summary>
-        public string groupName;
+        public string groupName { get; }
         /// <summary>
         /// 邀请人（好友）的昵称
         /// </summary>
-        public string nick;
+        public string nick { get; }
         /// <summary>
         /// 邀请消息
         /// </summary>
-        public string message;
+        public string message { get; }
         /// <summary>
         /// bot被邀请入群申请
         /// </summary>
@@ -438,31 +438,31 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 事件标识，响应该事件时的标识
         /// </summary>
-        public long eventId;
+        public long eventId { get; }
         /// <summary>
         /// 申请人QQ号
         /// </summary>
-        public long fromId;
+        public long fromId { get; }
         /// <summary>
         /// 申请人申请入群的群号
         /// </summary>
-        public long groupId;
+        public long groupId { get; }
         /// <summary>
         /// 申请人申请入群的群名称
         /// </summary>
-        public string groupName;
+        public string groupName { get; }
         /// <summary>
         /// 申请人的昵称或群名片
         /// </summary>
-        public string nick;
+        public string nick { get; }
         /// <summary>
         /// 申请消息
         /// </summary>
-        public string message;
+        public string message { get; }
         /// <summary>
         /// 邀请人 可能为空
         /// </summary>
-        public long? InvitorId;
+        public long? InvitorId { get; }
         /// <summary>
         /// 用户入群申请
         /// </summary>
@@ -477,7 +477,7 @@ namespace MeowMiraiLib.Event
             long eventId, long fromId, long groupId,
             string groupName, string nick, string message, long? invitorId)
         {
-            this.type = EventType.NewFriendRequestEvent;
+            type = EventType.NewFriendRequestEvent;
             this.eventId = eventId;
             this.fromId = fromId;
             this.groupId = groupId;
@@ -495,23 +495,23 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 事件标识，响应该事件时的标识
         /// </summary>
-        public long eventId;
+        public long eventId { get; }
         /// <summary>
         /// 申请人QQ号
         /// </summary>
-        public long fromId;
+        public long fromId { get; }
         /// <summary>
         /// 申请人如果通过某个群添加好友，该项为该群群号；否则为0
         /// </summary>
-        public long groupId;
+        public long groupId { get; }
         /// <summary>
         /// 申请人的昵称或群名片
         /// </summary>
-        public string nick;
+        public string nick { get; }
         /// <summary>
         /// 申请消息
         /// </summary>
-        public string message;
+        public string message { get; }
         /// <summary>
         /// 添加好友申请
         /// </summary>
@@ -540,15 +540,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被取消禁言的群员的信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 称号变化行为：achieve获得称号，lose失去称号
         /// </summary>
-        public string action;
+        public string action { get; }
         /// <summary>
         /// 称号名称
         /// </summary>
-        public string honor;
+        public string honor { get; }
         /// <summary>
         /// 群员称号改变
         /// </summary>
@@ -571,11 +571,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被取消禁言的群员的信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 操作者的信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 群成员被取消禁言事件(不是Bot)
         /// </summary>
@@ -596,15 +596,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 禁言时长，单位为秒
         /// </summary>
-        public long durationSecond;
+        public long durationSecond { get; }
         /// <summary>
         /// 被禁言的群员的信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 操作者的信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 群成员被禁言事件(不是Bot)
         /// </summary>
@@ -627,15 +627,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原权限
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// 现权限
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 权限改动的群员的信息
         /// </summary>
-        public QQGroupMemberShort member;
+        public QQGroupMemberShort member { get; }
         /// <summary>
         /// 成员权限改变(不是Bot)
         /// </summary>
@@ -658,15 +658,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原头衔
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// 现头衔
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 头衔改动的群员的信息
         /// </summary>
-        public QQGroupMemberShort member;
+        public QQGroupMemberShort member { get; }
         /// <summary>
         /// 群头衔改动(仅群主操作)
         /// </summary>
@@ -689,15 +689,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原本名片
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// 现在名片
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 名片改动的群员的信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 群名片改动
         /// </summary>
@@ -720,7 +720,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 退群群员的信息
         /// </summary>
-        public QQGroupMemberShort member;
+        public QQGroupMemberShort member { get; }
         /// <summary>
         /// 成员主动离开(不是Bot)
         /// </summary>
@@ -739,11 +739,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 被踢者的信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 成员被踢出(不是Bot)
         /// </summary>
@@ -764,11 +764,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 新人信息
         /// </summary>
-        public QQGroupMember member;
+        public QQGroupMember member { get; }
         /// <summary>
         /// 如果被要求入群的话，则为邀请人的 Member 对象
         /// </summary>
-        public object invitor;
+        public object invitor { get; }
         /// <summary>
         /// 新人入群
         /// </summary>
@@ -789,19 +789,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原本是否允许群员邀请好友加群
         /// </summary>
-        public bool origin;
+        public bool origin { get; }
         /// <summary>
         /// 现在是否允许群员邀请好友加群
         /// </summary>
-        public bool current;
+        public bool current { get; }
         /// <summary>
         /// 允许群员邀请好友加群状态改变的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 允许群员邀请好友加群
         /// </summary>
@@ -826,19 +826,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原本坦白说是否开启
         /// </summary>
-        public bool origin;
+        public bool origin { get; }
         /// <summary>
         /// 现在坦白说是否开启
         /// </summary>
-        public bool current;
+        public bool current { get; }
         /// <summary>
         /// 坦白说状态改变的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 是否Bot进行该操作
         /// </summary>
-        public bool isByBot;
+        public bool isByBot { get; }
         /// <summary>
         /// 坦白说
         /// </summary>
@@ -863,19 +863,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原本匿名聊天是否开启
         /// </summary>
-        public bool origin;
+        public bool origin { get; }
         /// <summary>
         /// 现在匿名聊天是否开启
         /// </summary>
-        public bool current;
+        public bool current { get; }
         /// <summary>
         /// 匿名聊天状态改变的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 匿名聊天
         /// </summary>
@@ -900,19 +900,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原本是否处于全员禁言
         /// </summary>
-        public bool origin;
+        public bool origin { get; }
         /// <summary>
         /// 现在是否处于全员禁言
         /// </summary>
-        public bool current;
+        public bool current { get; }
         /// <summary>
         /// 全员禁言的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 全员禁言
         /// </summary>
@@ -939,19 +939,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原公告
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// 新公告
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 公告改变的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 某群入群公告改变
         /// </summary>
@@ -978,19 +978,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原群名
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// 新群名
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 群名改名的群信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 操作的管理员或群主信息，当null时为Bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 某个群名改变
         /// </summary>
@@ -1017,27 +1017,27 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 动作发出者的QQ号
         /// </summary>
-        public long fromId;
+        public long fromId { get; }
         /// <summary>
         /// 动作目标的QQ号
         /// </summary>
-        public long target;
+        public long target { get; }
         /// <summary>
         /// 来源的类型，"Friend"或"Group"
         /// </summary>
-        public string fromKind;
+        public string fromKind { get; }
         /// <summary>
         /// 来源的QQ号（好友）或群号
         /// </summary>
-        public long fromKindId;
+        public long fromKindId { get; }
         /// <summary>
         /// 动作类型
         /// </summary>
-        public string action;
+        public string action { get; }
         /// <summary>
         /// 自定义动作内容
         /// </summary>
-        public string suffix;
+        public string suffix { get; }
         /// <summary>
         /// 戳一戳
         /// </summary>
@@ -1077,19 +1077,19 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原消息发送者的QQ号
         /// </summary>
-        public long authodId;
+        public long authodId { get; }
         /// <summary>
         /// 原消息messageId
         /// </summary>
-        public long messageId;
+        public long messageId { get; }
         /// <summary>
         /// 原消息发送时间
         /// </summary>
-        public long time;
+        public long time { get; }
         /// <summary>
         /// 好友QQ号或BotQQ号
         /// </summary>
-        public long @operator;
+        public long @operator { get; }
         /// <summary>
         /// 好友消息撤回
         /// </summary>
@@ -1114,23 +1114,23 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 原消息发送者的QQ号
         /// </summary>
-        public long authorId;
+        public long authorId { get; }
         /// <summary>
         /// 原消息messageId
         /// </summary>
-        public long messageId;
+        public long messageId { get; }
         /// <summary>
         /// 原消息发送时间
         /// </summary>
-        public long time;
+        public long time { get; }
         /// <summary>
         /// 消息撤回所在的群
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 撤回消息的操作人，当null时为bot操作
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// 群消息撤回
         /// </summary>
@@ -1159,11 +1159,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot被踢出的群的信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// Bot被踢后获取操作人的 Member 对象
         /// </summary>
-        public object op;
+        public object op { get; }
         /// <summary>
         /// Bot被踢出一个群
         /// </summary>
@@ -1184,7 +1184,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot退出的群的信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// Bot主动退出一个群
         /// </summary>
@@ -1203,11 +1203,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot所在被解散的群的信息 
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// Bot离开群后获取操作人的 Member 对象 
         /// </summary>
-        public object invitor;
+        public object invitor { get; }
 
         /// <summary>
         /// Bot因群主解散群而退出群
@@ -1228,11 +1228,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot新加入群的信息
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// 如果被要求入群的话，则为邀请人的 Member 对象
         /// </summary>
-        public object invitor;
+        public object invitor { get; }
         /// <summary>
         /// Bot自身入群事件
         /// </summary>
@@ -1253,7 +1253,7 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 操作的管理员或群主信息
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// Bot被解除禁言
         /// </summary>
@@ -1272,11 +1272,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 禁言时长，单位为秒
         /// </summary>
-        public long durationSecond;
+        public long durationSecond { get; }
         /// <summary>
         /// 操作的管理员或群主信息
         /// </summary>
-        public QQGroupMember @operator;
+        public QQGroupMember @operator { get; }
         /// <summary>
         /// Bot被禁言
         /// </summary>
@@ -1296,15 +1296,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// Bot的原权限，OWNER、ADMINISTRATOR或MEMBER
         /// </summary>
-        public string origin;
+        public string origin { get; }
         /// <summary>
         /// Bot的新权限，OWNER、ADMINISTRATOR或MEMBER
         /// </summary>
-        public string current;
+        public string current { get; }
         /// <summary>
         /// 
         /// </summary>
-        public QQGroup group;
+        public QQGroup group { get; }
         /// <summary>
         /// Bot在群里的权限改变
         /// </summary>
@@ -1327,15 +1327,15 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 好友详细信息
         /// </summary>
-        public QQFriend friend;
+        public QQFriend friend { get; }
         /// <summary>
         /// 从昵称...
         /// </summary>
-        public string from;
+        public string from { get; }
         /// <summary>
         /// 改变为...
         /// </summary>
-        public string to;
+        public string to { get; }
         /// <summary>
         /// 生成一个好友昵称改变事件
         /// </summary>
@@ -1358,11 +1358,11 @@ namespace MeowMiraiLib.Event
         /// <summary>
         /// 好友的详细信息
         /// </summary>
-        public QQFriend friend;
+        public QQFriend friend { get; }
         /// <summary>
         /// 输入状态
         /// </summary>
-        public bool inputting;
+        public bool inputting { get; }
         /// <summary>
         /// 生成一个好友输入状态改变事件类
         /// </summary>
@@ -1375,15 +1375,23 @@ namespace MeowMiraiLib.Event
             this.inputting = inputting;
         }
     }
+
+    /// <summary>
+    /// Bot类事件基类
+    /// </summary>
+    public abstract class BotGeneralEvent : MiraiEvent
+    {
+        /// <summary>
+        /// 当前事件的QQ号主体
+        /// </summary>
+        public long qq { get; protected set; }
+    }
+
     /// <summary>
     /// Bot主动重新登录
     /// </summary>
-    public sealed class BotReloginEvent : MiraiEvent
+    public sealed class BotReloginEvent : BotGeneralEvent
     {
-        /// <summary>
-        /// 重新登录的QQ
-        /// </summary>
-        public long qq;
         /// <summary>
         /// 生成一个主动重新登陆事件类
         /// </summary>
@@ -1397,12 +1405,8 @@ namespace MeowMiraiLib.Event
     /// <summary>
     /// Bot被服务器断开(网络问题)
     /// </summary>
-    public sealed class BotOfflineEventDropped : MiraiEvent
+    public sealed class BotOfflineEventDropped : BotGeneralEvent
     {
-        /// <summary>
-        /// 被断线的QQ
-        /// </summary>
-        public long qq;
         /// <summary>
         /// 生成一个被网络断线事件类
         /// </summary>
@@ -1416,12 +1420,8 @@ namespace MeowMiraiLib.Event
     /// <summary>
     /// Bot被挤下线
     /// </summary>
-    public sealed class BotOfflineEventForce : MiraiEvent
+    public sealed class BotOfflineEventForce : BotGeneralEvent
     {
-        /// <summary>
-        /// 被挤下线的QQ
-        /// </summary>
-        public long qq;
         /// <summary>
         /// 生成一个被挤下线事件类
         /// </summary>
@@ -1435,12 +1435,8 @@ namespace MeowMiraiLib.Event
     /// <summary>
     /// Bot主动离线
     /// </summary>
-    public sealed class BotOfflineEventActive : MiraiEvent
+    public sealed class BotOfflineEventActive : BotGeneralEvent
     {
-        /// <summary>
-        /// 离线的QQ
-        /// </summary>
-        public long qq;
         /// <summary>
         /// 生成一个主动离线事件类
         /// </summary>
@@ -1454,12 +1450,8 @@ namespace MeowMiraiLib.Event
     /// <summary>
     /// Bot登陆成功
     /// </summary>
-    public sealed class BotOnlineEvent : MiraiEvent
+    public sealed class BotOnlineEvent : BotGeneralEvent
     {
-        /// <summary>
-        /// 登录的QQ
-        /// </summary>
-        public long qq;
         /// <summary>
         /// 生成一个登陆成功事件类
         /// </summary>
@@ -1470,8 +1462,5 @@ namespace MeowMiraiLib.Event
             this.qq = qq;
         }
     }
-
-   
-
     #endregion
 }

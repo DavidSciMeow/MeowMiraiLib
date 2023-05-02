@@ -35,13 +35,13 @@ namespace MeowMiraiLib
         /// 撤回这条信息
         /// </summary>
         /// <returns></returns>
-        public bool ReCall() => new Msg.Recall(Id).Send(C) == 0;
+        public readonly bool ReCall() => new Msg.Recall(Id).Send(C) == 0;
         /// <summary>
         /// 延时 x 秒撤回消息
         /// </summary>
         /// <param name="second">秒钟数</param>
         /// <returns></returns>
-        public bool ReCall(int second)
+        public readonly bool ReCall(int second)
         {
             System.Threading.Tasks.Task.Delay(1000 * second).GetAwaiter().GetResult();
             return ReCall();
@@ -50,6 +50,6 @@ namespace MeowMiraiLib
         /// 打印MsgId
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"MsgId:{Id}";
+        public readonly override string ToString() => $"MsgId:{Id}";
     }
 }

@@ -20,6 +20,32 @@ using System.Reflection;
 namespace MeowMiraiLib
 {
     /// <summary>
+    /// 日志输出
+    /// </summary>
+    public enum DebugFlag
+    {
+        /// <summary>
+        /// Debug模式
+        /// </summary>
+        Debug = 4,
+        /// <summary>
+        /// Info模式
+        /// </summary>
+        Info = 3,
+        /// <summary>
+        /// 警告模式
+        /// </summary>
+        Warn = 2,
+        /// <summary>
+        /// 错误模式
+        /// </summary>
+        Error = 1,
+        /// <summary>
+        /// 空日志
+        /// </summary>
+        None = 0,
+    }
+    /// <summary>
     /// 通用设置
     /// </summary>
     public static class Global
@@ -29,11 +55,11 @@ namespace MeowMiraiLib
         /// <br/>
         /// 4:debug [3:info] 2:warn 1:error 
         /// </summary>
-        public static int G_Debug_Flag = 3;
+        public static DebugFlag G_Debug_Flag { get; set; } = DebugFlag.Info;
         /// <summary>
         /// 全局端
         /// </summary>
-        public static Client G_Client = null;
+        public static Client? G_Client { get; set; } = null;
 
         /// <summary>
         /// 日志处理模块
@@ -49,14 +75,15 @@ namespace MeowMiraiLib
             /// <param name="b">背景色</param>
             public static void GlobalLog(string s, int intsenties, ConsoleColor f = default, ConsoleColor b = default)
             {
-                if (G_Debug_Flag > intsenties)
+                if ((int)G_Debug_Flag > intsenties)
                 {
                     Console.ForegroundColor = f;
                     Console.BackgroundColor = b;
-                    Console.WriteLine($"[MML {Assembly.GetExecutingAssembly().GetName().Version}] [{DateTime.Now : yyyy-MM-dd HH:mm:ss}] \n$ {s}");
+                    Console.WriteLine($"[MML {Assembly.GetExecutingAssembly().GetName().Version}] [{DateTime.Now : MM-dd HH:mm:ss}] \n$ {s}");
                     Console.ForegroundColor = default;
                     Console.BackgroundColor = default;
                 }
+
             }
             /// <summary>
             /// Debug 级别
@@ -67,17 +94,17 @@ namespace MeowMiraiLib
             /// Info 级别
             /// </summary>
             /// <param name="s">字符</param>
-            public static void Info(string s) => GlobalLog(s,2, ConsoleColor.Blue);
+            public static void Info(string s) => GlobalLog(s, 2, ConsoleColor.Blue);
             /// <summary>
             /// Warn 级别
             /// </summary>
             /// <param name="s">字符</param>
-            public static void Warn(string s) => GlobalLog(s,1, ConsoleColor.Yellow);
+            public static void Warn(string s) => GlobalLog(s, 1, ConsoleColor.Yellow);
             /// <summary>
             /// Error 级别
             /// </summary>
             /// <param name="s">字符</param>
-            public static void Error(string s) => GlobalLog(s,0, ConsoleColor.Red);
+            public static void Error(string s) => GlobalLog(s, 0, ConsoleColor.Red);
            
         }
         

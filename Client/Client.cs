@@ -126,18 +126,24 @@ namespace MeowMiraiLib
         /// <param name="syncId">同步字段</param>
         /// <param name="TimeOut">超时取消,默认20s(秒)</param>
         /// <returns></returns>
-        public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse
-            (string json, int? syncId = null, int TimeOut = 10)
+        public async Task<(bool isTimedOut,JObject? Return)> SendAndWaitResponse(string json, int? syncId = null, int TimeOut = 10)
         {
             using var cancelTokenSource = new CancellationTokenSource(TimeOut * 1000);
             var ts = Task.Run(async () =>
             {
-                if (ws == null)
+                if (ws is null)
                 {
                     Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Socket Closed -");
                     ws.Close();
-                    Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Trying Reconnect Socket -");
-                    ws.Open();
+                    if(ws.State is not WebSocketState.Open)
+                    {
+                        Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Trying Reconnect Socket -");
+                        ws.Open();
+                        if(ws.State is WebSocketState.Open)
+                        {
+                            Console.WriteLine($"[MeowMiraiLib-SocketWatchdog * Sending with NetFlaws] - Reconnect Complete -");
+                        }
+                    }
                 }
                 ws?.Send(json);
                 while (true)

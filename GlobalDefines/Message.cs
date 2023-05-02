@@ -23,7 +23,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 信息类型
         /// </summary>
-        public string type;
+        public string type { get; protected set; }
     }
     /// <summary>
     /// 源类型(永远为信息链的第一个元素)
@@ -33,11 +33,11 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 消息的识别号，用于引用回复
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 时间戳
         /// </summary>
-        public long time;
+        public long time { get; }
         /// <summary>
         /// 源类型(永远为信息链的第一个元素)
         /// </summary>
@@ -58,23 +58,23 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 被引用回复的原消息的messageId
         /// </summary>
-        public long id;
+        public long id { get; }
         /// <summary>
         /// 被引用回复的原消息所接收的群号，当为好友消息时为0
         /// </summary>
-        public long groupId;
+        public long groupId { get; }
         /// <summary>
         /// 被引用回复的原消息的发送者的QQ号
         /// </summary>
-        public long senderId;
+        public long senderId { get; }
         /// <summary>
         /// 被引用回复的原消息的接收者者的QQ号（或群号）
         /// </summary>
-        public long targetId;
+        public long targetId { get; }
         /// <summary>
         /// 被引用回复的原消息的消息链对象
         /// </summary>
-        public Message[] origin;
+        public Message[] origin { get; }
         /// <summary>
         /// 回复类信息
         /// </summary>
@@ -101,11 +101,11 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 群员QQ号
         /// </summary>
-        public long target;
+        public long target { get; }
         /// <summary>
         /// At时显示的文字，发送消息时无效，自动使用群名片
         /// </summary>
-        public string display;
+        public string display { get; }
         /// <summary>
         /// @类信息
         /// </summary>
@@ -139,11 +139,11 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// QQ表情编号，可选，优先高于name
         /// </summary>
-        public long faceId;
+        public long faceId { get; }
         /// <summary>
         /// QQ表情拼音，可选
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 小图脸
         /// </summary>
@@ -164,7 +164,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 文字
         /// </summary>
-        public string text;
+        public string text { get; }
         /// <summary>
         /// 文字消息
         /// </summary>
@@ -183,19 +183,19 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 图片的imageId，群图片与好友图片格式不同。不为空时将忽略url属性
         /// </summary>
-        public string? imageId = null;
+        public string? imageId { get; } = null;
         /// <summary>
         /// 图片的URL，发送时可作网络图片的链接；接收时为腾讯图片服务器的链接，可用于图片下载
         /// </summary>
-        public string? url = null;
+        public string? url { get; } = null;
         /// <summary>
         /// 图片的路径，发送本地图片，路径相对于 JVM 工作路径（默认是当前路径，可通过 -Duser.dir=...指定），也可传入绝对路径。
         /// </summary>
-        public string? path = null;
+        public string? path { get; } = null;
         /// <summary>
         /// 图片的 Base64 编码
         /// </summary>
-        public string? base64 = null;
+        public string? base64 { get; } = null;
         /// <summary>
         /// 图片信息(构造参数任选其一，出现多个参数时，按照imageId > url > path > base64的优先级)
         /// </summary>
@@ -237,23 +237,23 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 语音的voiceId，不为空时将忽略url属性
         /// </summary>
-        public string voiceId = null;
+        public string voiceId { get; } = null;
         /// <summary>
         /// 语音的URL，发送时可作网络语音的链接；接收时为腾讯语音服务器的链接，可用于语音下载
         /// </summary>
-        public string url = null;
+        public string url { get; } = null;
         /// <summary>
         /// 语音的路径，发送本地语音，路径相对于 JVM 工作路径（默认是当前路径，可通过 -Duser.dir=...指定），也可传入绝对路径。
         /// </summary>
-        public string path = null;
+        public string path { get; } = null;
         /// <summary>
         /// 语音的 Base64 编码
         /// </summary>
-        public string base64 = null;
+        public string base64 { get; } = null;
         /// <summary>
         /// 返回的语音长度, 发送消息时可以不传
         /// </summary>
-        public long length;
+        public long length { get; }
         /// <summary>
         /// 语音信息(构造参数任选其一，出现多个参数时，按照voiceId > url > path > base64的优先级)
         /// </summary>
@@ -280,7 +280,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// XML文本
         /// </summary>
-        public string xml;
+        public string xml { get; }
         /// <summary>
         /// XML信息
         /// </summary>
@@ -299,7 +299,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// Json文本
         /// </summary>
-        public string json;
+        public string json { get; }
         /// <summary>
         /// Json信息
         /// </summary>
@@ -318,7 +318,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 内容
         /// </summary>
-        public string content;
+        public string content { get; }
         /// <summary>
         /// 应用消息
         /// </summary>
@@ -338,7 +338,7 @@ namespace MeowMiraiLib.Msg.Type
         /// 戳一戳的类型
         /// "Poke": 戳一戳 "ShowLove": 比心 "Like": 点赞 "Heartbroken": 心碎 "SixSixSix": 666 "FangDaZhao": 放大招
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 窗口震动(戳一戳)
         /// </summary>
@@ -357,7 +357,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 数值
         /// </summary>
-        public int value;
+        public int value { get; }
         /// <summary>
         /// 骰子信息
         /// </summary>
@@ -376,31 +376,31 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 类型
         /// </summary>
-        public string kind;
+        public string kind { get; }
         /// <summary>
         /// 标题
         /// </summary>
-        public string title;
+        public string title { get; }
         /// <summary>
         /// 概括
         /// </summary>
-        public string summary;
+        public string summary { get; }
         /// <summary>
         /// 跳转路径
         /// </summary>
-        public string jumpUrl;
+        public string jumpUrl { get; }
         /// <summary>
         /// 封面路径
         /// </summary>
-        public string pictureUrl;
+        public string pictureUrl { get; }
         /// <summary>
         /// 音乐路径
         /// </summary>
-        public string musicUrl;
+        public string musicUrl { get; }
         /// <summary>
         /// 简介
         /// </summary>
-        public string brief;
+        public string brief { get; }
         /// <summary>
         /// 生成音乐分享
         /// </summary>
@@ -436,22 +436,22 @@ namespace MeowMiraiLib.Msg.Type
             /// <summary>
             /// 引用缓存中其他对话上下文的消息作为节点
             /// </summary>
-            public class messageReferenceNode
+            public struct MessageReferenceNode
             {
                 /// <summary>
                 /// 引用的 messageId
                 /// </summary>
-                public long messageId;
+                public long messageId { get; }
                 /// <summary>
                 /// 引用的上下文目标，群号、好友账号
                 /// </summary>
-                public long target;
+                public long target { get; }
                 /// <summary>
                 /// 引用缓存中其他对话上下文的消息作为节点
                 /// </summary>
                 /// <param name="messageId">引用的 messageId</param>
                 /// <param name="target">引用的上下文目标，群号、好友账号</param>
-                public messageReferenceNode(long messageId, long target)
+                public MessageReferenceNode(long messageId, long target)
                 {
                     this.messageId = messageId;
                     this.target = target;
@@ -461,32 +461,32 @@ namespace MeowMiraiLib.Msg.Type
             /// <summary>
             /// 发送人QQ号
             /// </summary>
-            public long senderId;
+            public long senderId { get; }
             /// <summary>
             /// 时间
             /// </summary>
-            public long time;
+            public long time { get; }
             /// <summary>
             /// 显示名称
             /// </summary>
-            public string senderName;
+            public string senderName { get; }
             /// <summary>
             /// 转发的消息数组
             /// </summary>
-            public Message[] messageChain;
+            public Message[] messageChain { get; }
             /// <summary>
             /// 转发的消息数组
             /// </summary>
-            public long messageId;
+            public long messageId { get; }
             /// <summary>
             /// 引用缓存中其他对话上下文的消息作为节点
             /// </summary>
-            public messageReferenceNode messageRef;
+            public MessageReferenceNode messageRef { get; }
             /// <summary>
             /// 源ID
             /// </summary>
-            public long sourceId;
-            
+            public long sourceId { get; }
+
 
             /// <summary>
             /// 转发消息节点
@@ -528,7 +528,7 @@ namespace MeowMiraiLib.Msg.Type
             /// <param name="senderName">显示名称</param>
             /// <param name="messageRef">引用缓存中其他对话上下文的消息作为节点</param>
             /// <param name="sourceId">源ID</param>
-            public Node(long senderId, long time, string senderName, messageReferenceNode messageRef, long sourceId)
+            public Node(long senderId, long time, string senderName, MessageReferenceNode messageRef, long sourceId)
             {
                 this.senderId = senderId;
                 this.time = time;
@@ -540,7 +540,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 消息节点列表
         /// </summary>
-        public Node[] nodeList;
+        public Node[] nodeList { get; }
         /// <summary>
         /// 转发消息
         /// </summary>
@@ -559,15 +559,15 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 文件识别ID
         /// </summary>
-        public string id;
+        public string id { get; }
         /// <summary>
         /// 文件名
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 文件大小
         /// </summary>
-        public long size;
+        public long size { get; }
         /// <summary>
         /// 文件信息
         /// </summary>
@@ -590,7 +590,7 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// Mirai代码
         /// </summary>
-        public string code;
+        public string code { get; }
         /// <summary>
         /// Mirai码
         /// <para>关于Mirai码的对照: https://github.com/mamoe/mirai/blob/dev/docs/Messages.md</para>
@@ -609,11 +609,11 @@ namespace MeowMiraiLib.Msg.Type
         /// <summary>
         /// 商城表情唯一标识
         /// </summary>
-        public int id;
+        public int id { get; }
         /// <summary>
         /// 表情显示名称
         /// </summary>
-        public string name;
+        public string name { get; }
         /// <summary>
         /// 构造一个商城表情
         /// <para>目前商城表情仅支持接收和转发,不支持构造发送</para>
