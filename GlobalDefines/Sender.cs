@@ -7,6 +7,9 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime;
 
 namespace MeowMiraiLib.Msg.Sender
 {
@@ -24,6 +27,7 @@ namespace MeowMiraiLib.Msg.Sender
         public bool Equals(Sender? other) => id == other.id;
         /// <inheritdoc/>
         public override bool Equals(object obj) => Equals(obj as Sender);
+
         /// <inheritdoc/>
         public override int GetHashCode() => id.GetHashCode();
     }

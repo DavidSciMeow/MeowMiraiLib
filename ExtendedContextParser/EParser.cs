@@ -1,11 +1,43 @@
 ﻿using MeowMiraiLib.Msg.Sender;
 using MeowMiraiLib.Msg.Type;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
-namespace MeowMiraiLib
+namespace MeowMiraiLib.Extended
 {
+    /// <summary>
+    /// 将信息数组当作纯文本
+    /// </summary>
+    public enum TreatAsText
+    {
+        /// <summary>
+        /// 字面量
+        /// </summary>
+        Yes
+    }
+    /// <summary>
+    /// 将信息数组当作文本并进行分割
+    /// </summary>
+    public enum TreatAsTextArray
+    {
+        /// <summary>
+        /// 字面量
+        /// </summary>
+        Yes
+    }
+    /// <summary>
+    /// 将信息数组作为信息数组
+    /// </summary>
+    public enum TreatAsMessage
+    {
+        /// <summary>
+        /// 字面量
+        /// </summary>
+        Yes
+    }
+
     /// <summary>
     /// 信息队列模式
     /// </summary>
@@ -16,6 +48,7 @@ namespace MeowMiraiLib
         /// 队列内长
         /// </summary>
         public int Length { get => Q.Count; }
+
         /// <summary>
         /// 入队信息队列
         /// </summary>
@@ -56,19 +89,75 @@ namespace MeowMiraiLib
                 Q.Clear();
             }
         }
+
+
         /// <summary>
         /// 获得队列元素
         /// </summary>
-        /// <param name="x"></param>
+        /// <param name="x">队列元素次序</param>
         /// <returns></returns>
         public Message[] this[int x]
         {
             get
             {
-                lock (Q)
-                {
-                    return Q[x];
-                }
+                return Q[x];
+            }
+        }
+        /// <summary>
+        /// 获得队列元素,将元素作为纯信息数组
+        /// </summary>
+        /// <param name="x">队列元素次序</param>
+        /// <param name="para">将元素作为纯信息数组</param>
+        /// <returns></returns>
+        public Message[] this[int x, TreatAsMessage para = TreatAsMessage.Yes]
+        {
+            get
+            {
+                _ = para;
+                return Q[x];
+            }
+        }
+        /// <summary>
+        /// 获得队列元素:将元素作为纯字符串
+        /// </summary>
+        /// <param name="x">队列元素次序</param>
+        /// <param name="para">将元素作为纯字符串</param>
+        /// <returns></returns>
+        public string this[int x, TreatAsText para = TreatAsText.Yes]
+        {
+            get
+            {
+                _ = para;
+                return Q[x].MGetPlainString();
+            }
+        }
+        /// <summary>
+        /// 获得队列元素:将元素作为纯字符串
+        /// </summary>
+        /// <param name="x">队列元素次序</param>
+        /// <param name="para">将元素使用默认(空格)分割字符</param>
+        /// <returns></returns>
+        public string[]? this[int x, TreatAsTextArray para = TreatAsTextArray.Yes]
+        {
+            get
+            {
+                _ = para;
+                return Q[x].MGetPlainStringSplit();
+            }
+        }
+        /// <summary>
+        /// 获得队列元素:将元素作为纯字符串
+        /// </summary>
+        /// <param name="x">队列元素次序</param>
+        /// <param name="para">将元素使用提交的分割方案分割字符</param>
+        /// <param name="splitor">使用分割的字符串</param>
+        /// <returns></returns>
+        public string[]? this[int x, TreatAsTextArray para = TreatAsTextArray.Yes, string splitor = " "]
+        {
+            get
+            {
+                _ = para;
+                return Q[x].MGetPlainStringSplit();
             }
         }
     }
@@ -150,7 +239,7 @@ namespace MeowMiraiLib
                                 muq.Enqueue(s.Msg);
                                 _OnMessageRecieve.Invoke(s.Sender, muq);
                             }
-                            else //不含信息结构体,新建
+                            else //不含信息结构体,新建 
                             {
                                 var nmuq = new MUQueue();
                                 nmuq.Enqueue(s.Msg);
